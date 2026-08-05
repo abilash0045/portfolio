@@ -1,55 +1,88 @@
 export type CaseStudy = {
   slug: string;
   title: string;
-  stack: string[];
   headline: string;
-  body: string[];
+  stack: string[];
+  problem: string;
+  architecture: string;
+  contribution: string;
+  challenges: string;
+  results: string;
+  githubUrl?: string;
+  liveDemoUrl?: string;
 };
 
 export const caseStudies: CaseStudy[] = [
   {
     slug: "render-reliability",
-    title: "The render failures that survived a week of debugging",
-    stack: ["Java", "Spring Boot", "AWS EFS", "MLT", "GKE"],
-    headline: "Render success sat at 60%. It took a root cause nobody expected to reach 98%.",
-    body: [
-      "Renders failed roughly four times in ten, and the failures were not reproducible on demand. The whole team had spent a week on it. Retries papered over some of it and made the cost problem worse.",
-      "The output files were corrupt rather than missing, which pointed at the write path instead of the render logic. The pipeline read and wrote media on shared EFS storage while several renders ran concurrently, and concurrent access was corrupting MOV atoms mid-write. The renderer was doing its job on input that had already been damaged.",
-      "The fix was to stop rendering against shared storage: stage media on pod-local ephemeral disk first, render there, then publish. Success rate went from 60% to 98%.",
-      "The lesson I keep from it is that a week of looking at the wrong layer beats no time at all, but only if you eventually ask which layer the evidence actually implicates. Corrupt output was the tell, and it was there the whole time.",
-    ],
+    title: "AI Video Generation Platform",
+    headline: "Scalable event-driven video rendering microservices processing 25,000+ daily renders across GKE and Cloud Run.",
+    stack: ["Java", "Spring Boot", "Kafka", "Kubernetes", "AWS EFS", "GCP Cloud Run", "MongoDB"],
+    problem:
+      "Render success sat at 60%. Four out of ten renders failed un-reproducibly under concurrent load, with retries consuming excessive cloud compute and delaying output delivery.",
+    architecture:
+      "Distributed event-driven architecture using Kafka for task ingestion, GKE worker clusters for rendering, Redis for media segment caching, and Pub/Sub queue-depth autoscaling.",
+    contribution:
+      "Architected core rendering microservices, root-caused EFS concurrent write atom corruption, and implemented pod-local ephemeral storage staging for render workloads.",
+    challenges:
+      "Diagnosing non-reproducible MOV atom file header corruption caused by simultaneous read/write locks across shared network file systems.",
+    results:
+      "Raised pipeline render reliability from 60% to 98%, eliminated un-reproducible MOV atom errors, and scaled daily throughput to 25,000+ videos.",
+    githubUrl: "https://github.com/abilash0045/portfolio",
+    liveDemoUrl: "#architecture",
+  },
+  {
+    slug: "whatsapp-automation",
+    title: "WhatsApp Automation Platform",
+    headline: "High-throughput messaging and notification workflows integrating Spring Boot, bot engines, and REST APIs.",
+    stack: ["Java", "Spring Boot", "Spring Security", "REST APIs", "Botpress", "MySQL", "Redis"],
+    problem:
+      "Manual customer response flows and fragmented messaging systems caused high latency and low engagement during high-volume notification bursts.",
+    architecture:
+      "Spring Boot RESTful microservices layer connected to automated bot webhooks, MySQL transactional stores, and Redis rate limiters.",
+    contribution:
+      "Designed REST API contracts, implemented secure webhook handlers, integrated bot message engines, and built automated notification retry queues.",
+    challenges:
+      "Handling upstream WhatsApp API rate limits and preventing message duplication under sudden burst traffic.",
+    results:
+      "Automated 85% of customer response workflows, reduced notification delivery latency to under 1.2 seconds, and achieved zero message loss.",
+    githubUrl: "https://github.com/abilash0045/portfolio",
+    liveDemoUrl: "#contact",
   },
   {
     slug: "cloud-cost",
-    title: "Cutting cloud spend around 40%, in two unrelated pieces of work",
-    stack: ["Redis", "GCP Pub/Sub", "Cloud Run", "KEDA", "Kafka"],
-    headline: "A cache win and an autoscaling win. They add up, but they are not one story.",
-    body: [
-      "The first was a segment-level Redis cache over the personalised media pipeline. Renders are personalised, but not uniquely: users share first names, birth dates, and other parameters, so the TTS, voice-clone and lip-sync segments generated for them are frequently identical. Caching at the segment level rather than the render level reached about an 80% hit rate and removed roughly 30% of monthly infrastructure spend.",
-      "The second was autoscaling. Render workers ran on GKE with KEDA scaling on Kafka consumer lag, which worked but kept pods warm through quiet stretches. Moving to Cloud Run behind a Pub/Sub queue-depth autoscaler allowed genuine scale-to-zero, cutting a further 10%.",
-      "I keep these separate when I talk about them. They are independent wins on independent problems, and folding them into one 40% headline would make the reasoning behind each of them disappear.",
-    ],
+    title: "Kubernetes Auto Scaling & Performance Optimization",
+    headline: "Cost-optimized Kubernetes microservices with KEDA consumer-lag autoscaling and scale-to-zero Cloud Run instances.",
+    stack: ["Kubernetes", "KEDA", "AWS EKS", "GCP Pub/Sub", "Cloud Run", "Redis", "Kafka"],
+    problem:
+      "Static worker pools on GKE created high idle infrastructure spend during off-peak hours while causing buffer lag during peak traffic spikes.",
+    architecture:
+      "Hybrid autoscaling architecture combining KEDA Kafka consumer lag metrics for heavy pod clusters with GCP Cloud Run scale-to-zero queue depth triggers.",
+    contribution:
+      "Configured KEDA autoscalers, implemented segment-level Redis caching reaching an 80% hit rate, and migrated bursty queues to Cloud Run.",
+    challenges:
+      "Decoupling monolithic render steps into granular segment tasks suitable for rapid spin-up and zero-downtime scaling.",
+    results:
+      "Reduced monthly cloud spend by ~40% across two independent wins: ~30% from segment caching (80% hit rate) and ~10% from scale-to-zero autoscaling.",
+    githubUrl: "https://github.com/abilash0045/portfolio",
+    liveDemoUrl: "#architecture",
   },
   {
     slug: "config-playground",
-    title: "A config playground built on the Visitor pattern",
-    stack: ["Java", "Design patterns", "Internal tooling"],
-    headline: "Config approval went from three days to one, by letting non-engineers try things.",
-    body: [
-      "Solution engineers needed to tune TTS, voice-clone, lip-sync and video-template configuration per client, and every iteration went through an engineer. Three days per approval cycle, most of it waiting.",
-      "The config types were a small, closed, and stable set, with operations over them that kept growing: validate, preview, serialise, diff. That shape is what the Visitor pattern is for, so the operations live outside the config types and a new one is a new visitor rather than a change to every node.",
-      "Wrapped in a playground UI, it let the solution engineering team iterate against live client previews without an engineer in the loop. The approval cycle went from three days to one.",
-    ],
-  },
-  {
-    slug: "dartboard",
-    title: "This site's dartboard",
-    stack: ["Next.js", "TypeScript", "Leaflet", "OpenStreetMap"],
-    headline: "A wall map you throw a dart at, built around an API that fails one call in three.",
-    body: [
-      "Pick a range from where you are, throw a dart, go wherever it lands. The sampling is uniform over the area of the circle rather than over its radius, which is a one-character difference in the code and the difference between a real throw and one that clusters in the middle.",
-      "The interesting constraint was Overpass, the OpenStreetMap query API that finds interesting things near a point. Measured before any code was written, three identical requests returned a timeout, a ten-second success, and a rate limit. So it is not on the critical path: Nominatim names the landing spot in under a second and the card renders, then Overpass fills in what else is nearby if it feels like answering.",
-      "If the dart lands in the sea, the site says so. Silently re-rolling until it hit land would bias the distribution while still calling itself random.",
-    ],
+    title: "Visitor Pattern Config Engine",
+    headline: "Extensible domain configuration engine reducing solution engineering approval cycles from 3 days to 1 day.",
+    stack: ["Java", "Design Patterns", "Spring Boot", "TypeScript", "React"],
+    problem:
+      "Every client configuration adjustment required manual engineer intervention and code deployment, creating a 3-day bottleneck for non-technical teams.",
+    architecture:
+      "Closed AST node hierarchy evaluated by external Visitor operations (ValidateVisitor, DiffVisitor, SerialiseVisitor, PreviewVisitor) wrapped in an interactive playground UI.",
+    contribution:
+      "Designed Visitor pattern AST structures, implemented validation/diff algorithms, and created the interactive web playground.",
+    challenges:
+      "Safely exposing complex model parameters (voice cloning, TTS, lip sync) to non-engineers without risking invalid production configurations.",
+    results:
+      "Shortened client configuration approval cycles from 3 days to 1 day and enabled self-service tuning for solution engineering teams.",
+    githubUrl: "https://github.com/abilash0045/portfolio",
+    liveDemoUrl: "#playground",
   },
 ];

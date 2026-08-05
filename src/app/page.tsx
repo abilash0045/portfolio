@@ -1,5 +1,6 @@
 import Navbar from "@/components/site/Navbar";
 import Hero from "@/components/site/Hero";
+import EngineeringWins from "@/components/site/EngineeringWins";
 import TechStack from "@/components/site/TechStack";
 import CaseStudy from "@/components/site/CaseStudy";
 import ExperienceTimeline from "@/components/site/ExperienceTimeline";
@@ -27,12 +28,14 @@ export default function Home() {
       <main className="site">
         <Hero />
 
+        <EngineeringWins />
+
         <TechStack />
 
         <section id="case-studies" className="studies-section">
-          <h2 className="section-title">Featured Engineering Projects</h2>
+          <h2 className="section-title">Structured Featured Projects</h2>
           <p className="section-subtitle">
-            Distributed systems, media rendering pipelines, and developer tooling case studies
+            Every project detailed by Problem, Architecture, Tech Stack, Contribution, Challenges, and Results
           </p>
           <div className="studies-grid">
             {caseStudies.map((study) => (

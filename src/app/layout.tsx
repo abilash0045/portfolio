@@ -21,9 +21,28 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Abilash S L: Senior Backend Engineer",
+  title: "Abilash S L - Senior Backend Engineer",
   description:
-    "Distributed systems and video rendering architecture. 25,000 daily renders across GKE and Cloud Run. Java, Spring Boot, Kafka, GCP, Redis.",
+    "Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale. Java, Spring Boot, Kafka, Kubernetes, AWS, Redis.",
+  metadataBase: new URL("https://portfolio-abilash.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Abilash S L - Senior Backend Engineer",
+    description:
+      "Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale. 25,000+ daily renders across GKE and Cloud Run.",
+    url: "https://portfolio-abilash.vercel.app",
+    siteName: "Abilash S L Portfolio",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Abilash S L - Senior Backend Engineer",
+    description:
+      "Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale.",
+  },
 };
 
 export default function RootLayout({

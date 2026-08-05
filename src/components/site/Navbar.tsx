@@ -36,6 +36,9 @@ export default function Navbar() {
             <a href="#overview" className="navbar__link">Overview</a>
           </li>
           <li>
+            <a href="#engineering-wins" className="navbar__link">Wins</a>
+          </li>
+          <li>
             <a href="#tech-stack" className="navbar__link">Tech Stack</a>
           </li>
           <li>
@@ -46,9 +49,6 @@ export default function Navbar() {
           </li>
           <li>
             <a href="#skills" className="navbar__link">Skills</a>
-          </li>
-          <li>
-            <a href="#dartboard-embedded" className="navbar__link">Dartboard</a>
           </li>
           <li>
             <a href="#contact" className="navbar__link">Contact</a>

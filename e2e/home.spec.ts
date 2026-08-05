@@ -1,13 +1,25 @@
 import { test, expect } from "@playwright/test";
 
-test("home page carries full senior portfolio sections and embeds interactive components", async ({ page }) => {
+test("home page carries full senior portfolio sections and 30-second value prop", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("Abilash S L").first()).toBeVisible();
-  await expect(page.getByText("Backend Engineer building scalable distributed systems.")).toBeVisible();
-  await expect(page.getByText("Categorized Tech Stack")).toBeVisible();
-  await expect(page.getByText("Experience & Timeline")).toBeVisible();
-  await expect(page.getByText("Skills Capability Breakdown")).toBeVisible();
-  await expect(page.getByText("Let's Connect")).toBeVisible();
+  await expect(
+    page.getByText("Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale.").first()
+  ).toBeVisible();
+
+  // Verify Engineering Wins section
+  await expect(page.getByText("Engineering Wins & Production Impact")).toBeVisible();
+  await expect(page.getByText("Kafka Event-Driven Microservices")).toBeVisible();
+
+  // Verify structured project fields
+  await expect(page.getByText("Problem").first()).toBeVisible();
+  await expect(page.getByText("Architecture").first()).toBeVisible();
+  await expect(page.getByText("My Contribution").first()).toBeVisible();
+
+  // Verify functional resume download link
+  const resumeBtn = page.getByRole("link", { name: /download resume/i });
+  await expect(resumeBtn).toBeVisible();
+  await expect(resumeBtn).toHaveAttribute("href", "/resume.pdf");
 
   // Verify embedded dartboard on home page
   await expect(page.locator("#dartboard-embedded")).toBeVisible();

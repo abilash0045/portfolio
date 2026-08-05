@@ -4,17 +4,11 @@ import { useState } from "react";
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
-  const [resumeToast, setResumeToast] = useState(false);
 
   const copyEmail = () => {
     navigator.clipboard.writeText("abilash0045@gmail.com");
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
-  };
-
-  const handleResumeDownload = () => {
-    setResumeToast(true);
-    setTimeout(() => setResumeToast(false), 3000);
   };
 
   return (
@@ -29,6 +23,10 @@ export default function Hero() {
           <h1 className="hero__name">
             Backend Engineer building scalable distributed systems.
           </h1>
+
+          <p className="hero__value-prop">
+            Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale.
+          </p>
 
           <p className="hero__lede">
             I build high-performance backend systems with Java, Spring Boot, Kafka, Kubernetes, AWS, and modern cloud infrastructure.
@@ -86,13 +84,13 @@ export default function Hero() {
         <a className="hero__btn hero__btn--primary" href="#case-studies">
           View Projects
         </a>
-        <button
-          type="button"
+        <a
+          href="/resume.pdf"
+          download="Abilash_SL_Resume.pdf"
           className="hero__btn hero__btn--secondary"
-          onClick={handleResumeDownload}
         >
-          {resumeToast ? "✓ Resume Request Logged!" : "Download Resume"}
-        </button>
+          Download Resume
+        </a>
         <button
           type="button"
           className="hero__btn hero__btn--ghost"
@@ -106,11 +104,11 @@ export default function Hero() {
       {/* Social Links */}
       <div className="hero__socials">
         <a href="https://github.com/abilash0045" target="_blank" rel="noopener noreferrer" className="hero__social-link">
-          GitHub
+          GitHub (Pinned Repositories) ↗
         </a>
         <span>·</span>
         <a href="https://www.linkedin.com/in/abilash0045/" target="_blank" rel="noopener noreferrer" className="hero__social-link">
-          LinkedIn
+          LinkedIn ↗
         </a>
         <span>·</span>
         <a href="mailto:abilash0045@gmail.com" className="hero__social-link">
