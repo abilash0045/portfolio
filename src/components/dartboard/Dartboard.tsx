@@ -11,21 +11,40 @@ import "./dartboard.css";
 // Leaflet reads `window` at import time, so it can never be server-rendered.
 const WallMap = dynamic(() => import("./WallMap"), {
   ssr: false,
-  loading: () => <div style={{ width: "100%", height: "100%", background: "#e8e0cf" }} />,
+  loading: () => <div style={{ width: "100%", height: "100%", background: "#090a0f" }} />,
 });
 
-export default function Dartboard() {
+type Props = {
+  embedded?: boolean;
+};
+
+export default function Dartboard({ embedded = false }: Props) {
   const board = useDartboard();
 
   return (
-    <main className="dartboard">
+    <div className={`dartboard ${embedded ? "dartboard--embedded" : ""}`} id={embedded ? "dartboard-embedded" : "dartboard"}>
       {/* Floating Top Navigation Header */}
       <header className="dartboard__header">
-        <Link href="/" className="dartboard__back-btn">
-          ← Portfolio
-        </Link>
-        <div className="dartboard__header-title">
-          <span>🎯 Interactive Dartboard Map</span>
+        {!embedded ? (
+          <Link href="/" className="dartboard__back-btn">
+            ← Portfolio
+          </Link>
+        ) : (
+          <div className="dartboard__header-title">
+            <span>🎯 Interactive Dartboard Map</span>
+          </div>
+        )}
+
+        <div className="dartboard__header-actions">
+          {embedded ? (
+            <Link href="/dartboard" className="dartboard__fullscreen-btn">
+              Open Full Screen ↗
+            </Link>
+          ) : (
+            <div className="dartboard__header-title">
+              <span>🎯 Full Screen Mode</span>
+            </div>
+          )}
         </div>
       </header>
 
@@ -64,6 +83,6 @@ export default function Dartboard() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
@@ -59,9 +58,9 @@ export default function Hero() {
         <a className="hero__btn hero__btn--primary" href="#architecture">
           View Pipeline Architecture
         </a>
-        <Link className="hero__btn hero__btn--secondary" href="/dartboard">
+        <a className="hero__btn hero__btn--secondary" href="#dartboard-embedded">
           Throw a Dart on Map
-        </Link>
+        </a>
         <button
           type="button"
           className="hero__btn hero__btn--ghost"

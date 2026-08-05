@@ -45,7 +45,7 @@ export default function Navbar() {
             <a href="#case-studies" className="navbar__link">Case Studies</a>
           </li>
           <li>
-            <Link href="/dartboard" className="navbar__link">Dartboard</Link>
+            <a href="#dartboard-embedded" className="navbar__link">Dartboard</a>
           </li>
         </ul>
 

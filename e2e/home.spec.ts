@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("home page carries the work and links to the dartboard", async ({ page }) => {
+test("home page carries the work and embeds the interactive dartboard", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("Abilash S L").first()).toBeVisible();
   await expect(page.getByText("25,000+").first()).toBeVisible();
@@ -9,7 +9,10 @@ test("home page carries the work and links to the dartboard", async ({ page }) =
       name: /render failures that survived a week/i,
     }),
   ).toBeVisible();
-  await page.getByRole("link", { name: /throw a dart on map/i }).click();
+
+  // Verify embedded dartboard on home page
+  await expect(page.locator("#dartboard-embedded")).toBeVisible();
+  await page.getByRole("link", { name: /open full screen/i }).click();
   await expect(page).toHaveURL(/\/dartboard$/);
 });
 

@@ -2,6 +2,7 @@ import Navbar from "@/components/site/Navbar";
 import Hero from "@/components/site/Hero";
 import CaseStudy from "@/components/site/CaseStudy";
 import Footer from "@/components/site/Footer";
+import Dartboard from "@/components/dartboard/Dartboard";
 import { caseStudies } from "@/content/case-studies";
 import "@/components/site/site.css";
 
@@ -20,6 +21,11 @@ export default function Home() {
 
       <main className="site">
         <Hero />
+
+        {/* Embedded Interactive Dartboard Map Section */}
+        <section id="dartboard-section" style={{ margin: "40px 0" }}>
+          <Dartboard embedded={true} />
+        </section>
 
         <section id="case-studies" className="studies-section">
           <div className="studies-grid">

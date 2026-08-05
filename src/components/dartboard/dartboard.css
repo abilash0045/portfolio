@@ -7,6 +7,16 @@
   color: var(--text-primary);
 }
 
+/* Embedded Variant inside Portfolio Page */
+.dartboard--embedded {
+  height: 580px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  margin: 40px 0;
+  overflow: hidden;
+}
+
 .dartboard__header {
   position: absolute;
   top: 16px;
@@ -19,7 +29,8 @@
   pointer-events: none;
 }
 
-.dartboard__back-btn {
+.dartboard__back-btn,
+.dartboard__fullscreen-btn {
   pointer-events: auto;
   padding: 8px 18px;
   background: var(--glass-bg);
@@ -35,7 +46,8 @@
   transition: all 0.2s ease;
 }
 
-.dartboard__back-btn:hover {
+.dartboard__back-btn:hover,
+.dartboard__fullscreen-btn:hover {
   background: rgba(230, 57, 70, 0.9);
   border-color: var(--accent-red);
   color: #ffffff;
@@ -63,13 +75,13 @@
 /* Floating Glass Control Panel */
 .dartboard__panel {
   position: absolute;
-  bottom: 20px;
-  left: max(16px, 4vw);
-  right: max(16px, 4vw);
+  bottom: 16px;
+  left: max(12px, 3vw);
+  right: max(12px, 3vw);
   z-index: 800;
   max-width: 54rem;
   margin: 0 auto;
-  padding: 20px 24px;
+  padding: 16px 20px;
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -77,13 +89,13 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--glass-shadow);
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 
 .controls {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 20px;
+  gap: 16px;
   align-items: end;
 }
 
@@ -95,12 +107,12 @@
 
 .controls__label {
   display: block;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   letter-spacing: 0.04em;
   font-weight: 600;
   font-family: var(--font-mono);
   color: var(--text-secondary);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .controls__slider {
@@ -111,8 +123,8 @@
 }
 
 .controls__throw {
-  padding: 12px 28px;
-  font-size: 0.95rem;
+  padding: 10px 24px;
+  font-size: 0.92rem;
   font-weight: 700;
   font-family: var(--font-body);
   color: #ffffff;
@@ -122,7 +134,7 @@
   cursor: pointer;
   box-shadow: 0 4px 14px var(--accent-red-glow);
   transition: all 0.2s ease;
-  min-height: 44px;
+  min-height: 40px;
 }
 
 .controls__throw:hover:not(:disabled) {
@@ -144,17 +156,17 @@
 
 .locsearch__input {
   flex: 1 1 220px;
-  padding: 10px 14px;
+  padding: 9px 14px;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .locsearch__button {
-  padding: 10px 18px;
+  padding: 9px 16px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
@@ -210,9 +222,9 @@
 
 .card {
   display: grid;
-  gap: 6px;
-  padding: 16px 20px;
-  background: rgba(0, 0, 0, 0.35);
+  gap: 4px;
+  padding: 14px 18px;
+  background: rgba(0, 0, 0, 0.4);
   border: 1px solid var(--border-subtle);
   border-left: 3px solid var(--accent-red);
   border-radius: var(--radius-md);
@@ -225,7 +237,7 @@
 }
 
 .card__name {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 700;
   font-family: var(--font-display);
   color: var(--text-primary);
@@ -234,12 +246,12 @@
 
 .card__area {
   color: var(--text-secondary);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   margin: 0;
 }
 
 .card__meta {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-family: var(--font-mono);
   color: var(--text-muted);
   margin: 0;
@@ -251,13 +263,13 @@
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .nearby__item {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-family: var(--font-mono);
-  padding: 4px 12px;
+  padding: 3px 10px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
@@ -265,12 +277,12 @@
 }
 
 .nearby__heading {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-family: var(--font-mono);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 }
 
 @media (prefers-reduced-motion: reduce) {
