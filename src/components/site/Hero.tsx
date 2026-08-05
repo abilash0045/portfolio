@@ -17,41 +17,40 @@ export default function Hero() {
         <div>
           <div className="hero__badge">
             <span className="hero__badge-pulse" aria-hidden="true" />
-            <span>Senior Backend &amp; Distributed Systems Engineer</span>
+            <span>Backend engineer, distributed systems</span>
           </div>
 
           <h1 className="hero__name">
-            Backend Engineer building scalable distributed systems.
+            I keep a 25,000-render-a-day pipeline cheap and standing up.
           </h1>
 
-          <p className="hero__value-prop">
-            Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale.
-          </p>
-
           <p className="hero__lede">
-            I build high-performance backend systems with Java, Spring Boot, Kafka, Kubernetes, AWS, and modern cloud infrastructure.
+            At Whilter I work on the video rendering pipeline: Java and Spring
+            Boot over Kafka, Redis and MongoDB, running on GKE and Cloud Run
+            across GCP and AWS.
           </p>
 
           <p className="hero__lede hero__lede--muted">
-            At Whilter, I design and operate the core video rendering pipeline processing <strong>25,000+ daily renders</strong> across GKE and Cloud Run, caching media segments for 80% hit rates, root-causing MOV atom corruption to move from 60% to 98% reliability, and trimming 40% off cloud spend.
+            Most of what I do lands on either the cloud bill or the on-call
+            dashboard. How media gets cached, how render jobs get queued and
+            scaled, and what breaks when shared storage, concurrency and bursty
+            traffic all arrive at once.
           </p>
         </div>
 
-        {/* Professional Avatar Card */}
         <div className="hero__avatar-card">
           <div className="hero__avatar-circle">
             <span>ASL</span>
           </div>
           <div className="hero__avatar-info">
             <div className="hero__avatar-name">Abilash S L</div>
-            <div className="hero__avatar-role">Senior Backend Engineer</div>
+            <div className="hero__avatar-role">Backend Engineer</div>
             <div className="hero__avatar-tech">Java · Spring · Kafka · K8s</div>
           </div>
         </div>
       </div>
 
-      {/* Floating Tech Stack Badges without emojis */}
-      <div className="hero__tech-badges" aria-label="Core Stack">
+      <div className="hero__tech-badges" aria-label="Core stack">
         <span className="hero__tech-tag">Java</span>
         <span className="hero__tech-tag">Spring Boot</span>
         <span className="hero__tech-tag">Kafka</span>
@@ -60,54 +59,60 @@ export default function Hero() {
         <span className="hero__tech-tag">Redis</span>
       </div>
 
-      {/* Key Metric Highlights Grid */}
       <div className="hero__metrics">
         <div className="hero__metric">
           <div className="hero__metric-value">25,000+</div>
-          <div className="hero__metric-label">Daily Video Renders</div>
+          <div className="hero__metric-label">Daily video renders</div>
         </div>
         <div className="hero__metric">
-          <div className="hero__metric-value" style={{ color: "var(--accent-green)" }}>60% ➔ 98%</div>
-          <div className="hero__metric-label">Pipeline Reliability</div>
+          <div className="hero__metric-value" style={{ color: "var(--accent-green)" }}>
+            60% → 98%
+          </div>
+          <div className="hero__metric-label">Render reliability</div>
         </div>
         <div className="hero__metric">
-          <div className="hero__metric-value" style={{ color: "var(--accent-blue)" }}>~40%</div>
-          <div className="hero__metric-label">Cloud Spend Saved</div>
+          <div className="hero__metric-value" style={{ color: "var(--accent-blue)" }}>
+            ~40%
+          </div>
+          <div className="hero__metric-label">Cloud spend cut</div>
         </div>
         <div className="hero__metric">
-          <div className="hero__metric-value" style={{ color: "var(--accent-violet)" }}>3d ➔ 1d</div>
-          <div className="hero__metric-label">Config Approval Cycle</div>
+          <div className="hero__metric-value" style={{ color: "var(--accent-violet)" }}>
+            3d → 1d
+          </div>
+          <div className="hero__metric-label">Config approval cycle</div>
         </div>
       </div>
 
       <div className="hero__cta-group">
         <a className="hero__btn hero__btn--primary" href="#case-studies">
-          View Selected Work
-        </a>
-        <a
-          href="/resume.pdf"
-          download="Abilash_SL_Resume.pdf"
-          className="hero__btn hero__btn--secondary"
-        >
-          Download Resume
+          Read the case studies
         </a>
         <button
           type="button"
           className="hero__btn hero__btn--ghost"
           onClick={copyEmail}
-          title="Copy email to clipboard"
         >
-          {copied ? "✓ Copied to Clipboard!" : "Copy Email"}
+          {copied ? "Copied" : "Copy email"}
         </button>
       </div>
 
-      {/* Social Links */}
       <div className="hero__socials">
-        <a href="https://github.com/abilash0045" target="_blank" rel="noopener noreferrer" className="hero__social-link">
-          GitHub (Pinned Repositories) ↗
+        <a
+          href="https://github.com/abilash0045"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hero__social-link"
+        >
+          GitHub ↗
         </a>
         <span>·</span>
-        <a href="https://www.linkedin.com/in/abilash0045/" target="_blank" rel="noopener noreferrer" className="hero__social-link">
+        <a
+          href="https://www.linkedin.com/in/abilash0045/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hero__social-link"
+        >
           LinkedIn ↗
         </a>
         <span>·</span>

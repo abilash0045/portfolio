@@ -48,9 +48,6 @@ export default function Navbar() {
             <a href="#experience" className="navbar__link">Experience</a>
           </li>
           <li>
-            <a href="#testimonials" className="navbar__link">Endorsements</a>
-          </li>
-          <li>
             <a href="#contact" className="navbar__link">Contact</a>
           </li>
         </ul>

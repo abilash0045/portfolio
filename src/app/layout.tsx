@@ -21,17 +21,17 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Abilash S L - Senior Backend Engineer",
+  title: "Abilash S L, Backend Engineer",
   description:
-    "Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale. Java, Spring Boot, Kafka, Kubernetes, AWS, Redis.",
+    "Backend engineer on a video rendering pipeline handling 25,000+ renders a day across GKE and Cloud Run. Java, Spring Boot, Kafka, Redis, Kubernetes, GCP and AWS.",
   metadataBase: new URL("https://portfolio-abilash.vercel.app"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Abilash S L - Senior Backend Engineer",
+    title: "Abilash S L, Backend Engineer",
     description:
-      "Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale. 25,000+ daily renders across GKE and Cloud Run.",
+      "Backend engineer on a video rendering pipeline handling 25,000+ renders a day across GKE and Cloud Run. Java, Spring Boot, Kafka, Redis, Kubernetes, GCP and AWS.",
     url: "https://portfolio-abilash.vercel.app",
     siteName: "Abilash S L Portfolio",
     type: "website",
@@ -39,9 +39,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abilash S L - Senior Backend Engineer",
+    title: "Abilash S L, Backend Engineer",
     description:
-      "Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale.",
+      "Backend engineer on a video rendering pipeline handling 25,000+ renders a day across GKE and Cloud Run. Java, Spring Boot, Kafka, Redis, Kubernetes, GCP and AWS.",
   },
 };
 

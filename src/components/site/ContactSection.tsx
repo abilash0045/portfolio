@@ -3,30 +3,40 @@
 import { useState } from "react";
 import "./contact.css";
 
+const ADDRESS = "abilash0045@gmail.com";
+
 export default function ContactSection() {
-  const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
+  /**
+   * Composes a real mail draft and hands it to the visitor's mail client.
+   *
+   * There is no backend and no mail service, so there is nothing here that
+   * could actually deliver a message. Rather than show a success state for
+   * something that never happened, this opens a prefilled draft the sender
+   * can see and send themselves.
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !message) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      setName("");
-      setEmail("");
-      setMessage("");
-      setSubmitted(false);
-    }, 4000);
+
+    const subject = `Portfolio enquiry from ${name}`;
+    const body = `${message}\n\n---\n${name}\n${email}`;
+    window.location.href = `mailto:${ADDRESS}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
   };
 
   return (
     <section className="contact-section" id="contact">
       <div className="contact-card">
-        <h2 className="contact-title">Let&apos;s Build Systems Together</h2>
+        <h2 className="contact-title">Get in touch</h2>
         <p className="contact-desc">
-          Interested in distributed systems engineering, high-throughput microservices, or cloud infrastructure? Reach out directly.
+          If your team works on high-throughput backends, caching, or the kind
+          of infrastructure problems that show up on the bill, I&apos;m happy to
+          talk shop.
         </p>
 
         <form className="contact-form" onSubmit={handleSubmit}>
@@ -54,7 +64,7 @@ export default function ContactSection() {
               type="email"
               required
               className="form-input"
-              placeholder="your.email@example.com"
+              placeholder="you@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -68,27 +78,41 @@ export default function ContactSection() {
               id="contact-message"
               required
               className="form-textarea"
-              placeholder="Share details about your team, infrastructure challenge, or engineering role..."
+              placeholder="What are you building, and where does it hurt?"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
           </div>
 
           <button type="submit" className="submit-btn">
-            {submitted ? "✓ Message Sent Successfully!" : "Send Message"}
+            Open in your mail app
           </button>
+          <p className="contact-note">
+            This opens a draft in your own mail client. Nothing is sent from
+            this page.
+          </p>
         </form>
 
         <div className="contact-channels">
-          <a href="mailto:abilash0045@gmail.com" className="contact-channel-link">
-            abilash0045@gmail.com
+          <a href={`mailto:${ADDRESS}`} className="contact-channel-link">
+            {ADDRESS}
           </a>
           <span>·</span>
-          <a href="https://github.com/abilash0045" target="_blank" rel="noopener noreferrer" className="contact-channel-link">
+          <a
+            href="https://github.com/abilash0045"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-channel-link"
+          >
             GitHub ↗
           </a>
           <span>·</span>
-          <a href="https://www.linkedin.com/in/abilash0045/" target="_blank" rel="noopener noreferrer" className="contact-channel-link">
+          <a
+            href="https://www.linkedin.com/in/abilash0045/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-channel-link"
+          >
             LinkedIn ↗
           </a>
         </div>

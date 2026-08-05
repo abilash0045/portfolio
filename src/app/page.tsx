@@ -4,7 +4,6 @@ import CaseStudy from "@/components/site/CaseStudy";
 import EngineeringPhilosophy from "@/components/site/EngineeringPhilosophy";
 import TechStack from "@/components/site/TechStack";
 import ExperienceMagazine from "@/components/site/ExperienceMagazine";
-import Testimonials from "@/components/site/Testimonials";
 import ContactSection from "@/components/site/ContactSection";
 import Footer from "@/components/site/Footer";
 import Dartboard from "@/components/dartboard/Dartboard";
@@ -44,8 +43,6 @@ export default function Home() {
         <TechStack />
 
         <ExperienceMagazine />
-
-        <Testimonials />
 
         {/* Embedded Interactive Dartboard Map Section */}
         <section id="dartboard-embedded-section" style={{ margin: "72px 0" }}>

@@ -1,79 +1,134 @@
 import { test, expect } from "@playwright/test";
 
-test("home page carries full senior portfolio sections and 30-second value prop", async ({ page }) => {
+test("home page carries the work", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("Abilash S L").first()).toBeVisible();
-  await expect(
-    page.getByText("Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale.").first()
-  ).toBeVisible();
-
-  // Verify Linear/Vercel sections
+  await expect(page.getByText("25,000+").first()).toBeVisible();
   await expect(page.getByText("Selected Work").first()).toBeVisible();
   await expect(page.getByText("Engineering Philosophy")).toBeVisible();
   await expect(page.getByText("Technology Ecosystem")).toBeVisible();
   await expect(page.getByText("Production Engineering Experience")).toBeVisible();
-  await expect(page.getByText("Peer Endorsements")).toBeVisible();
-  await expect(page.getByText("Let's Build Systems Together")).toBeVisible();
-
-  // Verify structured project fields
-  await expect(page.getByText("Problem").first()).toBeVisible();
-  await expect(page.getByText("Architecture").first()).toBeVisible();
-  await expect(page.getByText("My Contribution").first()).toBeVisible();
-
-  // Verify functional resume download link
-  const resumeBtn = page.getByRole("link", { name: /download resume/i });
-  await expect(resumeBtn).toBeVisible();
-  await expect(resumeBtn).toHaveAttribute("href", "/resume.pdf");
-
-  // Verify embedded dartboard on home page
-  await expect(page.locator("#dartboard-embedded")).toBeVisible();
-  await page.getByRole("link", { name: /open full screen/i }).click();
-  await expect(page).toHaveURL(/\/dartboard$/);
+  await expect(page.getByText("Get in touch")).toBeVisible();
 });
 
-test("home page renders interactive architecture simulator and playground", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.getByText("Interactive Architecture Simulator")).toBeVisible();
-  await expect(page.getByText("Visitor Pattern Playground")).toBeVisible();
+// These assertions are the point of this file. Fabricated content reached this
+// page once already: invented testimonials credited to people at a real
+// employer, a blog whose articles linked nowhere, self-assigned skill
+// percentage bars, a contact form that reported success while sending nothing,
+// and a 473-byte stub behind a resume download. Each check below names one of
+// those so it cannot come back quietly.
+test.describe("nothing on this page claims something untrue", () => {
+  test("no invented endorsements", async ({ page }) => {
+    await page.goto("/");
+    const body = ((await page.textContent("body")) ?? "").toLowerCase();
+    expect(body).not.toContain("peer endorsement");
+    expect(body).not.toContain("testimonial");
+  });
 
-  // Test interactive simulator toggle
-  const efsBtn = page.getByRole("button", { name: /shared efs/i });
-  await efsBtn.click();
-  await expect(page.locator(".sim-container").getByText("60%", { exact: true })).toBeVisible();
+  test("no self-assigned skill percentages", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator(".skill-pct")).toHaveCount(0);
+    await expect(page.locator(".skill-fill")).toHaveCount(0);
+  });
 
-  const ephBtn = page.getByRole("button", { name: /ephemeral disk/i });
-  await ephBtn.click();
-  await expect(page.locator(".sim-container").getByText("98%", { exact: true })).toBeVisible();
-});
+  test("no title inflation and no tenure claim", async ({ page }) => {
+    await page.goto("/");
+    const body = ((await page.textContent("body")) ?? "").toLowerCase();
+    expect(body).not.toContain("senior backend");
+    expect(body).not.toMatch(/\d\+?\s*years/);
+  });
 
-test("contact form allows user submission feedback", async ({ page }) => {
-  await page.goto("/");
-  await page.fill("#contact-name", "Alex Recruiter");
-  await page.fill("#contact-email", "alex@techcorp.com");
-  await page.fill("#contact-message", "We would love to interview you for a Senior Backend role.");
-  await page.getByRole("button", { name: /send message/i }).click();
-  await expect(page.getByText("✓ Message Sent Successfully!")).toBeVisible();
-});
+  test("every link goes somewhere real", async ({ page }) => {
+    await page.goto("/");
+    const hrefs = await page
+      .locator("a")
+      .evaluateAll((els) =>
+        els.map((el) => (el as HTMLAnchorElement).getAttribute("href")),
+      );
+    for (const href of hrefs) {
+      expect(
+        href,
+        "an anchor with no href is decoration pretending to be a link",
+      ).toBeTruthy();
+      expect(href).not.toBe("#");
+    }
 
-test("home page is responsive across mobile, tablet, and ultra-wide viewports", async ({ page }) => {
-  // Mobile Viewport (iPhone SE / 375x667)
-  await page.setViewportSize({ width: 375, height: 667 });
-  await page.goto("/");
-  await expect(page.getByText("Abilash S L").first()).toBeVisible();
-  await expect(page.getByText("Technology Ecosystem")).toBeVisible();
+    // An in-page anchor pointing at a section that no longer exists is a dead
+    // link that still looks alive. Removing the testimonials section left one.
+    const fragments = hrefs.filter(
+      (h): h is string => !!h && h.startsWith("#") && h.length > 1,
+    );
+    for (const fragment of fragments) {
+      await expect(
+        page.locator(fragment),
+        `${fragment} has no matching element on the page`,
+      ).toHaveCount(1);
+    }
+  });
 
-  // Tablet Viewport (768x1024)
-  await page.setViewportSize({ width: 768, height: 1024 });
-  await expect(page.getByText("Production Engineering Experience")).toBeVisible();
+  test("the contact form does not fake a send", async ({ page }) => {
+    await page.goto("/");
+    await page.fill("#contact-name", "Alex Recruiter");
+    await page.fill("#contact-email", "alex@example.com");
+    await page.fill("#contact-message", "Are you free to talk this week?");
 
-  // Ultra-wide Desktop Viewport (2560x1440)
-  await page.setViewportSize({ width: 2560, height: 1440 });
-  await expect(page.getByText("Engineering Philosophy")).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: /open in your mail app/i }),
+    ).toBeVisible();
+
+    // The page says plainly that it sends nothing itself.
+    await expect(page.getByText(/nothing is sent from this page/i)).toBeVisible();
+
+    const body = ((await page.textContent("body")) ?? "").toLowerCase();
+    expect(body).not.toContain("message sent");
+  });
+
+  test("no download link points at a missing or stub file", async ({
+    page,
+    request,
+  }) => {
+    await page.goto("/");
+    const downloads = await page
+      .locator("a[download]")
+      .evaluateAll((els) =>
+        els.map((el) => (el as HTMLAnchorElement).getAttribute("href")),
+      );
+    for (const href of downloads) {
+      if (!href) continue;
+      const response = await request.get(href);
+      expect(response.status(), `${href} should exist`).toBe(200);
+      const body = await response.body();
+      // A real document is not a few hundred bytes.
+      expect(body.byteLength, `${href} looks like a stub`).toBeGreaterThan(20_000);
+    }
+  });
 });
 
 test("home page stays about the work", async ({ page }) => {
   await page.goto("/");
-  const body = (await page.textContent("body")) ?? "";
-  expect(body.toLowerCase()).not.toContain("open to work");
-  expect(body.toLowerCase()).not.toContain("lpa");
+  const body = ((await page.textContent("body")) ?? "").toLowerCase();
+  expect(body).not.toContain("open to work");
+  expect(body).not.toContain("lpa");
+});
+
+test("home page is responsive from small mobile to ultra-wide", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.goto("/");
+  await expect(page.getByText("Abilash S L").first()).toBeVisible();
+
+  // Nothing should push the document wider than the viewport.
+  const overflow = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth -
+      document.documentElement.clientWidth,
+  );
+  expect(overflow, "page scrolls horizontally at 375px").toBeLessThanOrEqual(1);
+
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await expect(page.getByText("Production Engineering Experience")).toBeVisible();
+
+  await page.setViewportSize({ width: 2560, height: 1440 });
+  await expect(page.getByText("Engineering Philosophy")).toBeVisible();
 });

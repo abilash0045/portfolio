@@ -15,7 +15,7 @@ export default function ExperienceMagazine() {
               <span className="magazine-company">Whilter · Video Platform</span>
               <span className="magazine-period">2023 - Present</span>
             </div>
-            <h3 className="magazine-title">Senior Backend &amp; Systems Engineer</h3>
+            <h3 className="magazine-title">Software Development Engineer</h3>
             <p className="magazine-lead">
               Operating core video rendering microservices processing <strong>25,000+ daily renders</strong> across GKE and GCP Cloud Run.
             </p>
