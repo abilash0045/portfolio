@@ -46,9 +46,11 @@ export default function Home() {
 
         {/* Embedded Interactive Dartboard Map Section */}
         <section id="dartboard-embedded-section" style={{ margin: "72px 0" }}>
-          <h2 className="section-title">Interactive Map &amp; Geocoding Sandbox</h2>
+          <h2 className="section-title">Throw a dart at the map</h2>
           <p className="section-subtitle">
-            Uniform area dart sampling map backed by Nominatim and Overpass API query fallbacks
+            I am bad at deciding where to go on a free weekend, so I let a dart
+            decide. Pick how far you are willing to travel, throw, and go
+            wherever it lands. If it lands in the sea, it says so.
           </p>
           <Dartboard embedded={true} />
         </section>

@@ -31,18 +31,18 @@ export default function Dartboard({ embedded = false }: Props) {
           </Link>
         ) : (
           <div className="dartboard__header-title">
-            <span>🎯 Interactive Dartboard Map</span>
+            <span>Pick a range, then throw.</span>
           </div>
         )}
 
         <div className="dartboard__header-actions">
           {embedded ? (
             <Link href="/dartboard" className="dartboard__fullscreen-btn">
-              Open Full Screen ↗
+              Open the full map ↗
             </Link>
           ) : (
             <div className="dartboard__header-title">
-              <span>🎯 Full Screen Mode</span>
+              <span>Pick a range, then throw.</span>
             </div>
           )}
         </div>
