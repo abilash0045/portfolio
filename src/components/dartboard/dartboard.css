@@ -46,13 +46,20 @@
   transition: all 0.2s ease;
 }
 
+/* The second `color` here used to be var(--color-ink), which silently
+   overrode the on-accent value above it and put 2.45:1 text on the accent
+   fill for as long as the pointer was over the button. */
 .dartboard__back-btn:hover,
 .dartboard__fullscreen-btn:hover {
   background: var(--color-accent);
   color: var(--color-on-accent);
   border-color: var(--accent-red);
-  color: var(--color-ink);
   transform: translateY(-1px);
+}
+
+.dartboard__back-btn:active,
+.dartboard__fullscreen-btn:active {
+  transform: translateY(0);
 }
 
 .dartboard__header-title {
@@ -128,7 +135,6 @@
   font-size: 0.92rem;
   font-weight: 700;
   font-family: var(--font-body);
-  color: var(--color-ink);
   background: var(--accent-red);
   color: var(--color-on-accent);
   border: none;
@@ -146,6 +152,10 @@
   box-shadow: 0 6px 20px var(--accent-red-glow);
 }
 
+.controls__throw:active:not(:disabled) {
+  transform: translateY(0);
+}
+
 .controls__throw:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -160,27 +170,45 @@
 .locsearch__input {
   flex: 1 1 220px;
   padding: 9px 14px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--border-subtle);
+  background: var(--color-inset);
+  border: 1px solid var(--color-border-interactive);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 0.88rem;
+  transition: border-color 0.2s ease;
+}
+
+.locsearch__input:focus-visible {
+  border-color: var(--color-focus);
 }
 
 .locsearch__button {
   padding: 9px 16px;
-  background: var(--color-paper-3);
-  border: 1px solid var(--border-subtle);
+  background: var(--color-paper-2);
+  border: 1px solid var(--color-border-interactive);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.locsearch__button:hover {
+/* Hover used to set the background it already had. Resting is now one step
+   darker so the lift on hover is visible. */
+.locsearch__button:hover:not(:disabled) {
   background: var(--color-paper-3);
+}
+
+.locsearch__button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* The button is disabled for the length of the Nominatim call and had no
+   disabled styling, so the only clue was the label changing to Searching. */
+.locsearch__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .locsearch__results {
@@ -191,15 +219,26 @@
   gap: 4px;
 }
 
+/* A list of search hits, every one of them clickable, and until now the
+   only control on the site with no hover state whatsoever. */
 .locsearch__result {
   width: 100%;
   text-align: left;
   padding: 8px 12px;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--border-subtle);
+  background: var(--color-inset);
+  border: 1px solid var(--color-border-interactive);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.locsearch__result:hover {
+  background: var(--color-paper-3);
+}
+
+.locsearch__result:active {
+  background: var(--color-paper-2);
 }
 
 /* Flying Dart Animation */
@@ -227,7 +266,7 @@
   display: grid;
   gap: 4px;
   padding: 14px 18px;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--color-inset);
   border: 1px solid var(--border-subtle);
   border-left: 3px solid var(--accent-red);
   border-radius: var(--radius-md);

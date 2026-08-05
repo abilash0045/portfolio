@@ -44,6 +44,19 @@
   --accent-green: var(--color-ink);
   --accent-amber: var(--color-ink);
 
+  /* One surface for anything set into a card: text fields, result rows,
+     the trough behind a segmented toggle, the panes inside the two
+     widgets. Nine different rgba(0, 0, 0, 0.2-0.5) values used to do this
+     job, and every one of them stays near-black in light theme no matter
+     what the theme says, because alpha over an unknown parent is not a
+     colour. This is the last of the alpha-as-colour values on the site. */
+  --color-inset: oklch(11% 0.010 28);
+
+  /* The ring is a token because keyboard focus is not a per-component
+     decision. Components override the offset only where 3px is clipped. */
+  --focus-ring: 2px solid var(--color-focus);
+  --focus-ring-offset: 3px;
+
   --border-subtle: var(--color-rule);
   --glass-bg: var(--color-paper-2);
   --glass-border: var(--color-rule);
@@ -78,6 +91,7 @@
   --color-focus: oklch(52% 0.190 28);
   --color-on-accent: oklch(97% 0.008 40);
   --color-border-interactive: oklch(58% 0.014 28);
+  --color-inset: oklch(99% 0.003 40);
   --color-grid: oklch(20% 0.014 28 / 0.05);
   --color-scroll-thumb: oklch(20% 0.014 28 / 0.22);
 
@@ -134,6 +148,23 @@ a {
   text-decoration: none;
 }
 
+/* Every focusable thing gets the same ring, defined once. Before this,
+   four selectors in navbar.css had a ring and nothing else on the site
+   did, so tabbing off the header went dark. Declaring it on the universal
+   match means a control added later cannot forget it. Outline follows the
+   element's own border-radius, so pills stay pills while focused. */
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Placeholders were inheriting the browser default, which is derived from
+   the text colour and lands well under 4.5:1 on a dark field. */
+::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -152,4 +183,24 @@ a {
 @keyframes pulse-slow {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.95); }
+}
+
+/* The project rule is that every animation respects this. Three stylesheets
+   each guarded two or three of their own rules and the other twenty-odd
+   transitions were unguarded, so the guard lives here instead: one block
+   that a new rule cannot escape. Durations go to near-zero rather than
+   none so animationend still fires and nothing waits forever on it.
+   scroll-behavior is the one motion-sensitive visitors most often disable
+   and it was set to smooth unconditionally. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

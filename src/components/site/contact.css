@@ -54,20 +54,22 @@
 .form-textarea {
   width: 100%;
   padding: 14px 16px;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--color-inset);
   border: 1px solid var(--color-border-interactive);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 0.95rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
-.form-input:focus,
-.form-textarea:focus {
-  outline: none;
-  border-color: var(--accent-blue);
-  box-shadow: none;
+/* This rule used to be `outline: none` plus an ink border, which took the
+   only focus indicator on the form away and replaced it with a 1px colour
+   shift. The ring comes from the global rule; the border moves as well so
+   the field reads as active from the inside too. */
+.form-input:focus-visible,
+.form-textarea:focus-visible {
+  border-color: var(--color-focus);
 }
 
 .form-textarea {
@@ -81,20 +83,22 @@
   font-weight: 700;
   color: var(--color-on-accent);
   background: var(--color-accent);
-  color: var(--color-on-accent);
   border: none;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  box-shadow: none;
-  transition: all 0.25s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
   min-height: 48px;
 }
 
+/* Hover used to set the same background it already had, so the only signal
+   was the lift. It now darkens like every other primary button. */
 .submit-btn:hover {
-  background: var(--color-accent);
-  color: var(--color-on-accent);
+  background: var(--button-primary-hover);
   transform: translateY(-2px);
-  box-shadow: none;
+}
+
+.submit-btn:active {
+  transform: translateY(0);
 }
 
 .contact-channels {
@@ -115,8 +119,11 @@
   transition: color 0.2s ease;
 }
 
-.contact-channel-link:hover {
-  color: var(--accent-blue);
+.contact-channel-link:hover,
+.contact-channel-link:active {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .contact-note {

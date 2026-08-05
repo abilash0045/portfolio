@@ -22,9 +22,10 @@ export default function PipelineSimulator() {
         </div>
 
         <div className="sim-controls">
-          <div className="sim-btn-group" aria-label="Storage Mode Toggle">
+          <div className="sim-btn-group" role="group" aria-label="Storage mode">
             <button
               type="button"
+              aria-pressed={storageMode === "efs"}
               className={`sim-btn ${storageMode === "efs" ? "sim-btn--active" : ""}`}
               onClick={() => setStorageMode("efs")}
             >
@@ -32,6 +33,7 @@ export default function PipelineSimulator() {
             </button>
             <button
               type="button"
+              aria-pressed={storageMode === "ephemeral"}
               className={`sim-btn ${storageMode === "ephemeral" ? "sim-btn--active-green" : ""}`}
               onClick={() => setStorageMode("ephemeral")}
             >
@@ -39,9 +41,10 @@ export default function PipelineSimulator() {
             </button>
           </div>
 
-          <div className="sim-btn-group" aria-label="Caching Mode Toggle">
+          <div className="sim-btn-group" role="group" aria-label="Caching mode">
             <button
               type="button"
+              aria-pressed={cacheMode === "none"}
               className={`sim-btn ${cacheMode === "none" ? "sim-btn--active" : ""}`}
               onClick={() => setCacheMode("none")}
             >
@@ -49,6 +52,7 @@ export default function PipelineSimulator() {
             </button>
             <button
               type="button"
+              aria-pressed={cacheMode === "redis"}
               className={`sim-btn ${cacheMode === "redis" ? "sim-btn--active-green" : ""}`}
               onClick={() => setCacheMode("redis")}
             >

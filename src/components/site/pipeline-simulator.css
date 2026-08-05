@@ -41,10 +41,10 @@
 
 .sim-btn-group {
   display: flex;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--color-inset);
   padding: 3px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--color-border-interactive);
   max-width: 100%;
 }
 
@@ -58,8 +58,20 @@
   padding: 8px 14px;
   border-radius: calc(var(--radius-md) - 3px);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
   min-height: 38px;
+}
+
+/* The pair had no hover state at all: the only way to find out a segment
+   was clickable was to click it. Scoped to the unpressed one so hovering
+   the current selection does not undo its fill. */
+.sim-btn[aria-pressed="false"]:hover {
+  color: var(--text-primary);
+  background: var(--color-paper-3);
+}
+
+.sim-btn:active {
+  transform: translateY(1px);
 }
 
 .sim-btn--active {
@@ -93,7 +105,7 @@
   flex-direction: column;
   gap: 16px;
   padding: clamp(14px, 2vw, 20px);
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--color-inset);
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
   width: 100%;
@@ -171,7 +183,7 @@
 }
 
 .sim-card {
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--color-inset);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 16px;

@@ -85,11 +85,4 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
   color: var(--text-secondary);
-  transition: all 0.2s ease;
-}
-
-.tech-pill:hover {
-  color: var(--text-primary);
-  border-color: var(--accent-cyan);
-  background: var(--color-paper-3);
 }

@@ -154,14 +154,13 @@
   border-radius: 2px;
 }
 
-/* Every interactive element in the bar gets the same visible focus ring. */
-.navbar__link:focus-visible,
-.navbar__menu-btn:focus-visible,
-.navbar__theme-btn:focus-visible,
-.navbar__brand:focus-visible {
-  outline: 2px solid var(--accent-red);
-  outline-offset: 3px;
-  border-radius: var(--radius-sm);
+/* The ring itself now comes from the global :focus-visible rule. This block
+   used to also set border-radius: var(--radius-sm), which reshaped the pill
+   links into rounded rects for as long as they held focus. */
+.navbar__link:active,
+.navbar__menu-btn:active,
+.navbar__theme-btn:active {
+  transform: translateY(1px);
 }
 
 @media (max-width: 768px) {

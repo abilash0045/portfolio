@@ -134,16 +134,13 @@
   margin: 30px 0;
 }
 
+/* A span in a list of six. It had a hover brightening and a transition to
+   go with it, which promises a click target that was never there. */
 .hero__tech-tag {
   font-family: var(--font-mono);
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--color-neutral);
-  transition: color 0.18s var(--ease-out, ease);
-}
-
-.hero__tech-tag:hover {
-  color: var(--color-ink);
 }
 
 /* Metric Highlights Bar */
@@ -225,7 +222,9 @@
   background: var(--button-primary-hover);
   color: var(--color-on-accent);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px var(--color-accent);
+  /* Was var(--color-accent): a solid fill in the blur slot, which reads as
+     a hard halo rather than a shadow. */
+  box-shadow: 0 6px 20px var(--accent-red-glow);
 }
 
 .hero__btn--secondary {
@@ -247,6 +246,14 @@
 .hero__btn--ghost:hover {
   color: var(--text-primary);
   border-color: var(--text-secondary);
+  background: var(--color-paper-2);
+}
+
+/* Press feedback. Everything that lifts on hover settles back to zero when
+   held, which is the whole point of the lift. Nothing on the site had an
+   :active state before, so a click landed with no acknowledgement. */
+.hero__btn:active {
+  transform: translateY(0);
 }
 
 .hero__socials {
@@ -265,8 +272,11 @@
   transition: color 0.2s ease;
 }
 
-.hero__social-link:hover {
+.hero__social-link:hover,
+.hero__social-link:active {
   color: var(--accent-red);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* Case Studies Grid Layout */
@@ -399,6 +409,8 @@
   list-style: none;
 }
 
+/* An li in a stack list. Same story as .hero__tech-tag: it lit up on hover
+   and did nothing when clicked. */
 .study__tech {
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -408,13 +420,6 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
   color: var(--text-secondary);
-  transition: all 0.2s ease;
-}
-
-.study__tech:hover {
-  color: var(--text-primary);
-  border-color: var(--color-border-interactive);
-  background: var(--color-paper-3);
 }
 
 .study__links {
@@ -451,6 +456,11 @@
   color: var(--color-on-accent);
 }
 
+/* Neither variant lifts on hover, so the press moves down instead of back. */
+.study__link-btn:active {
+  transform: translateY(1px);
+}
+
 /* Footer Section */
 .footer {
   padding: 56px 0 0;
@@ -480,6 +490,9 @@
   color: var(--text-secondary);
   font-weight: 500;
 }
-.footer__link:hover {
+.footer__link:hover,
+.footer__link:active {
   color: var(--accent-red);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
