@@ -1,0 +1,368 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-05T10:52:51Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 987491502,
+  "lat": 8.0829273,
+  "lon": 77.5392470,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Gujarati Bhavan"
+  }
+},
+{
+  "type": "node",
+  "id": 1053621184,
+  "lat": 8.0778131,
+  "lon": 77.5557978,
+  "tags": {
+    "name": "Sunset Point",
+    "tourism": "viewpoint"
+  }
+},
+{
+  "type": "node",
+  "id": 1053622176,
+  "lat": 8.0781048,
+  "lon": 77.5553579,
+  "tags": {
+    "name": "Swami Vivekananda Rock Memorial",
+    "name:en": "Swami Vivekananda Rock Memorial",
+    "name:hi": "विवेकानन्द स्मारक शिला",
+    "name:ml": "സ്വാമി വിവേകാനന്ദപ്പാറ",
+    "name:mr": "स्वामी विवेकानंद स्मारक",
+    "name:ta": "ஸ்வாமி விவேகானந்தர் பாறை",
+    "tourism": "attraction",
+    "wikidata": "Q3344887",
+    "wikimedia_commons": "File:Vivekanand_Rock_Memorial_as_visible_from_Thiruvalluvar_Statue.jpg",
+    "wikipedia": "en:Vivekananda Rock Memorial"
+  }
+},
+{
+  "type": "node",
+  "id": 1207709813,
+  "lat": 8.0780036,
+  "lon": 77.5462271,
+  "tags": {
+    "name": "View Tower",
+    "name:en": "View Tower",
+    "opening_hours": "05:30-19:00",
+    "tourism": "viewpoint"
+  }
+},
+{
+  "type": "node",
+  "id": 1942966052,
+  "lat": 8.0992921,
+  "lon": 77.5196980,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2024-04-03",
+    "name": "Arulmigu Kulasekara Vinayagar temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 2152043260,
+  "lat": 8.0788680,
+  "lon": 77.5491035,
+  "tags": {
+    "name": "Kamaraj Mandapam",
+    "name:en": "Kamaraj Mandapam",
+    "name:ta": "காமராஜர் மண்டபம்",
+    "tourism": "museum"
+  }
+},
+{
+  "type": "node",
+  "id": 2152043507,
+  "lat": 8.0813875,
+  "lon": 77.5508171,
+  "tags": {
+    "amenity": "cafe",
+    "name": "Tonys Internetcafe"
+  }
+},
+{
+  "type": "node",
+  "id": 2152043513,
+  "lat": 8.0813017,
+  "lon": 77.5499014,
+  "tags": {
+    "name": "Wandering Monk Museum",
+    "tourism": "museum"
+  }
+},
+{
+  "type": "node",
+  "id": 2439679265,
+  "lat": 8.0980144,
+  "lon": 77.5312614,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "sai baba temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 2605729676,
+  "lat": 8.0793666,
+  "lon": 77.5513442,
+  "tags": {
+    "name": "Sunrise Point",
+    "tourism": "viewpoint"
+  }
+},
+{
+  "type": "node",
+  "id": 4005973841,
+  "lat": 8.0814058,
+  "lon": 77.5470171,
+  "tags": {
+    "man_made": "lighthouse",
+    "name": "Kanyakumari Lighthouse",
+    "name:en": "Kanyakumari Lighthouse",
+    "name:ml": "കന്യാകുമാരി ദീപസ്തംഭം",
+    "name:ta": "கன்னியாகுமரி கலங்கரை விளக்கம்",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 4005985061,
+  "lat": 8.0781052,
+  "lon": 77.5316171,
+  "tags": {
+    "name": "Sunset viewpoint",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 4005985062,
+  "lat": 8.0781806,
+  "lon": 77.5318259,
+  "tags": {
+    "name": "Sunset Viewpoint",
+    "tourism": "viewpoint",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 4005990720,
+  "lat": 8.0786769,
+  "lon": 77.5510969,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Adi Sankara Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4005990721,
+  "lat": 8.0786472,
+  "lon": 77.5507044,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Swami Vivekananda Altar",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4006001304,
+  "lat": 8.0787684,
+  "lon": 77.5513816,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Mayamma Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4367453289,
+  "lat": 8.0836749,
+  "lon": 77.5495990,
+  "tags": {
+    "addr:street": "Main Road",
+    "amenity": "restaurant",
+    "cuisine": "seafood;indian;breakfast;local",
+    "name": "Hotel Sangam",
+    "opening_hours": "Mo-Su 09:00-21:00"
+  }
+},
+{
+  "type": "node",
+  "id": 4679946991,
+  "lat": 8.0779078,
+  "lon": 77.5558429,
+  "tags": {
+    "check_date": "2023-01-16",
+    "name": "Dhyan mandapam",
+    "name:en": "Dhyan mandapam",
+    "name:mr": "ध्यान मंडपम",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 5282523882,
+  "lat": 8.1054408,
+  "lon": 77.4988768,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Junction temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 5792618670,
+  "lat": 8.0842603,
+  "lon": 77.5481679,
+  "tags": {
+    "addr:city": "Kanyakumari",
+    "addr:postcode": "629702",
+    "addr:street": "Anju Kattu Vilai Road",
+    "amenity": "place_of_worship",
+    "name": "Bharat Sevashram Sangha",
+    "phone": "04652-246164",
+    "religion": "hindu",
+    "website": "https://www.bharatsevashramsangha.org/"
+  }
+},
+{
+  "type": "node",
+  "id": 6939047685,
+  "lat": 8.1044978,
+  "lon": 77.4977729,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Shree Esaki Amman temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 6939196241,
+  "lat": 8.1029956,
+  "lon": 77.4987373,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sree Bathrakaali amman temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7016742486,
+  "lat": 8.0793285,
+  "lon": 77.5499079,
+  "tags": {
+    "name": "Triangle Park",
+    "name:en": "Triangle park",
+    "name:ta": "முக்கோண பூங்கா",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 7857874778,
+  "lat": 8.1055082,
+  "lon": 77.4980746,
+  "tags": {
+    "amenity": "place_of_worship",
+    "denomination": "hindu",
+    "name": "Shree Siva Senkidakara Swami Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7891648774,
+  "lat": 8.1044657,
+  "lon": 77.4986797,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Shri Siva Sudalaimadan Swami Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 8908079738,
+  "lat": 8.0769322,
+  "lon": 77.5548448,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Jhinki Devi Stupa Shila",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 10605606201,
+  "lat": 8.0842412,
+  "lon": 77.5495646,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2023-02-04",
+    "diet:non-vegetarian": "yes",
+    "diet:vegetarian": "yes",
+    "name": "Hotel Saran"
+  }
+},
+{
+  "type": "node",
+  "id": 10606030151,
+  "lat": 8.0822485,
+  "lon": 77.5497432,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2023-02-04",
+    "name": "Hotel Viswa"
+  }
+},
+{
+  "type": "node",
+  "id": 11535630617,
+  "lat": 8.0929592,
+  "lon": 77.5643392,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2024-01-21",
+    "name": "Sriman Narayanaswami Temple",
+    "name:ta": "ஶ்ரீமன் நாராயண சுவாமி ஆலயம்",
+    "religion": "hindu",
+    "source": "survey",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12886725444,
+  "lat": 8.0813566,
+  "lon": 77.5496319,
+  "tags": {
+    "amenity": "post_box",
+    "name": "Southernmost Post Box",
+    "operator": "India Post",
+    "operator:wikidata": "Q3519720",
+    "tourism": "attraction"
+  }
+}
+
+  ]
+}
