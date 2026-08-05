@@ -8,10 +8,13 @@ Status: approved, pre-implementation
 
 A personal portfolio at `/` and a working dart-throwing wall map at `/dartboard`.
 
-The portfolio exists because Abilash's public GitHub does not represent his ability. It is 32 repos,
-mostly forks (clawdbot, agenticSeek, build-your-own-x, palmier-pro) and 2023-era college work
-(blinkit-clone, startup-landing-page, bestBuy). His real work — a 25k/day video render pipeline — sits
-behind an employer firewall. The portfolio's job is to carry that work in written form, credibly.
+The portfolio exists because the work worth showing runs inside a company and cannot be linked to.
+A 25k/day video render pipeline has no public repo, and it never will. So the portfolio's job is to
+carry that work in written form, with the numbers and the reasoning attached, credibly enough that a
+reader does not need a repo to believe it.
+
+GitHub gets a link and no more. Repo cards would compete with the case studies for attention while
+saying less than the case studies do. This repo is the code sample.
 
 The dartboard exists because a portfolio with no personality is forgettable, and because it is a real
 piece of engineering: geospatial sampling, a flaky third-party API, and a graceful-degradation problem.
@@ -19,8 +22,9 @@ It is the only thing on the site whose source a reader can actually inspect.
 
 ## Constraints
 
-- Public and indexed. Abilash is currently employed at Whilter and his job search is deliberately
-  soft-signal. No "open to work", no compensation figures, no relocation intent on the page.
+- Public and indexed. The site is about the work and nothing else. No employment-status badges, no
+  compensation figures, no location-preference statements. Those belong on a profile someone chooses
+  to open, not on the front page of a portfolio.
 - Employer detail is capped at what his resume and LinkedIn already say publicly. Numbers, tech, and
   narrative are in. Internal service names, client names, config specifics, and real architecture
   diagrams of Whilter's system are out.
@@ -228,8 +232,8 @@ the honest way to get both a green build and a real guarantee.
 `github.com/abilash0045/portfolio`, public. Public means unlimited free Actions minutes, so build time
 is bounded by patience rather than cost.
 
-`~/career-plan` stays entirely out of this repo. It contains private job-search material and must never
-appear in public git history.
+Unrelated personal repositories that live on the same machine stay entirely out of this one. Only this
+project belongs in this project's history.
 
 ### Workflows
 

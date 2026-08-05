@@ -5,13 +5,15 @@ The design lives in `docs/DESIGN.md` and is the reference; this file is the diar
 
 ## Decisions
 
-**2026-08-05 — Portfolio carries the work, GitHub doesn't.**
-The public GitHub is 32 repos, mostly forks and 2023 college projects. Embedding repo cards would
-actively hurt. GitHub gets a footer link; this repo itself is the code sample.
+**2026-08-05 — Written case studies carry the work, not repo cards.**
+The systems worth showing run inside a company and have no public repos. Case studies with the
+numbers and the reasoning attached do more work than a wall of repo cards, which would compete for
+attention while saying less. GitHub gets a footer link, and this repo is the code sample.
 
-**2026-08-05 — No job-search signal on the page.**
-Site is public and indexed, and the LinkedIn strategy is deliberately soft-signal while employed.
-No "open to work", no comp figures, no relocation intent.
+**2026-08-05 — The site is about the work, nothing else.**
+Public and indexed, so it carries no employment-status badge, no compensation figures, and no
+location-preference statement. Those belong on a profile someone chooses to open, not on the front
+page of a portfolio. The work is the argument.
 
 **2026-08-05 — Employer detail capped at resume level.**
 Numbers, tech, and narrative are already public on the resume and LinkedIn, so restating them adds no

@@ -15,7 +15,7 @@
 - **Employer detail capped at resume level.** Numbers, tech and narrative are in. Internal service names, client names, and real architecture diagrams of Whilter's systems are out.
 - **Exact claim wording** (these are load-bearing and must not drift): 25,000+ daily video renders; render success 60% → 98%, root-caused to **MOV atom corruption from concurrent EFS reads/writes**, fixed by staging media on pod-local ephemeral disk — **not** attributable to KEDA; ~40% monthly cloud spend cut as **two independent wins**, a segment-level Redis cache at ~80% hit rate (~30%) and a Pub/Sub queue-depth Cloud Run autoscaler replacing KEDA-on-GKE (~10%); config playground on the Visitor pattern, approval cycle 3 days → 1 day; S3 → EFS migration, 2x throughput.
 - **Attribution is mandatory, not fine print.** OpenStreetMap contributors and CARTO credited on the map, per ODbL.
-- **`~/career-plan` never enters this repo.** Private job-search material.
+- **Unrelated local repositories never enter this repo.** Only this project belongs in its history.
 - **Voice:** the repo `CLAUDE.md` written in Task 1 governs all prose. No em-dashes in anything a human reads. No banned AI lexicon. Minimal bold.
 - **Node 22** everywhere: CI, and the `.nvmrc` written in Task 1.
 - `prefers-reduced-motion` is respected by every animation.
@@ -2770,7 +2770,7 @@ test("home page carries the work and links to the dartboard", async ({ page }) =
   await expect(page).toHaveURL(/\/dartboard$/);
 });
 
-test("home page never advertises a job search", async ({ page }) => {
+test("home page stays about the work", async ({ page }) => {
   await page.goto("/");
   const body = (await page.textContent("body")) ?? "";
   expect(body.toLowerCase()).not.toContain("open to work");
