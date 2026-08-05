@@ -15,9 +15,6 @@ export default function Home() {
     <>
       {/* Ambient background mesh */}
       <div className="ambient-bg" aria-hidden="true">
-        <div className="ambient-bg__glow ambient-bg__glow--1" />
-        <div className="ambient-bg__glow ambient-bg__glow--2" />
-        <div className="ambient-bg__glow ambient-bg__glow--3" />
         <div className="ambient-bg__grid" />
       </div>
 

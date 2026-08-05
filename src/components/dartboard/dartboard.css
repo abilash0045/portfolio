@@ -48,9 +48,9 @@
 
 .dartboard__back-btn:hover,
 .dartboard__fullscreen-btn:hover {
-  background: rgba(230, 57, 70, 0.9);
+  background: var(--color-accent);
   border-color: var(--accent-red);
-  color: #ffffff;
+  color: var(--color-ink);
   transform: translateY(-1px);
 }
 
@@ -127,7 +127,7 @@
   font-size: 0.92rem;
   font-weight: 700;
   font-family: var(--font-body);
-  color: #ffffff;
+  color: var(--color-ink);
   background: var(--accent-red);
   border: none;
   border-radius: var(--radius-pill);
@@ -138,9 +138,9 @@
 }
 
 .controls__throw:hover:not(:disabled) {
-  background: #d62839;
+  background: var(--button-primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+  box-shadow: 0 6px 20px var(--accent-red-glow);
 }
 
 .controls__throw:disabled {

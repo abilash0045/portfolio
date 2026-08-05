@@ -65,19 +65,19 @@ export default function Hero() {
           <div className="hero__metric-label">Daily video renders</div>
         </div>
         <div className="hero__metric">
-          <div className="hero__metric-value" style={{ color: "var(--accent-green)" }}>
+          <div className="hero__metric-value">
             60% → 98%
           </div>
           <div className="hero__metric-label">Render reliability</div>
         </div>
         <div className="hero__metric">
-          <div className="hero__metric-value" style={{ color: "var(--accent-blue)" }}>
+          <div className="hero__metric-value">
             ~40%
           </div>
           <div className="hero__metric-label">Cloud spend cut</div>
         </div>
         <div className="hero__metric">
-          <div className="hero__metric-value" style={{ color: "var(--accent-violet)" }}>
+          <div className="hero__metric-value">
             3d → 1d
           </div>
           <div className="hero__metric-label">Config approval cycle</div>
