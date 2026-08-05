@@ -104,6 +104,68 @@ test.describe("nothing on this page claims something untrue", () => {
   });
 });
 
+// Below 540px the nav list was simply display:none with nothing in its place,
+// so a phone visitor could not reach any section of the page.
+test.describe("navigation works on a phone", () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test("the menu opens, navigates, and closes", async ({ page }) => {
+    await page.goto("/");
+
+    const toggle = page.getByRole("button", { name: "Main menu" });
+    const nav = page.locator("#primary-nav");
+
+    await expect(toggle).toBeVisible();
+    await expect(nav).toBeHidden();
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+
+    await toggle.click();
+    await expect(nav).toBeVisible();
+    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await expect(page.getByRole("link", { name: "Selected Work" })).toBeVisible();
+
+    // Choosing a destination should close the panel behind you.
+    await page.getByRole("link", { name: "Selected Work" }).click();
+    await expect(nav).toBeHidden();
+  });
+
+  test("escape closes the menu and returns focus to the control", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const toggle = page.getByRole("button", { name: "Main menu" });
+
+    await toggle.click();
+    await expect(page.locator("#primary-nav")).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(page.locator("#primary-nav")).toBeHidden();
+    await expect(toggle).toBeFocused();
+  });
+
+  test("menu links are reachable by keyboard and big enough to tap", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Main menu" }).click();
+
+    const link = page.getByRole("link", { name: "Contact" });
+    const box = await link.boundingBox();
+    expect(box, "Contact link should be laid out").not.toBeNull();
+    expect(box!.height, "touch target under 44px").toBeGreaterThanOrEqual(44);
+
+    await link.focus();
+    await expect(link).toBeFocused();
+  });
+});
+
+test("the menu control is not shown when the full nav fits", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/");
+  await expect(page.getByRole("button", { name: "Main menu" })).toBeHidden();
+  await expect(page.locator("#primary-nav")).toBeVisible();
+});
+
 test("home page stays about the work", async ({ page }) => {
   await page.goto("/");
   const body = ((await page.textContent("body")) ?? "").toLowerCase();

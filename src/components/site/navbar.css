@@ -8,6 +8,7 @@
 }
 
 .navbar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -117,18 +118,105 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
+
+
+/* Menu control. Hidden on wide screens, where the inline list is visible. */
+.navbar__menu-btn {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.navbar__menu-btn:hover {
+  background: var(--bg-card-hover);
+}
+
+.navbar__menu-bars {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 16px;
+  height: 11px;
+}
+
+.navbar__menu-bars span {
+  display: block;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+}
+
+/* Every interactive element in the bar gets the same visible focus ring. */
+.navbar__link:focus-visible,
+.navbar__menu-btn:focus-visible,
+.navbar__theme-btn:focus-visible,
+.navbar__brand:focus-visible {
+  outline: 2px solid var(--accent-red);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
 @media (max-width: 768px) {
   .navbar__status {
     display: none;
   }
+
+  .navbar__menu-btn {
+    display: inline-flex;
+  }
+
+  /* The panel, not a disappearance. Closed means closed, and closed means
+     removed from the tab order rather than merely invisible. */
+  .navbar__nav {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 10px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .navbar__nav[data-open="false"] {
+    display: none;
+  }
+
+  .navbar__nav[data-open="true"] {
+    display: flex;
+  }
+
   .navbar__link {
-    padding: 5px 8px;
-    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .navbar__link:hover {
+    background: var(--bg-card-hover);
   }
 }
 
-@media (max-width: 540px) {
+@media (prefers-reduced-motion: reduce) {
   .navbar__nav {
-    display: none;
+    transition: none;
   }
 }
