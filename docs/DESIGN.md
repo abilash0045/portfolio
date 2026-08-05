@@ -116,12 +116,17 @@ client never parses Nominatim's raw response:
 ```ts
 type Landing =
   | { kind: "place";   name: string; area: string; country: string; category: string }
-  | { kind: "nowhere"; reason: "water" | "unmapped" }
+  | { kind: "nowhere" }
 ```
 
 `Unable to geocode` maps to `kind: "nowhere"`. Any other upstream failure surfaces as an error the UI
 reports plainly; it does not silently become "nowhere", because a network failure and an empty ocean are
 different facts and conflating them would be a lie in the UI.
+
+Note that `nowhere` carries no reason. An earlier draft of this document had it distinguish `water` from
+`unmapped`, which is not derivable: Nominatim returns the same `Unable to geocode` body for an ocean
+coordinate and for genuinely unmapped land, and there is no second field to separate them. The UI copy
+is written to be true in both cases rather than asserting a cause we cannot know.
 
 ### `/api/nearby`
 
