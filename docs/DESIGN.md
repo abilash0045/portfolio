@@ -200,19 +200,111 @@ The dart sampler is a pure function and gets real tests:
 - antimeridian: origin at lon 179.9 produces valid longitudes in [-180, 180]
 - high latitude: origin at lat 89 does not produce NaN or out-of-range latitude
 
-API routes are tested against mocked upstream responses for the shapes actually observed: a village hit,
-the `Unable to geocode` body, a 429, and a timeout.
+API routes are tested against recorded upstream responses for the shapes actually observed on
+2026-08-05: a village hit, the `Unable to geocode` body, a 429, and a timeout.
 
 One end-to-end pass with Playwright: load `/dartboard`, stub geolocation, throw, assert a card appears
 with a real place name.
 
-## Deployment
+### Recorded responses are not a violation of "nothing mocked"
 
-`github.com/abilash0045/portfolio`, public. Vercel free tier. The repo is deliberately readable — it is
-part of the portfolio.
+The application never mocks. It calls the real APIs and handles their real failures, always.
+
+The *test suite* uses recorded real responses, and must. Overpass fails roughly one request in three;
+a CI job that called it live would fail one build in three for reasons that have nothing to do with the
+commit, and a test suite that cries wolf is worse than no test suite. Fixtures are captured verbatim
+from real calls and the file records when.
+
+Upstream drift is caught by a separate scheduled workflow instead — see `contract-check` below. That is
+the honest way to get both a green build and a real guarantee.
+
+## Repo and CI/CD
+
+`github.com/abilash0045/portfolio`, public. Public means unlimited free Actions minutes, so build time
+is bounded by patience rather than cost.
 
 `~/career-plan` stays entirely out of this repo. It contains private job-search material and must never
 appear in public git history.
+
+### Workflows
+
+**`ci.yml`** — on push and pull request. Typecheck, lint, unit tests, `next build`, Playwright e2e, and
+a Lighthouse budget check. The full suite runs everywhere; a portfolio's broken deploy is not an
+incident, so nothing here is a hard deployment gate. It exists for signal, and for Auto-fix to react to.
+
+**`contract-check.yml`** — scheduled weekly, and manually dispatchable. Calls the live Nominatim and
+Overpass endpoints and asserts the response *shapes* the app depends on: that a rural land coordinate
+returns a named place, and that an ocean coordinate returns the `Unable to geocode` error body. Opens
+an issue on failure rather than failing a build, because upstream being down is not a code defect.
+Overpass failures do not open an issue — it is expected to fail and the app already treats it as
+optional.
+
+### Deployment
+
+Vercel's native GitHub integration: preview deploy per pull request, production deploy on `main`. Chosen
+over a GitHub Actions deploy step because previews-per-PR come free and there is no deploy token to
+store or rotate.
+
+This requires connecting Vercel to the GitHub repo once, in a browser. That step is Abilash's; it cannot
+be scripted from here.
+
+## Remote development
+
+The goal is being able to work on this from a phone. Two distinct features cover two distinct moments,
+and both get set up.
+
+**Cloud sessions** (`claude --cloud`, claude.ai/code, Claude mobile app) run on an Anthropic-managed VM.
+The laptop can be closed. This is the one that means "develop from my phone."
+
+**Remote Control** (`claude remote-control`) exposes a session running on the Mac to phone and browser.
+The laptop must stay awake and the process alive. This is for steering something already started at the
+desk, not for working away from it.
+
+### Repo config, because user-level config does not travel
+
+Cloud sessions clone the repo and get nothing else. The repo's `CLAUDE.md`, `.claude/settings.json`,
+`.claude/skills/`, `.claude/agents/`, and `.claude/commands/` all come along. `~/.claude/CLAUDE.md` does
+not.
+
+That matters here specifically: the anti-slop voice spec and the minimal-code decision ladder live in
+the user-level file. Without action, Claude-on-the-phone writes in a different voice than Claude-at-the-
+desk on the same repo. So the repo gets its own `CLAUDE.md` carrying the rules this project actually
+needs — voice, the minimal-code ladder, and the project's own constraints from this document.
+
+A `SessionStart` hook in `.claude/settings.json` runs `npm install` in cloud sessions, gated on
+`CLAUDE_CODE_REMOTE` so it is a no-op locally.
+
+### Cloud environment network access
+
+The default **Trusted** network level allowlists package registries, GitHub, and cloud SDKs. It does
+**not** include any domain this project depends on. A cloud environment for this repo must use
+**Custom**, with "also include the default list" checked, plus:
+
+```
+nominatim.openstreetmap.org
+overpass-api.de
+tile.openstreetmap.org
+basemaps.cartocdn.com
+*.basemaps.cartocdn.com
+cdn.playwright.dev
+```
+
+Without these, live API checks and Playwright browser installs fail inside cloud sessions. Configured in
+the environment selector at claude.ai/code — a browser step, and Abilash's to do.
+
+### GitHub access and Auto-fix
+
+`gh` is already authenticated locally with `repo` and `workflow` scopes, so `/web-setup` syncs that token
+and cloud sessions work immediately.
+
+Auto-fix additionally requires the Claude GitHub App installed on the repo. It is the piece that makes
+the mobile loop close: push from the phone, CI fails, Claude investigates and pushes a fix without a
+laptop being opened. Enabled per PR.
+
+One consequence worth stating plainly: Auto-fix can reply to review comment threads using the connected
+GitHub account, so replies appear under Abilash's username, labelled as written by Claude Code. On a
+solo portfolio repo with no comment-triggered automation, that surface is harmless. It would not be on a
+repo where a PR comment can deploy something.
 
 ## Out of scope
 

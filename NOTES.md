@@ -32,13 +32,46 @@ Initially assumed a server proxy was required because the browser couldn't call 
 `access-control-allow-origin: *`, so that was wrong. The API route stays, for response caching and
 rate-limit control — a correct reason rather than an imagined one.
 
+**2026-08-05 — Cloud sessions, not Remote Control, are what "develop from mobile" needs.**
+Two different features. Cloud sessions run on Anthropic's VM and survive a closed laptop. Remote Control
+exposes a session running on the Mac and dies with it. Both are set up; they cover different moments.
+
+**2026-08-05 — The repo needs its own CLAUDE.md.**
+User-level `~/.claude/CLAUDE.md` does not travel to cloud sessions — only repo-committed config does.
+Without a repo CLAUDE.md, Claude working from the phone has none of the voice or code rules that
+Claude at the desk has, on the same repo.
+
+**2026-08-05 — Default cloud network access blocks this project's APIs.**
+Trusted allowlists npm and GitHub, not `nominatim.openstreetmap.org`, `overpass-api.de`, the tile hosts,
+or Playwright's CDN. The cloud environment needs Custom access with those added or nothing live works
+from mobile.
+
+**2026-08-05 — Tests use recorded responses; the app never mocks.**
+Overpass fails about one call in three. CI that called it live would fail one build in three for reasons
+unrelated to the commit. Fixtures are captured verbatim from real calls; a weekly `contract-check`
+workflow hits the live APIs and opens an issue if the response shape drifts. Both a green build and a
+real guarantee, without pretending.
+
+**2026-08-05 — Full CI suite, no hard deploy gates.**
+Abilash's call: it's a portfolio, a broken deploy isn't an incident. Everything runs for the signal;
+nothing blocks. Auto-fix reacts to failures, which is what makes the phone loop close.
+
 ## Progress
 
 - [x] 2026-08-05 — API behaviour measured (Nominatim, Overpass, both tile sources)
 - [x] 2026-08-05 — Design approved and written to `docs/DESIGN.md`
+- [x] 2026-08-05 — CI/CD and remote-development requirements added to the design
 - [ ] Implementation plan
 - [ ] Scaffold + dart sampler with tests
 - [ ] API routes
 - [ ] Dartboard UI
 - [ ] Portfolio content
+- [ ] CI workflows + Vercel
 - [ ] Deploy
+
+## Manual steps (browser only — cannot be scripted)
+
+- [ ] Connect Vercel to the GitHub repo (preview per PR, production on `main`)
+- [ ] Install the Claude GitHub App on the repo (required for Auto-fix)
+- [ ] Create the cloud environment at claude.ai/code with Custom network access and the domains listed
+      in `docs/DESIGN.md`
