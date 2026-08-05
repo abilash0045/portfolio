@@ -104,7 +104,7 @@
   justify-content: center;
   font-size: 1.8rem;
   font-weight: 900;
-  color: #ffffff;
+  color: var(--color-ink);
   box-shadow: 0 0 25px rgba(230, 57, 70, 0.4);
 }
 
@@ -231,11 +231,11 @@
 
 .hero__btn--primary {
   background: var(--accent-red);
-  color: #ffffff;
+  color: var(--color-ink);
   box-shadow: 0 4px 14px var(--accent-red-glow);
 }
 .hero__btn--primary:hover {
-  background: #d62839;
+  background: var(--button-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
 }
@@ -455,11 +455,11 @@
 .study__link-btn--primary {
   background: var(--accent-red);
   border-color: var(--accent-red);
-  color: #ffffff;
+  color: var(--color-ink);
 }
 
 .study__link-btn--primary:hover {
-  background: #d62839;
+  background: var(--button-primary-hover);
 }
 
 /* Footer Section */

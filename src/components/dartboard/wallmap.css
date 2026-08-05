@@ -63,7 +63,7 @@
   height: 14px;
   border-radius: 50%;
   background: var(--accent-red);
-  border: 2px solid #ffffff;
+  border: 2px solid var(--color-ink);
   box-shadow: 0 0 12px var(--accent-red), 0 0 24px var(--accent-red);
   z-index: 2;
 }

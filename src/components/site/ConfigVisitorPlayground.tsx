@@ -8,12 +8,17 @@ type VisitorType = "validate" | "diff" | "serialise" | "preview";
 export default function ConfigVisitorPlayground() {
   const [activeVisitor, setActiveVisitor] = useState<VisitorType>("validate");
 
+  // An illustration of the pattern, not a transcript of a production system.
+  // The node types are the real shape of the problem; the values are
+  // deliberately generic. Publishing a real template id, model name or sample
+  // id would either leak an employer's internals or invent them, and both are
+  // the same mistake wearing different clothes.
   const inputNodes = `{
-  "templateId": "video-v4-personalized",
+  "template": "example-template",
   "nodes": [
-    { "type": "TTS", "voiceId": "en-US-neural-1", "speed": 1.0 },
-    { "type": "VoiceClone", "sampleId": "user-vocal-99", "denoise": true },
-    { "type": "LipSync", "model": "wav2lip-v2", "padBottom": 10 },
+    { "type": "TTS",           "voice": "voice-a", "speed": 1.0 },
+    { "type": "VoiceClone",    "sample": "sample-a", "denoise": true },
+    { "type": "LipSync",       "model": "model-a", "padBottom": 10 },
     { "type": "VideoTemplate", "resolution": "1080p", "fps": 60 }
   ]
 }`;
@@ -21,39 +26,56 @@ export default function ConfigVisitorPlayground() {
   const getVisitorOutput = () => {
     switch (activeVisitor) {
       case "validate":
-        return `// Executing ValidateVisitor...
-✓ TTSNode: Valid voiceId "en-US-neural-1", speed in bounds (1.0).
-✓ VoiceCloneNode: Sample "user-vocal-99" loaded (0.4s duration).
-✓ LipSyncNode: Model "wav2lip-v2" compatible with 1080p@60fps.
-✓ VideoTemplateNode: Resolution 1080p valid for export.
+        return `ValidateVisitor
 
-Result: SUCCESS (0 errors, 0 warnings)`;
+Walks every node and checks its own constraints. Each node type
+accepts the visitor and hands over the fields it owns.
+
+  TTSNode            speed within the allowed range
+  VoiceCloneNode     sample present and readable
+  LipSyncNode        model compatible with the target resolution
+  VideoTemplateNode  resolution valid for export
+
+Adding a new check means writing one visitor, not editing four
+node classes.`;
 
       case "diff":
-        return `// Executing DiffVisitor against Production Baseline...
-~ TTSNode.speed: 0.95 -> 1.0 (+5% pitch adjustment)
-~ LipSyncNode.padBottom: 0 -> 10 (+10px chin margin)
-+ VoiceCloneNode.denoise: true (new flag)
+        return `DiffVisitor
 
-Result: 3 field mutations detected, 0 breaking schema changes.`;
+Same traversal, different operation. Compares this config against
+a baseline and reports what moved.
+
+  ~ TTSNode.speed            changed
+  ~ LipSyncNode.padBottom    changed
+  + VoiceCloneNode.denoise   added
+
+The node classes did not change to support this. That is the whole
+argument for the pattern.`;
 
       case "serialise":
-        return `// Executing SerialiseVisitor (Protobuf Binary Payload)...
-0A 17 76 69 64 65 6F 2D 76 34 2D 70 65 72 73 6F 6E 61 6C 69
-7A 65 64 12 1A 0A 03 54 54 53 12 11 65 6E 2D 55 53 2D 6E 65
-75 72 61 6C 2D 31 18 64 12 21 0A 0A 56 6F 69 63 65 43 6C 6F
-6E 65 12 0F 75 73 65 72 2D 76 6F 63 61 6C 2D 39 39 20 01
+        return `SerialiseVisitor
 
-Result: 148 bytes generated. Compression ratio 64.2%.`;
+Turns the tree into a wire format. Each node contributes its own
+encoding; the visitor owns the framing and the ordering.
+
+  template   -> length-prefixed string
+  nodes[]    -> repeated message, one per node type
+  scalars    -> varint
+
+A new wire format is a new visitor. The tree stays where it is.`;
 
       case "preview":
-        return `// Executing PreviewVisitor...
-[Frame 001/180] Initializing TTS buffer for "en-US-neural-1"...
-[Frame 045/180] LipSync alignment score: 99.4%.
-[Frame 120/180] Rendering video frame at 1080p@60fps...
-[Frame 180/180] Final composite verified.
+        return `PreviewVisitor
 
-Result: Real-time preview ready in 42ms.`;
+The reason the playground exists. Renders the config against a
+sample so a solution engineer can see the result before anyone
+commits it.
+
+  resolve assets -> compose -> render sample frames
+
+This is what took the config approval cycle from three days to one:
+the person tuning the config stopped needing an engineer to see
+what it did.`;
     }
   };
 
@@ -111,20 +133,20 @@ Result: Real-time preview ready in 42ms.`;
       <div className="pg-workspace">
         <div className="pg-pane">
           <div className="pg-pane__title">Config Node Input AST</div>
-          <pre className="pg-code" style={{ color: "#93c5fd" }}>{inputNodes}</pre>
+          <pre className="pg-code pg-code--input">{inputNodes}</pre>
         </div>
 
         <div className="pg-pane">
           <div className="pg-pane__title">
             <span>{activeVisitor}.accept(visitor)</span>
-            <span style={{ color: "#10b981" }}>Live Execution</span>
+            <span className="pg-pane__note">Illustration, not a live system</span>
           </div>
           <pre className="pg-code">{getVisitorOutput()}</pre>
         </div>
       </div>
 
       <div className="pg-stats">
-        <div>Approval Time Impact: <span className="pg-stat-val">3 Days ➔ 1 Day</span></div>
+        <div>Approval Time Impact: <span className="pg-stat-val">3 days to 1 day</span></div>
         <div>Non-Engineer Self-Service: <span className="pg-stat-val">Enabled</span></div>
       </div>
     </section>

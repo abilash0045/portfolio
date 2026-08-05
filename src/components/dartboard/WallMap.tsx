@@ -56,10 +56,10 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
     circleRef.current?.remove();
     const circle = L.circle([origin.lat, origin.lon], {
       radius: radiusM,
-      color: "#e63946",
+      color: "var(--color-accent)",
       weight: 2,
       dashArray: "6 6",
-      fillColor: "#e63946",
+      fillColor: "var(--color-accent)",
       fillOpacity: 0.12,
     }).addTo(map);
     circleRef.current = circle;

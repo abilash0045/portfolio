@@ -11,7 +11,7 @@ import "./dartboard.css";
 // Leaflet reads `window` at import time, so it can never be server-rendered.
 const WallMap = dynamic(() => import("./WallMap"), {
   ssr: false,
-  loading: () => <div style={{ width: "100%", height: "100%", background: "#090a0f" }} />,
+  loading: () => <div style={{ width: "100%", height: "100%", background: "var(--color-paper)" }} />,
 });
 
 type Props = {

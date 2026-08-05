@@ -15,9 +15,9 @@ export default function PipelineSimulator() {
     <section className="sim-container" id="architecture">
       <div className="sim-container__header">
         <div>
-          <h3 className="sim-container__title">Interactive Architecture Simulator</h3>
+          <h3 className="sim-container__title">The storage decision, side by side</h3>
           <p className="sim-container__subtitle">
-            Simulate Whilter&apos;s 25,000 daily video rendering pipeline under concurrent load
+            Toggle between what the pipeline did before and after. The numbers are the real ones from the change, not a simulation.
           </p>
         </div>
 
@@ -63,13 +63,11 @@ export default function PipelineSimulator() {
         <div className="sim-flow">
           <div className="sim-nodes">
             <div className="sim-node">
-              <div className="sim-node__icon">📥</div>
               <div className="sim-node__title">Kafka / PubSub</div>
               <div className="sim-node__detail">Render Queue</div>
             </div>
 
             <div className={`sim-node ${storageMode === "efs" ? "sim-node--error" : "sim-node--success"}`}>
-              <div className="sim-node__icon">⚙️</div>
               <div className="sim-node__title">Render Worker</div>
               <div className="sim-node__detail">
                 {storageMode === "efs" ? "EFS Concurrent Lock" : "Pod Ephemeral Disk"}
@@ -77,7 +75,6 @@ export default function PipelineSimulator() {
             </div>
 
             <div className={`sim-node ${cacheMode === "redis" ? "sim-node--cached" : ""}`}>
-              <div className="sim-node__icon">⚡</div>
               <div className="sim-node__title">Segment Cache</div>
               <div className="sim-node__detail">
                 {cacheMode === "redis" ? "Redis (80% Hit Rate)" : "Bypassed"}
@@ -85,7 +82,6 @@ export default function PipelineSimulator() {
             </div>
 
             <div className="sim-node">
-              <div className="sim-node__icon">🎞️</div>
               <div className="sim-node__title">Output Delivery</div>
               <div className="sim-node__detail">25k Renders/Day</div>
             </div>
@@ -93,18 +89,18 @@ export default function PipelineSimulator() {
 
           <div className="sim-explain">
             {storageMode === "efs" ? (
-              <span style={{ color: "#ef4444" }}>
-                ⚠️ <strong>EFS Shared Storage:</strong> Concurrent reads/writes cause MOV atom corruption mid-render. 40% of renders fail un-reproducibly.
+              <span className="sim-explain__bad">
+                <strong>Shared EFS:</strong> Concurrent reads/writes cause MOV atom corruption mid-render. 40% of renders fail un-reproducibly.
               </span>
             ) : (
-              <span style={{ color: "#10b981" }}>
-                ✓ <strong>Ephemeral Local Storage:</strong> Renders complete on pod-local disk before publishing. MOV atom corruption eliminated (98% reliability).
+              <span className="sim-explain__good">
+                <strong>Pod-local disk:</strong> Renders complete on pod-local disk before publishing. MOV atom corruption eliminated (98% reliability).
               </span>
             )}
           </div>
         </div>
 
-        {/* Live Metrics Column */}
+        
         <div className="sim-metrics">
           <div className="sim-card">
             <div className="sim-card__label">Render Reliability</div>
@@ -119,7 +115,7 @@ export default function PipelineSimulator() {
                 className="sim-bar-fill"
                 style={{
                   width: `${reliability}%`,
-                  backgroundColor: reliability === 98 ? "#10b981" : "#ef4444",
+                  backgroundColor: reliability === 98 ? "var(--color-ink)" : "var(--color-accent)",
                 }}
               />
             </div>
@@ -137,8 +133,8 @@ export default function PipelineSimulator() {
               <div
                 className="sim-bar-fill"
                 style={{
-                  width: `${costReduction * 2.5}%`,
-                  backgroundColor: costReduction > 0 ? "#06b6d4" : "#ef4444",
+                  width: `${costReduction}%`,
+                  backgroundColor: costReduction > 0 ? "var(--color-ink)" : "var(--color-accent)",
                 }}
               />
             </div>

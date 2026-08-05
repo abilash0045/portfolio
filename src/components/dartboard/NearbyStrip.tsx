@@ -14,7 +14,7 @@ export default function NearbyStrip({ nearby }: { nearby: Nearby[] }) {
         {nearby.map((item) => (
           <li key={`${item.name}-${item.lat}`} className="nearby__item">
             {item.name}
-            <span style={{ color: "#7d7267" }}> · {item.kind.replace(/_/g, " ")}</span>
+            <span style={{ color: "var(--color-neutral)" }}> · {item.kind.replace(/_/g, " ")}</span>
           </li>
         ))}
       </ul>
