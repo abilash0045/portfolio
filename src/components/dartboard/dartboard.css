@@ -3,15 +3,15 @@
   display: grid;
   grid-template-rows: 1fr auto;
   height: 100dvh;
-  background: #2b2622;
-  color: #f4efe2;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .dartboard__header {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  right: 14px;
+  top: 16px;
+  left: max(16px, 3vw);
+  right: max(16px, 3vw);
   z-index: 700;
   display: flex;
   justify-content: space-between;
@@ -21,34 +21,38 @@
 
 .dartboard__back-btn {
   pointer-events: auto;
-  padding: 8px 16px;
-  background: rgba(33, 29, 26, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 999px;
-  color: #f4efe2;
+  padding: 8px 18px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  color: var(--text-primary);
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--glass-shadow);
   transition: all 0.2s ease;
 }
 
 .dartboard__back-btn:hover {
-  background: rgba(179, 36, 28, 0.9);
-  border-color: #b3241c;
+  background: rgba(230, 57, 70, 0.9);
+  border-color: var(--accent-red);
+  color: #ffffff;
   transform: translateY(-1px);
 }
 
 .dartboard__header-title {
-  padding: 6px 14px;
-  background: rgba(33, 29, 26, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 999px;
-  font-size: 0.8rem;
+  padding: 6px 16px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
   font-weight: 600;
-  color: #a89c8c;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
 }
 
 .dartboard__stage {
@@ -56,80 +60,134 @@
   min-height: 0;
 }
 
+/* Floating Glass Control Panel */
 .dartboard__panel {
-  padding: 16px 20px 22px;
-  background: #211d1a;
-  border-top: 1px solid #3d3630;
+  position: absolute;
+  bottom: 20px;
+  left: max(16px, 4vw);
+  right: max(16px, 4vw);
+  z-index: 800;
+  max-width: 54rem;
+  margin: 0 auto;
+  padding: 20px 24px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
   display: grid;
-  gap: 14px;
+  gap: 16px;
 }
 
 .controls {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 16px;
+  gap: 20px;
   align-items: end;
 }
 
 @media (max-width: 640px) {
-  .controls { grid-template-columns: 1fr; }
+  .controls {
+    grid-template-columns: 1fr;
+  }
 }
 
 .controls__label {
   display: block;
   font-size: 0.82rem;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #a89c8c;
-  margin-bottom: 6px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  margin-bottom: 8px;
 }
 
-.controls__slider { width: 100%; accent-color: #b3241c; }
+.controls__slider {
+  width: 100%;
+  accent-color: var(--accent-red);
+  height: 6px;
+  border-radius: var(--radius-pill);
+}
 
 .controls__throw {
-  padding: 13px 30px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #f4efe2;
-  background: #b3241c;
+  padding: 12px 28px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: var(--font-body);
+  color: #ffffff;
+  background: var(--accent-red);
   border: none;
-  border-radius: 3px;
+  border-radius: var(--radius-pill);
   cursor: pointer;
+  box-shadow: 0 4px 14px var(--accent-red-glow);
+  transition: all 0.2s ease;
+  min-height: 44px;
 }
-.controls__throw:hover:not(:disabled) { background: #c9312a; }
-.controls__throw:disabled { opacity: 0.5; cursor: not-allowed; }
-.controls__throw:active:not(:disabled) { transform: translateY(1px); }
 
-.locsearch { display: flex; gap: 8px; flex-wrap: wrap; }
+.controls__throw:hover:not(:disabled) {
+  background: #d62839;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+}
+
+.controls__throw:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.locsearch {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .locsearch__input {
   flex: 1 1 220px;
-  padding: 9px 12px;
-  background: #171412;
-  border: 1px solid #3d3630;
-  border-radius: 3px;
-  color: #f4efe2;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
 }
+
 .locsearch__button {
-  padding: 9px 16px;
-  background: transparent;
-  border: 1px solid #6b5f52;
-  border-radius: 3px;
-  color: #f4efe2;
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
-.locsearch__results { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
+
+.locsearch__button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.locsearch__results {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
 .locsearch__result {
   width: 100%;
   text-align: left;
-  padding: 8px 10px;
-  background: #171412;
-  border: 1px solid #3d3630;
-  border-radius: 3px;
-  color: #f4efe2;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
   cursor: pointer;
 }
 
-/* The dart, flying from the viewer toward the wall. */
+/* Flying Dart Animation */
 .dart {
   position: absolute;
   top: 50%;
@@ -139,8 +197,8 @@
   margin: -22px 0 0 -22px;
   z-index: 600;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, #b3241c 0 32%, transparent 33%),
-              linear-gradient(#f4efe2 0 100%) center/3px 44px no-repeat;
+  background: radial-gradient(circle at 50% 50%, var(--accent-red) 0 32%, transparent 33%),
+              linear-gradient(var(--accent-cyan) 0 100%) center/3px 44px no-repeat;
   animation: dart-throw 700ms cubic-bezier(0.3, 0.7, 0.4, 1) forwards;
 }
 
@@ -153,11 +211,11 @@
 .card {
   display: grid;
   gap: 6px;
-  padding: 16px 18px;
-  background: #171412;
-  border: 1px solid #3d3630;
-  border-left: 3px solid #b3241c;
-  border-radius: 3px;
+  padding: 16px 20px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent-red);
+  border-radius: var(--radius-md);
   animation: card-rise 260ms ease-out;
 }
 
@@ -166,25 +224,53 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.card__name { font-size: 1.3rem; font-weight: 650; margin: 0; }
-.card__area { color: #a89c8c; margin: 0; }
-.card__meta { font-size: 0.82rem; color: #7d7267; margin: 0; }
-
-.nearby { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 7px; }
-.nearby__item {
-  font-size: 0.82rem;
-  padding: 5px 10px;
-  background: #211d1a;
-  border: 1px solid #3d3630;
-  border-radius: 999px;
-  color: #cdc2b3;
+.card__name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  margin: 0;
 }
+
+.card__area {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.card__meta {
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.nearby {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nearby__item {
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
+}
+
 .nearby__heading {
   font-size: 0.75rem;
+  font-family: var(--font-mono);
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #7d7267;
-  margin: 0 0 7px;
+  color: var(--text-muted);
+  margin: 0 0 8px;
 }
 
 @media (prefers-reduced-motion: reduce) {

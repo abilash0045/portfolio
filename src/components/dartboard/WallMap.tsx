@@ -13,7 +13,7 @@ type Props = {
   shake: boolean;
 };
 
-const TILE_URL = "https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+const TILE_URL = "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
 const ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
   '&copy; <a href="https://carto.com/attributions">CARTO</a>';
@@ -24,8 +24,7 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
   const circleRef = useRef<L.Circle | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
 
-  // Init once. The ref guard also survives React StrictMode's double-invoke
-  // in development, which would otherwise leave two maps on one container.
+  // Init once. The ref guard survives React StrictMode's double-invoke in development.
   useEffect(() => {
     const el = containerRef.current;
     if (!el || mapRef.current) return;
@@ -57,18 +56,18 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
     circleRef.current?.remove();
     const circle = L.circle([origin.lat, origin.lon], {
       radius: radiusM,
-      color: "#7a3b2e",
+      color: "#e63946",
       weight: 2,
       dashArray: "6 6",
-      fillColor: "#b3241c",
-      fillOpacity: 0.06,
+      fillColor: "#e63946",
+      fillOpacity: 0.12,
     }).addTo(map);
     circleRef.current = circle;
 
     if (!landing) map.fitBounds(circle.getBounds(), { padding: [40, 40] });
   }, [origin.lat, origin.lon, radiusM, landing]);
 
-  // Landing pin.
+  // Landing pin with neon glow and expanding ripple animation.
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
@@ -80,9 +79,14 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
     const marker = L.marker([landing.lat, landing.lon], {
       icon: L.divIcon({
         className: "",
-        html: '<div class="dartpin" aria-hidden="true"></div>',
-        iconSize: [22, 22],
-        iconAnchor: [11, 11],
+        html: `
+          <div class="dartpin-glow" aria-hidden="true">
+            <div class="dartpin-core"></div>
+            <div class="dartpin-ripple"></div>
+          </div>
+        `,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
       }),
       keyboard: false,
     }).addTo(map);
@@ -94,12 +98,8 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
   return (
     <div className={`wallmap${shake ? " wallmap--shake" : ""}`}>
       <div ref={containerRef} className="wallmap__canvas" />
-      <div className="wallmap__grain" />
       <div className="wallmap__vignette" />
-      <span className="wallmap__pin wallmap__pin--tl" />
-      <span className="wallmap__pin wallmap__pin--tr" />
-      <span className="wallmap__pin wallmap__pin--bl" />
-      <span className="wallmap__pin wallmap__pin--br" />
+      <div className="wallmap__hud-overlay" />
     </div>
   );
 }
