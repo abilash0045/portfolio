@@ -1,14 +1,13 @@
 import { test, expect } from "@playwright/test";
 
-test("home page carries the work and embeds the interactive dartboard", async ({ page }) => {
+test("home page carries full senior portfolio sections and embeds interactive components", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("Abilash S L").first()).toBeVisible();
-  await expect(page.getByText("25,000+").first()).toBeVisible();
-  await expect(
-    page.getByRole("heading", {
-      name: /render failures that survived a week/i,
-    }),
-  ).toBeVisible();
+  await expect(page.getByText("Backend Engineer building scalable distributed systems.")).toBeVisible();
+  await expect(page.getByText("Categorized Tech Stack")).toBeVisible();
+  await expect(page.getByText("Experience & Timeline")).toBeVisible();
+  await expect(page.getByText("Skills Capability Breakdown")).toBeVisible();
+  await expect(page.getByText("Let's Connect")).toBeVisible();
 
   // Verify embedded dartboard on home page
   await expect(page.locator("#dartboard-embedded")).toBeVisible();
@@ -31,20 +30,29 @@ test("home page renders interactive architecture simulator and playground", asyn
   await expect(page.locator(".sim-container").getByText("98%", { exact: true })).toBeVisible();
 });
 
+test("contact form allows user submission feedback", async ({ page }) => {
+  await page.goto("/");
+  await page.fill("#contact-name", "Alex Recruiter");
+  await page.fill("#contact-email", "alex@techcorp.com");
+  await page.fill("#contact-message", "We would love to interview you for a Senior Backend role.");
+  await page.getByRole("button", { name: /send message/i }).click();
+  await expect(page.getByText("✓ Message Sent Successfully!")).toBeVisible();
+});
+
 test("home page is responsive across mobile, tablet, and ultra-wide viewports", async ({ page }) => {
   // Mobile Viewport (iPhone SE / 375x667)
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");
   await expect(page.getByText("Abilash S L").first()).toBeVisible();
-  await expect(page.getByText("Interactive Architecture Simulator")).toBeVisible();
+  await expect(page.getByText("Categorized Tech Stack")).toBeVisible();
 
   // Tablet Viewport (768x1024)
   await page.setViewportSize({ width: 768, height: 1024 });
-  await expect(page.getByText("Interactive Architecture Simulator")).toBeVisible();
+  await expect(page.getByText("Experience & Timeline")).toBeVisible();
 
   // Ultra-wide Desktop Viewport (2560x1440)
   await page.setViewportSize({ width: 2560, height: 1440 });
-  await expect(page.getByText("Interactive Architecture Simulator")).toBeVisible();
+  await expect(page.getByText("Skills Capability Breakdown")).toBeVisible();
 });
 
 test("home page stays about the work", async ({ page }) => {

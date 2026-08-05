@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
+  const [resumeToast, setResumeToast] = useState(false);
 
   const copyEmail = () => {
     navigator.clipboard.writeText("abilash0045@gmail.com");
@@ -11,28 +12,55 @@ export default function Hero() {
     setTimeout(() => setCopied(false), 2500);
   };
 
+  const handleResumeDownload = () => {
+    setResumeToast(true);
+    setTimeout(() => setResumeToast(false), 3000);
+  };
+
   return (
     <header className="hero" id="overview">
-      <div className="hero__badge">
-        <span className="hero__badge-pulse" aria-hidden="true" />
-        <span>Senior Backend Engineer &amp; Architecture</span>
+      <div className="hero__top-row">
+        <div>
+          <div className="hero__badge">
+            <span className="hero__badge-pulse" aria-hidden="true" />
+            <span>Senior Backend &amp; Distributed Systems Engineer</span>
+          </div>
+
+          <h1 className="hero__name">
+            Backend Engineer building scalable distributed systems.
+          </h1>
+
+          <p className="hero__lede">
+            I build high-performance backend systems with Java, Spring Boot, Kafka, Kubernetes, AWS, and modern cloud infrastructure.
+          </p>
+
+          <p className="hero__lede hero__lede--muted">
+            At Whilter, I design and operate the core video rendering pipeline processing <strong>25,000+ daily renders</strong> across GKE and Cloud Run, caching media segments for 80% hit rates, root-causing MOV atom corruption to move from 60% to 98% reliability, and trimming 40% off cloud spend.
+          </p>
+        </div>
+
+        {/* Professional Avatar Card */}
+        <div className="hero__avatar-card">
+          <div className="hero__avatar-circle">
+            <span>ASL</span>
+          </div>
+          <div className="hero__avatar-info">
+            <div className="hero__avatar-name">Abilash S L</div>
+            <div className="hero__avatar-role">Senior Backend Engineer</div>
+            <div className="hero__avatar-tech">Java · Spring · Kafka · K8s</div>
+          </div>
+        </div>
       </div>
 
-      <h1 className="hero__name">
-        Building high-scale backend pipelines that run reliably and save millions.
-      </h1>
-
-      <p className="hero__lede">
-        Backend engineer at Whilter. I design and operate the core video rendering pipeline
-        turning out <strong>25,000+ renders daily</strong> across GKE and Cloud Run, built with
-        Java, Spring Boot, Kafka, Redis, and MongoDB.
-      </p>
-
-      <p className="hero__lede hero__lede--muted">
-        My work lives where concurrency, shared storage, and bursty traffic intersect:
-        caching media segments for 80% hit rates, root-causing MOV atom corruption to move
-        from 60% to 98% reliability, and trimming 40% off the cloud bill.
-      </p>
+      {/* Floating Tech Stack Badges */}
+      <div className="hero__tech-badges" aria-label="Core Stack">
+        <span className="hero__tech-tag">☕ Java</span>
+        <span className="hero__tech-tag">🍃 Spring Boot</span>
+        <span className="hero__tech-tag">📡 Kafka</span>
+        <span className="hero__tech-tag">☸️ Kubernetes</span>
+        <span className="hero__tech-tag">☁️ AWS / GCP</span>
+        <span className="hero__tech-tag">⚡ Redis</span>
+      </div>
 
       {/* Key Metric Highlights Grid */}
       <div className="hero__metrics">
@@ -55,12 +83,16 @@ export default function Hero() {
       </div>
 
       <div className="hero__cta-group">
-        <a className="hero__btn hero__btn--primary" href="#architecture">
-          View Pipeline Architecture
+        <a className="hero__btn hero__btn--primary" href="#case-studies">
+          View Projects
         </a>
-        <a className="hero__btn hero__btn--secondary" href="#dartboard-embedded">
-          Throw a Dart on Map
-        </a>
+        <button
+          type="button"
+          className="hero__btn hero__btn--secondary"
+          onClick={handleResumeDownload}
+        >
+          {resumeToast ? "✓ Resume Request Logged!" : "Download Resume"}
+        </button>
         <button
           type="button"
           className="hero__btn hero__btn--ghost"
@@ -69,6 +101,21 @@ export default function Hero() {
         >
           {copied ? "✓ Copied to Clipboard!" : "Copy Email"}
         </button>
+      </div>
+
+      {/* Social Links */}
+      <div className="hero__socials">
+        <a href="https://github.com/abilash0045" target="_blank" rel="noopener noreferrer" className="hero__social-link">
+          GitHub
+        </a>
+        <span>·</span>
+        <a href="https://www.linkedin.com/in/abilash0045/" target="_blank" rel="noopener noreferrer" className="hero__social-link">
+          LinkedIn
+        </a>
+        <span>·</span>
+        <a href="mailto:abilash0045@gmail.com" className="hero__social-link">
+          abilash0045@gmail.com
+        </a>
       </div>
     </header>
   );

@@ -1,6 +1,11 @@
 import Navbar from "@/components/site/Navbar";
 import Hero from "@/components/site/Hero";
+import TechStack from "@/components/site/TechStack";
 import CaseStudy from "@/components/site/CaseStudy";
+import ExperienceTimeline from "@/components/site/ExperienceTimeline";
+import SkillsVisualization from "@/components/site/SkillsVisualization";
+import BlogSection from "@/components/site/BlogSection";
+import ContactSection from "@/components/site/ContactSection";
 import Footer from "@/components/site/Footer";
 import Dartboard from "@/components/dartboard/Dartboard";
 import { caseStudies } from "@/content/case-studies";
@@ -22,18 +27,36 @@ export default function Home() {
       <main className="site">
         <Hero />
 
-        {/* Embedded Interactive Dartboard Map Section */}
-        <section id="dartboard-section" style={{ margin: "40px 0" }}>
-          <Dartboard embedded={true} />
-        </section>
+        <TechStack />
 
         <section id="case-studies" className="studies-section">
+          <h2 className="section-title">Featured Engineering Projects</h2>
+          <p className="section-subtitle">
+            Distributed systems, media rendering pipelines, and developer tooling case studies
+          </p>
           <div className="studies-grid">
             {caseStudies.map((study) => (
               <CaseStudy key={study.slug} study={study} />
             ))}
           </div>
         </section>
+
+        <ExperienceTimeline />
+
+        <SkillsVisualization />
+
+        {/* Embedded Interactive Dartboard Map Section */}
+        <section id="dartboard-embedded-section" style={{ margin: "56px 0" }}>
+          <h2 className="section-title">Interactive Map &amp; Geocoding Sandbox</h2>
+          <p className="section-subtitle">
+            Uniform area dart sampling map backed by Nominatim and Overpass API query fallbacks
+          </p>
+          <Dartboard embedded={true} />
+        </section>
+
+        <BlogSection />
+
+        <ContactSection />
 
         <Footer />
       </main>
