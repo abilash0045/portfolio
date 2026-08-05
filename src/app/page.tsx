@@ -21,10 +21,12 @@ export default function Home() {
       <main className="site">
         <Hero />
 
-        <section id="case-studies">
-          {caseStudies.map((study) => (
-            <CaseStudy key={study.slug} study={study} />
-          ))}
+        <section id="case-studies" className="studies-section">
+          <div className="studies-grid">
+            {caseStudies.map((study) => (
+              <CaseStudy key={study.slug} study={study} />
+            ))}
+          </div>
         </section>
 
         <Footer />

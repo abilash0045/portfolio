@@ -3,8 +3,10 @@ import PipelineSimulator from "./PipelineSimulator";
 import ConfigVisitorPlayground from "./ConfigVisitorPlayground";
 
 export default function CaseStudy({ study }: { study: Study }) {
+  const isFullWidth = study.slug === "render-reliability" || study.slug === "config-playground";
+
   return (
-    <article className="study" id={study.slug}>
+    <article className={`study ${isFullWidth ? "study--full" : ""}`} id={study.slug}>
       <div className="study__header">
         <span className="study__number">CASE STUDY</span>
         <h2 className="study__title">{study.title}</h2>

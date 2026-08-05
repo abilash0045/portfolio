@@ -3,9 +3,10 @@
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-lg);
-  padding: 28px;
+  padding: clamp(16px, 3vw, 28px);
   box-shadow: var(--glass-shadow);
   backdrop-filter: blur(12px);
+  width: 100%;
 }
 
 .pg-header {
@@ -13,14 +14,14 @@
 }
 
 .pg-title {
-  font-size: 1.2rem;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 4px;
 }
 
 .pg-subtitle {
-  font-size: 0.88rem;
+  font-size: clamp(0.82rem, 1.5vw, 0.9rem);
   color: var(--text-secondary);
   margin: 0;
 }
@@ -43,6 +44,7 @@
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 38px;
 }
 
 .pg-tab:hover {
@@ -61,9 +63,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+  width: 100%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   .pg-workspace {
     grid-template-columns: 1fr;
   }
@@ -76,6 +79,7 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .pg-pane__title {
@@ -88,21 +92,25 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .pg-code {
   font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-size: clamp(0.75rem, 1.2vw, 0.82rem);
   line-height: 1.6;
   color: #a7f3d0;
   margin: 0;
   white-space: pre-wrap;
   word-break: break-all;
+  overflow-x: auto;
   flex: 1;
 }
 
 .pg-stats {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   margin-top: 16px;
   padding-top: 12px;

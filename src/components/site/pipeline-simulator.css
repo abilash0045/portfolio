@@ -3,11 +3,12 @@
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-lg);
-  padding: 28px;
+  padding: clamp(16px, 3vw, 32px);
   box-shadow: var(--glass-shadow);
   backdrop-filter: blur(12px);
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 .sim-container__header {
@@ -20,14 +21,14 @@
 }
 
 .sim-container__title {
-  font-size: 1.25rem;
+  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 4px;
 }
 
 .sim-container__subtitle {
-  font-size: 0.88rem;
+  font-size: clamp(0.82rem, 1.5vw, 0.92rem);
   color: var(--text-secondary);
   margin: 0;
 }
@@ -44,6 +45,7 @@
   padding: 3px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
+  max-width: 100%;
 }
 
 .sim-btn {
@@ -51,12 +53,13 @@
   border: none;
   color: var(--text-muted);
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: clamp(0.72rem, 1.2vw, 0.82rem);
   font-weight: 600;
-  padding: 6px 14px;
+  padding: 8px 14px;
   border-radius: calc(var(--radius-md) - 3px);
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 38px;
 }
 
 .sim-btn--active {
@@ -78,7 +81,7 @@
   align-items: center;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 900px) {
   .sim-grid {
     grid-template-columns: 1fr;
   }
@@ -89,10 +92,11 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 20px;
+  padding: clamp(14px, 2vw, 20px);
   background: rgba(0, 0, 0, 0.2);
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
+  width: 100%;
 }
 
 .sim-nodes {
@@ -102,9 +106,15 @@
   position: relative;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .sim-nodes {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .sim-nodes {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -176,12 +186,13 @@
 }
 
 .sim-card__value {
-  font-size: 1.8rem;
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
   font-weight: 800;
   font-family: var(--font-display);
   color: var(--text-primary);
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 8px;
 }
 

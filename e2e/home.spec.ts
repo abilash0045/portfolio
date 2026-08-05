@@ -28,6 +28,22 @@ test("home page renders interactive architecture simulator and playground", asyn
   await expect(page.locator(".sim-container").getByText("98%", { exact: true })).toBeVisible();
 });
 
+test("home page is responsive across mobile, tablet, and ultra-wide viewports", async ({ page }) => {
+  // Mobile Viewport (iPhone SE / 375x667)
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.goto("/");
+  await expect(page.getByText("Abilash S L").first()).toBeVisible();
+  await expect(page.getByText("Interactive Architecture Simulator")).toBeVisible();
+
+  // Tablet Viewport (768x1024)
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await expect(page.getByText("Interactive Architecture Simulator")).toBeVisible();
+
+  // Ultra-wide Desktop Viewport (2560x1440)
+  await page.setViewportSize({ width: 2560, height: 1440 });
+  await expect(page.getByText("Interactive Architecture Simulator")).toBeVisible();
+});
+
 test("home page stays about the work", async ({ page }) => {
   await page.goto("/");
   const body = (await page.textContent("body")) ?? "";
