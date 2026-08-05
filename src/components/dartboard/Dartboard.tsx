@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useDartboard } from "./useDartboard";
 import ThrowControls from "./ThrowControls";
 import LandingCard from "./LandingCard";
@@ -18,6 +19,16 @@ export default function Dartboard() {
 
   return (
     <main className="dartboard">
+      {/* Floating Top Navigation Header */}
+      <header className="dartboard__header">
+        <Link href="/" className="dartboard__back-btn">
+          ← Portfolio
+        </Link>
+        <div className="dartboard__header-title">
+          <span>🎯 Interactive Dartboard Map</span>
+        </div>
+      </header>
+
       <div className="dartboard__stage">
         {board.origin && (
           <WallMap

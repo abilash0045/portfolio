@@ -1,0 +1,233 @@
+.sim-container {
+  margin: 32px 0 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+}
+
+.sim-container__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sim-container__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.sim-container__subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.sim-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sim-btn-group {
+  display: flex;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 3px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.sim-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: calc(var(--radius-md) - 3px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sim-btn--active {
+  background: var(--accent-red);
+  color: #ffffff;
+  box-shadow: 0 2px 8px var(--accent-red-glow);
+}
+
+.sim-btn--active-green {
+  background: var(--accent-green);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.sim-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .sim-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Architecture Flow Nodes */
+.sim-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.sim-nodes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .sim-nodes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.sim-node {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.sim-node__icon {
+  font-size: 1.25rem;
+  margin-bottom: 6px;
+}
+
+.sim-node__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.sim-node__detail {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.sim-node--error {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.1);
+  animation: pulse-slow 1.5s infinite;
+}
+
+.sim-node--success {
+  border-color: rgba(16, 185, 129, 0.5);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.sim-node--cached {
+  border-color: rgba(6, 182, 212, 0.5);
+  background: rgba(6, 182, 212, 0.1);
+}
+
+/* Metrics Column */
+.sim-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sim-card {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.sim-card__label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.sim-card__value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.sim-bar-bg {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.sim-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease;
+}
+
+.sim-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.sim-badge--danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.sim-badge--success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.sim-badge--info {
+  background: rgba(6, 182, 212, 0.2);
+  color: #06b6d4;
+}
+
+.sim-explain {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-subtle);
+}
