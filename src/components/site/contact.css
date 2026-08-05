@@ -67,7 +67,7 @@
 .form-textarea:focus {
   outline: none;
   border-color: var(--accent-blue);
-  box-shadow: 0 0 16px rgba(59, 130, 246, 0.3);
+  box-shadow: none;
 }
 
 .form-textarea {
@@ -79,20 +79,22 @@
   padding: 14px 32px;
   font-size: 0.98rem;
   font-weight: 700;
-  color: var(--color-ink);
-  background: var(--accent-blue);
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
   border: none;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.35);
+  box-shadow: none;
   transition: all 0.25s ease;
   min-height: 48px;
 }
 
 .submit-btn:hover {
   background: var(--color-accent);
+  color: var(--color-on-accent);
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.5);
+  box-shadow: none;
 }
 
 .contact-channels {

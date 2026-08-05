@@ -30,13 +30,13 @@
 
 .magazine-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--color-border-interactive);
 }
 
 .magazine-card--featured {
   grid-column: 1 / -1;
-  background: linear-gradient(135deg, rgba(18, 18, 20, 0.9), rgba(59, 130, 246, 0.08));
-  border-color: rgba(59, 130, 246, 0.25);
+  background: var(--color-paper-2);
+  border-color: var(--color-ink);
 }
 
 .magazine-meta {

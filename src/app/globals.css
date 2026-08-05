@@ -19,6 +19,7 @@
   --color-ink: oklch(95% 0.006 40);
   --color-accent: oklch(64% 0.170 28);
   --color-focus: oklch(72% 0.170 28);
+  --color-on-accent: oklch(14% 0.010 28);
 
   /* Surfaces are opaque values, not alpha. Transparency modifies an
      overlay; it does not define a colour. */
@@ -75,6 +76,7 @@
   --color-ink: oklch(20% 0.014 28);
   --color-accent: oklch(52% 0.190 28);
   --color-focus: oklch(52% 0.190 28);
+  --color-on-accent: oklch(97% 0.008 40);
   --color-border-interactive: oklch(58% 0.014 28);
   --color-grid: oklch(20% 0.014 28 / 0.05);
   --color-scroll-thumb: oklch(20% 0.014 28 / 0.22);

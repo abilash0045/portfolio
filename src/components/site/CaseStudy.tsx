@@ -66,9 +66,12 @@ export default function CaseStudy({ study }: { study: Study }) {
               GitHub ↗
             </a>
           )}
-          {study.liveDemoUrl && (
-            <a href={study.liveDemoUrl} className="study__link-btn study__link-btn--primary">
-              Live Demo ↗
+          {study.inPageAnchor && (
+            <a
+              href={study.inPageAnchor}
+              className="study__link-btn study__link-btn--primary"
+            >
+              See it below ↓
             </a>
           )}
         </div>

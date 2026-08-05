@@ -49,6 +49,7 @@
 .dartboard__back-btn:hover,
 .dartboard__fullscreen-btn:hover {
   background: var(--color-accent);
+  color: var(--color-on-accent);
   border-color: var(--accent-red);
   color: var(--color-ink);
   transform: translateY(-1px);
@@ -129,6 +130,7 @@
   font-family: var(--font-body);
   color: var(--color-ink);
   background: var(--accent-red);
+  color: var(--color-on-accent);
   border: none;
   border-radius: var(--radius-pill);
   cursor: pointer;
@@ -139,6 +141,7 @@
 
 .controls__throw:hover:not(:disabled) {
   background: var(--button-primary-hover);
+  color: var(--color-on-accent);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px var(--accent-red-glow);
 }
@@ -167,7 +170,7 @@
 
 .locsearch__button {
   padding: 9px 16px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-paper-3);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   color: var(--text-primary);
@@ -177,7 +180,7 @@
 }
 
 .locsearch__button:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--color-paper-3);
 }
 
 .locsearch__results {
@@ -270,7 +273,7 @@
   font-size: 0.78rem;
   font-family: var(--font-mono);
   padding: 3px 10px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-paper-2);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
   color: var(--text-secondary);

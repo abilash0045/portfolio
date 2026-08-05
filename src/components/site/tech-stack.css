@@ -46,7 +46,7 @@
 
 .tech-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--color-border-interactive);
 }
 
 .tech-card__header {
@@ -81,7 +81,7 @@
   font-size: 0.8rem;
   font-weight: 500;
   padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-paper-2);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
   color: var(--text-secondary);
@@ -91,5 +91,5 @@
 .tech-pill:hover {
   color: var(--text-primary);
   border-color: var(--accent-cyan);
-  background: rgba(6, 182, 212, 0.1);
+  background: var(--color-paper-3);
 }
