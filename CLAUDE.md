@@ -1,4 +1,4 @@
-# Portfolio — working rules
+# Portfolio: working rules
 
 Design and rationale: `docs/DESIGN.md`. Running decisions: `NOTES.md`.
 Read both before changing behaviour. Update `NOTES.md` when a decision changes.

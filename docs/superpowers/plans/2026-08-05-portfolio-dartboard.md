@@ -137,7 +137,7 @@ export default defineConfig({
 This file is the reason mobile sessions behave like desk sessions. Create `CLAUDE.md`:
 
 ```markdown
-# Portfolio — working rules
+# Portfolio: working rules
 
 Design and rationale: `docs/DESIGN.md`. Running decisions: `NOTES.md`.
 Read both before changing behaviour. Update `NOTES.md` when a decision changes.
@@ -2687,7 +2687,9 @@ a { color: inherit; text-underline-offset: 3px; }
 Read every string in `src/content/case-studies.ts`, `Hero.tsx` and `Footer.tsx` and confirm: no em-dashes, no banned lexicon, no "open to work" or compensation or relocation language, the 60→98% win is attributed to the EFS/MOV-atom root cause and not KEDA, and the ~30% and ~10% cost wins are still described as separate.
 
 ```bash
-cd ~/portfolio && grep -rn "—" src/ || echo "no em-dashes: pass"
+# Every file that ships or is read by a human, not just src/. The narrower
+# src/-only version of this check missed an em-dash in CLAUDE.md itself.
+cd ~/portfolio && grep -rn "—" src/ e2e/ contract/ CLAUDE.md README.md NOTES.md .github/ 2>/dev/null || echo "no em-dashes: pass"
 cd ~/portfolio && grep -rniE "open to work|LPA|relocat|delve|leverage|seamless|robust|comprehensive|crucial|pivotal|elevate|empower|foster|streamline|supercharge|game.chang|cutting.edge|next.generation|tapestry|myriad|plethora" src/ || echo "no banned terms: pass"
 ```
 
