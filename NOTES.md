@@ -63,13 +63,13 @@ nothing blocks. Auto-fix reacts to failures, which is what makes the phone loop 
 - [x] 2026-08-05: API behaviour measured (Nominatim, Overpass, both tile sources)
 - [x] 2026-08-05: Design approved and written to `docs/DESIGN.md`
 - [x] 2026-08-05: CI/CD and remote-development requirements added to the design
-- [ ] Implementation plan
-- [ ] Scaffold + dart sampler with tests
-- [ ] API routes
-- [ ] Dartboard UI
-- [ ] Portfolio content
-- [ ] CI workflows + Vercel
-- [ ] Deploy
+- [x] Implementation plan
+- [x] Scaffold + dart sampler with tests
+- [x] API routes
+- [x] Dartboard UI
+- [x] Portfolio content
+- [x] CI workflows + Vercel
+- [x] Deploy
 
 ## Manual steps (browser only, cannot be scripted)
 
