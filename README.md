@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# portfolio
 
-## Getting Started
+Personal site, and a wall map you throw a dart at.
 
-First, run the development server:
+Design and rationale: [`docs/DESIGN.md`](docs/DESIGN.md). Running decisions: [`NOTES.md`](NOTES.md).
+
+## Running it
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tests
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Command | What it does |
+|---|---|
+| `npm run test:unit` | Pure logic against fixtures recorded from real calls. Runs in CI. |
+| `npm run test:e2e` | Playwright against a real build. Runs in CI. |
+| `npm run test:contract` | Hits the live OpenStreetMap APIs. Weekly, never in CI. |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The split exists because Overpass fails roughly one request in three. Calling
+it from CI would fail about one build in three for reasons unrelated to the
+commit, so upstream drift is caught by a scheduled job instead.
 
-## Learn More
+## Notes on the dart
 
-To learn more about Next.js, take a look at the following resources:
+The landing point is sampled uniformly over the area of the circle, not over
+its radius. Without the square root in `src/lib/geo/sample.ts`, darts crowd
+the centre. `sample.test.ts` asserts the distribution and fails if it is
+removed.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If the dart lands in water, the site says so rather than re-rolling. Silently
+re-throwing until it hits land would bias the distribution while still calling
+itself random.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Maps © OpenStreetMap contributors, © CARTO.
