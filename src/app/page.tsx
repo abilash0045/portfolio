@@ -1,11 +1,10 @@
 import Navbar from "@/components/site/Navbar";
 import Hero from "@/components/site/Hero";
-import EngineeringWins from "@/components/site/EngineeringWins";
-import TechStack from "@/components/site/TechStack";
 import CaseStudy from "@/components/site/CaseStudy";
-import ExperienceTimeline from "@/components/site/ExperienceTimeline";
-import SkillsVisualization from "@/components/site/SkillsVisualization";
-import BlogSection from "@/components/site/BlogSection";
+import EngineeringPhilosophy from "@/components/site/EngineeringPhilosophy";
+import TechStack from "@/components/site/TechStack";
+import ExperienceMagazine from "@/components/site/ExperienceMagazine";
+import Testimonials from "@/components/site/Testimonials";
 import ContactSection from "@/components/site/ContactSection";
 import Footer from "@/components/site/Footer";
 import Dartboard from "@/components/dartboard/Dartboard";
@@ -28,14 +27,10 @@ export default function Home() {
       <main className="site">
         <Hero />
 
-        <EngineeringWins />
-
-        <TechStack />
-
         <section id="case-studies" className="studies-section">
-          <h2 className="section-title">Structured Featured Projects</h2>
+          <h2 className="section-title">Selected Work</h2>
           <p className="section-subtitle">
-            Every project detailed by Problem, Architecture, Tech Stack, Contribution, Challenges, and Results
+            Structured bento-grid analysis of production distributed systems, media processing microservices, and performance wins
           </p>
           <div className="studies-grid">
             {caseStudies.map((study) => (
@@ -44,20 +39,22 @@ export default function Home() {
           </div>
         </section>
 
-        <ExperienceTimeline />
+        <EngineeringPhilosophy />
 
-        <SkillsVisualization />
+        <TechStack />
+
+        <ExperienceMagazine />
+
+        <Testimonials />
 
         {/* Embedded Interactive Dartboard Map Section */}
-        <section id="dartboard-embedded-section" style={{ margin: "56px 0" }}>
+        <section id="dartboard-embedded-section" style={{ margin: "72px 0" }}>
           <h2 className="section-title">Interactive Map &amp; Geocoding Sandbox</h2>
           <p className="section-subtitle">
             Uniform area dart sampling map backed by Nominatim and Overpass API query fallbacks
           </p>
           <Dartboard embedded={true} />
         </section>
-
-        <BlogSection />
 
         <ContactSection />
 

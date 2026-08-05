@@ -36,19 +36,19 @@ export default function Navbar() {
             <a href="#overview" className="navbar__link">Overview</a>
           </li>
           <li>
-            <a href="#engineering-wins" className="navbar__link">Wins</a>
+            <a href="#case-studies" className="navbar__link">Selected Work</a>
           </li>
           <li>
-            <a href="#tech-stack" className="navbar__link">Tech Stack</a>
+            <a href="#philosophy" className="navbar__link">Philosophy</a>
           </li>
           <li>
-            <a href="#case-studies" className="navbar__link">Projects</a>
+            <a href="#tech-stack" className="navbar__link">Technology</a>
           </li>
           <li>
-            <a href="#timeline" className="navbar__link">Timeline</a>
+            <a href="#experience" className="navbar__link">Experience</a>
           </li>
           <li>
-            <a href="#skills" className="navbar__link">Skills</a>
+            <a href="#testimonials" className="navbar__link">Endorsements</a>
           </li>
           <li>
             <a href="#contact" className="navbar__link">Contact</a>

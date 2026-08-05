@@ -50,14 +50,14 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Floating Tech Stack Badges */}
+      {/* Floating Tech Stack Badges without emojis */}
       <div className="hero__tech-badges" aria-label="Core Stack">
-        <span className="hero__tech-tag">☕ Java</span>
-        <span className="hero__tech-tag">🍃 Spring Boot</span>
-        <span className="hero__tech-tag">📡 Kafka</span>
-        <span className="hero__tech-tag">☸️ Kubernetes</span>
-        <span className="hero__tech-tag">☁️ AWS / GCP</span>
-        <span className="hero__tech-tag">⚡ Redis</span>
+        <span className="hero__tech-tag">Java</span>
+        <span className="hero__tech-tag">Spring Boot</span>
+        <span className="hero__tech-tag">Kafka</span>
+        <span className="hero__tech-tag">Kubernetes</span>
+        <span className="hero__tech-tag">AWS / GCP</span>
+        <span className="hero__tech-tag">Redis</span>
       </div>
 
       {/* Key Metric Highlights Grid */}
@@ -71,18 +71,18 @@ export default function Hero() {
           <div className="hero__metric-label">Pipeline Reliability</div>
         </div>
         <div className="hero__metric">
-          <div className="hero__metric-value" style={{ color: "var(--accent-cyan)" }}>~40%</div>
+          <div className="hero__metric-value" style={{ color: "var(--accent-blue)" }}>~40%</div>
           <div className="hero__metric-label">Cloud Spend Saved</div>
         </div>
         <div className="hero__metric">
-          <div className="hero__metric-value" style={{ color: "var(--accent-purple)" }}>3d ➔ 1d</div>
+          <div className="hero__metric-value" style={{ color: "var(--accent-violet)" }}>3d ➔ 1d</div>
           <div className="hero__metric-label">Config Approval Cycle</div>
         </div>
       </div>
 
       <div className="hero__cta-group">
         <a className="hero__btn hero__btn--primary" href="#case-studies">
-          View Projects
+          View Selected Work
         </a>
         <a
           href="/resume.pdf"

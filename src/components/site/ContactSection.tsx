@@ -24,42 +24,10 @@ export default function ContactSection() {
   return (
     <section className="contact-section" id="contact">
       <div className="contact-card">
-        <div className="contact-info">
-          <div>
-            <h2 className="contact-title">Let&apos;s Connect</h2>
-            <p className="contact-desc">
-              Interested in distributed systems engineering, high-throughput pipelines, or backend architecture? Reach out directly or send a message.
-            </p>
-          </div>
-
-          <div className="contact-channels">
-            <a
-              href="mailto:abilash0045@gmail.com"
-              className="contact-channel-link"
-            >
-              <span>📧</span>
-              <span>abilash0045@gmail.com</span>
-            </a>
-            <a
-              href="https://github.com/abilash0045"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-channel-link"
-            >
-              <span>🐙</span>
-              <span>github.com/abilash0045</span>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/abilash0045/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-channel-link"
-            >
-              <span>💼</span>
-              <span>linkedin.com/in/abilash0045</span>
-            </a>
-          </div>
-        </div>
+        <h2 className="contact-title">Let&apos;s Build Systems Together</h2>
+        <p className="contact-desc">
+          Interested in distributed systems engineering, high-throughput microservices, or cloud infrastructure? Reach out directly.
+        </p>
 
         <form className="contact-form" onSubmit={handleSubmit}>
           <div className="form-group">
@@ -100,7 +68,7 @@ export default function ContactSection() {
               id="contact-message"
               required
               className="form-textarea"
-              placeholder="Share details about your team, system engineering challenge, or role..."
+              placeholder="Share details about your team, infrastructure challenge, or engineering role..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
@@ -110,6 +78,20 @@ export default function ContactSection() {
             {submitted ? "✓ Message Sent Successfully!" : "Send Message"}
           </button>
         </form>
+
+        <div className="contact-channels">
+          <a href="mailto:abilash0045@gmail.com" className="contact-channel-link">
+            abilash0045@gmail.com
+          </a>
+          <span>·</span>
+          <a href="https://github.com/abilash0045" target="_blank" rel="noopener noreferrer" className="contact-channel-link">
+            GitHub ↗
+          </a>
+          <span>·</span>
+          <a href="https://www.linkedin.com/in/abilash0045/" target="_blank" rel="noopener noreferrer" className="contact-channel-link">
+            LinkedIn ↗
+          </a>
+        </div>
       </div>
     </section>
   );

@@ -7,9 +7,13 @@ test("home page carries full senior portfolio sections and 30-second value prop"
     page.getByText("Backend Engineer with 2+ years building event-driven microservices that power AI video generation at scale.").first()
   ).toBeVisible();
 
-  // Verify Engineering Wins section
-  await expect(page.getByText("Engineering Wins & Production Impact")).toBeVisible();
-  await expect(page.getByText("Kafka Event-Driven Microservices")).toBeVisible();
+  // Verify Linear/Vercel sections
+  await expect(page.getByText("Selected Work").first()).toBeVisible();
+  await expect(page.getByText("Engineering Philosophy")).toBeVisible();
+  await expect(page.getByText("Technology Ecosystem")).toBeVisible();
+  await expect(page.getByText("Production Engineering Experience")).toBeVisible();
+  await expect(page.getByText("Peer Endorsements")).toBeVisible();
+  await expect(page.getByText("Let's Build Systems Together")).toBeVisible();
 
   // Verify structured project fields
   await expect(page.getByText("Problem").first()).toBeVisible();
@@ -56,15 +60,15 @@ test("home page is responsive across mobile, tablet, and ultra-wide viewports", 
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("/");
   await expect(page.getByText("Abilash S L").first()).toBeVisible();
-  await expect(page.getByText("Categorized Tech Stack")).toBeVisible();
+  await expect(page.getByText("Technology Ecosystem")).toBeVisible();
 
   // Tablet Viewport (768x1024)
   await page.setViewportSize({ width: 768, height: 1024 });
-  await expect(page.getByText("Experience & Timeline")).toBeVisible();
+  await expect(page.getByText("Production Engineering Experience")).toBeVisible();
 
   // Ultra-wide Desktop Viewport (2560x1440)
   await page.setViewportSize({ width: 2560, height: 1440 });
-  await expect(page.getByText("Skills Capability Breakdown")).toBeVisible();
+  await expect(page.getByText("Engineering Philosophy")).toBeVisible();
 });
 
 test("home page stays about the work", async ({ page }) => {
