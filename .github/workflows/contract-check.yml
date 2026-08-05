@@ -1,0 +1,37 @@
+name: contract-check
+
+on:
+  schedule:
+    # 06:00 UTC every Monday.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - id: contract
+        run: npm run test:contract
+      - name: Open an issue when the upstream shape has drifted
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "Nominatim response shape drifted ($(date -u +%Y-%m-%d))" \
+            --body "The weekly contract check failed. The recorded fixtures in \`tests/fixtures/\` may no longer match what Nominatim returns, which means the unit tests are passing against a stale contract.
+
+          Run \`npm run test:contract\` locally, then re-record the fixtures per Task 4 Step 1 of \`docs/superpowers/plans/2026-08-05-portfolio-dartboard.md\` if the shape really has changed.
+
+          Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --label "upstream" || true

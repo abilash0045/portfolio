@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, build/portfolio]
   pull_request:
 
 jobs:
@@ -27,3 +27,19 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    # Informational. A portfolio's broken deploy is not an incident, so this
+    # reports and never blocks.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm i -g @lhci/cli
+      - run: lhci autorun --config=lighthouserc.json
