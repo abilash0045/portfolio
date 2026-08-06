@@ -14,6 +14,23 @@ type Props = {
   onOriginChange: (origin: LatLon) => void;
 };
 
+/** Matches the bound the search route enforces, so the 400 is unreachable. */
+const MAX_QUERY = 120;
+
+/**
+ * Every outcome the search can have, as one value. It used to be a results
+ * array plus a searching flag, and three of the outcomes below rendered as
+ * an empty array: too short, no match, and upstream down all looked like
+ * "nothing happened".
+ */
+type SearchState =
+  | { kind: "idle" }
+  | { kind: "tooShort" }
+  | { kind: "searching" }
+  | { kind: "results"; results: SearchResult[] }
+  | { kind: "empty"; query: string }
+  | { kind: "failed" };
+
 export default function ThrowControls({
   radiusM,
   onRadiusChange,
@@ -23,20 +40,34 @@ export default function ThrowControls({
   onOriginChange,
 }: Props) {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [searching, setSearching] = useState(false);
+  const [search, setSearch] = useState<SearchState>({ kind: "idle" });
 
   async function runSearch() {
-    if (query.trim().length < 2) return;
-    setSearching(true);
+    const trimmed = query.trim();
+    if (trimmed.length < 2) {
+      setSearch({ kind: "tooShort" });
+      return;
+    }
+
+    setSearch({ kind: "searching" });
     try {
-      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-      const body = (await response.json()) as { results?: SearchResult[] };
-      setResults(body.results ?? []);
+      const response = await fetch(`/api/search?q=${encodeURIComponent(trimmed)}`);
+      if (!response.ok) throw new Error("search");
+
+      const body = (await response.json()) as {
+        results?: SearchResult[];
+        error?: string;
+      };
+      if (body.error) throw new Error(body.error);
+
+      const results = body.results ?? [];
+      setSearch(
+        results.length > 0
+          ? { kind: "results", results }
+          : { kind: "empty", query: trimmed },
+      );
     } catch {
-      setResults([]);
-    } finally {
-      setSearching(false);
+      setSearch({ kind: "failed" });
     }
   }
 
@@ -47,31 +78,50 @@ export default function ThrowControls({
           <input
             className="locsearch__input"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            maxLength={MAX_QUERY}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              // Whatever the last attempt said is about the old query.
+              if (search.kind !== "idle") setSearch({ kind: "idle" });
+            }}
             onKeyDown={(event) => {
               if (event.key === "Enter") void runSearch();
             }}
             placeholder="Where are you? Try a town or city"
             aria-label="Search for your location"
+            aria-describedby="locsearch-status"
           />
           <button
             type="button"
             className="locsearch__button"
             onClick={() => void runSearch()}
-            disabled={searching}
+            disabled={search.kind === "searching"}
           >
-            {searching ? "Searching" : "Find it"}
+            {search.kind === "searching" ? "Searching" : "Find it"}
           </button>
-          {results.length > 0 && (
-            <ul className="locsearch__results" style={{ flexBasis: "100%" }}>
-              {results.map((result) => (
+
+          {/* Three of the outcomes below used to render as nothing at all:
+              the button went back to "Find it" and the visitor was told
+              neither what had happened nor what to do about it. */}
+          <p className="locsearch__status" id="locsearch-status" role="status">
+            {search.kind === "tooShort" &&
+              "Type at least two letters, then search again."}
+            {search.kind === "empty" &&
+              `Nothing matched "${search.query}". Try a nearby town, or check the spelling.`}
+            {search.kind === "failed" &&
+              "Couldn't reach the place lookup. Try again in a moment, or throw from where the map already is."}
+          </p>
+
+          {search.kind === "results" && (
+            <ul className="locsearch__results">
+              {search.results.map((result) => (
                 <li key={`${result.lat},${result.lon}`}>
                   <button
                     type="button"
                     className="locsearch__result"
                     onClick={() => {
                       onOriginChange({ lat: result.lat, lon: result.lon });
-                      setResults([]);
+                      setSearch({ kind: "idle" });
                       setQuery("");
                     }}
                   >

@@ -228,8 +228,25 @@
   cursor: not-allowed;
 }
 
+/* The live region is always in the DOM so a screen reader has something to
+   announce into, and collapses out of the flex row when it has nothing to
+   say. LandingCard sets the precedent for the styling: errors here are
+   stated in plain text, not colour-coded. */
+.locsearch__status {
+  flex-basis: 100%;
+  margin: 8px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.locsearch__status:empty {
+  display: none;
+}
+
 .locsearch__results {
   list-style: none;
+  flex-basis: 100%;
   margin: 8px 0 0;
   padding: 0;
   display: grid;

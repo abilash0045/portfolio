@@ -29,12 +29,17 @@ export async function GET(request: Request): Promise<NextResponse> {
       headers: { "User-Agent": USER_AGENT, Accept: "application/json" },
       signal: AbortSignal.timeout(8_000),
     });
-    if (!upstream.ok) return NextResponse.json({ results: [] });
+    // Both failure paths used to answer `{ results: [] }`, which told the UI
+    // the same thing as a genuine no-match and left it with nothing true to
+    // say. The field is additive: `results` still means what it always did.
+    if (!upstream.ok) {
+      return NextResponse.json({ results: [], error: "upstream" });
+    }
 
     const results = normaliseSearch(await upstream.json());
     cache.set(key, results);
     return NextResponse.json({ results });
   } catch {
-    return NextResponse.json({ results: [] });
+    return NextResponse.json({ results: [], error: "upstream" });
   }
 }
