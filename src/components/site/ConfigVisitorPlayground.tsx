@@ -1,12 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import "./config-playground.css";
 
 type VisitorType = "validate" | "diff" | "serialise" | "preview";
 
+const VISITORS: { id: VisitorType; label: string }[] = [
+  { id: "validate", label: "ValidateVisitor" },
+  { id: "diff", label: "DiffVisitor" },
+  { id: "serialise", label: "SerialiseVisitor" },
+  { id: "preview", label: "PreviewVisitor" },
+];
+
+const PANEL_ID = "pg-visitor-output";
+const tabId = (visitor: VisitorType) => `pg-tab-${visitor}`;
+
 export default function ConfigVisitorPlayground() {
   const [activeVisitor, setActiveVisitor] = useState<VisitorType>("validate");
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const selectedLabel =
+    VISITORS.find((visitor) => visitor.id === activeVisitor)?.label ?? "";
+
+  // The keyboard half of the tab role. Arrow keys move between tabs and
+  // selection follows focus; Tab itself leaves the group, which is why only
+  // the selected tab is in the tab order. Up and Down are deliberately not
+  // handled: this list is horizontal, and swallowing them would take page
+  // scrolling away from anyone standing on a tab.
+  function moveSelection(event: KeyboardEvent<HTMLButtonElement>) {
+    const current = VISITORS.findIndex((visitor) => visitor.id === activeVisitor);
+    let next = current;
+
+    switch (event.key) {
+      case "ArrowRight":
+        next = (current + 1) % VISITORS.length;
+        break;
+      case "ArrowLeft":
+        next = (current - 1 + VISITORS.length) % VISITORS.length;
+        break;
+      case "Home":
+        next = 0;
+        break;
+      case "End":
+        next = VISITORS.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    setActiveVisitor(VISITORS[next].id);
+    tabRefs.current[next]?.focus();
+  }
 
   // An illustration of the pattern, not a transcript of a production system.
   // The node types are the real shape of the problem; the values are
@@ -88,46 +132,29 @@ what it did.`;
         </p>
       </div>
 
-      <div className="pg-tabs" role="tablist" aria-label="Visitor Operations">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeVisitor === "validate"}
-          className={`pg-tab ${activeVisitor === "validate" ? "pg-tab--active" : ""}`}
-          onClick={() => setActiveVisitor("validate")}
-        >
-          ValidateVisitor
-        </button>
-
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeVisitor === "diff"}
-          className={`pg-tab ${activeVisitor === "diff" ? "pg-tab--active" : ""}`}
-          onClick={() => setActiveVisitor("diff")}
-        >
-          DiffVisitor
-        </button>
-
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeVisitor === "serialise"}
-          className={`pg-tab ${activeVisitor === "serialise" ? "pg-tab--active" : ""}`}
-          onClick={() => setActiveVisitor("serialise")}
-        >
-          SerialiseVisitor
-        </button>
-
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeVisitor === "preview"}
-          className={`pg-tab ${activeVisitor === "preview" ? "pg-tab--active" : ""}`}
-          onClick={() => setActiveVisitor("preview")}
-        >
-          PreviewVisitor
-        </button>
+      <div className="pg-tabs" role="tablist" aria-label="Visitor operations">
+        {VISITORS.map((visitor, index) => {
+          const selected = visitor.id === activeVisitor;
+          return (
+            <button
+              key={visitor.id}
+              type="button"
+              role="tab"
+              id={tabId(visitor.id)}
+              ref={(node) => {
+                tabRefs.current[index] = node;
+              }}
+              aria-selected={selected}
+              aria-controls={PANEL_ID}
+              tabIndex={selected ? 0 : -1}
+              className="pg-tab"
+              onClick={() => setActiveVisitor(visitor.id)}
+              onKeyDown={moveSelection}
+            >
+              {visitor.label}
+            </button>
+          );
+        })}
       </div>
 
       <div className="pg-workspace">
@@ -136,9 +163,21 @@ what it did.`;
           <pre className="pg-code pg-code--input">{inputNodes}</pre>
         </div>
 
-        <div className="pg-pane">
+        {/* One panel serving four tabs, so it is labelled by whichever tab is
+            selected. tabIndex 0 because it holds no focusable content of its
+            own and a keyboard visitor still has to be able to reach the text
+            the tabs just changed. */}
+        <div
+          className="pg-pane"
+          role="tabpanel"
+          id={PANEL_ID}
+          aria-labelledby={tabId(activeVisitor)}
+          tabIndex={0}
+        >
           <div className="pg-pane__title">
-            <span>{activeVisitor}.accept(visitor)</span>
+            {/* node.accept(visitor), the way round the pattern actually goes.
+                This used to render "validate.accept(visitor)". */}
+            <span>config.accept({selectedLabel})</span>
             <span className="pg-pane__note">Illustration, not a live system</span>
           </div>
           <pre className="pg-code">{getVisitorOutput()}</pre>

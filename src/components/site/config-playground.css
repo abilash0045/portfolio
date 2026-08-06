@@ -47,11 +47,12 @@
   min-height: 38px;
 }
 
-/* Keyed off aria-selected rather than a :not() on the class, so the hover
-   can never drift away from the state screen readers are told about. It
-   matters: an unscoped .pg-tab:hover outspecifies .pg-tab--active, so
-   hovering the selected tab used to put ink text on the accent fill at
-   2.45:1 and drop its selected appearance at the same time. */
+/* Both of these key off aria-selected rather than a class, so what a tab
+   looks like and what a screen reader is told about it cannot drift apart.
+   The selected look used to ride on a .pg-tab--active class, and an
+   unscoped .pg-tab:hover outspecified it: hovering the selected tab put ink
+   text on the accent fill at 2.45:1 and dropped its selected appearance at
+   the same time. */
 .pg-tab[aria-selected="false"]:hover {
   color: var(--text-primary);
   background: var(--color-paper-3);
@@ -61,7 +62,7 @@
   transform: translateY(1px);
 }
 
-.pg-tab--active {
+.pg-tab[aria-selected="true"] {
   background: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-on-accent);
