@@ -48,3 +48,6 @@ next-env.d.ts
 
 # SDD scratch
 .superpowers/
+
+# UI/UX loop state. Local working notes, deliberately not published.
+.uiux/
