@@ -78,6 +78,23 @@
 .dartboard__stage {
   position: relative;
   min-height: 0;
+  /* Holds the map's box before the map exists, so nothing shifts when it
+     arrives and the gap reads as a container rather than a hole. */
+  background: var(--color-inset);
+}
+
+.dartboard__stage-note {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(30rem, 82%);
+  margin: 0;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 /* Floating Glass Control Panel */

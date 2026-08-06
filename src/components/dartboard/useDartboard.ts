@@ -11,12 +11,24 @@ export const MAX_RADIUS_M = 500_000;
 /** Kanyakumari. Only used if geolocation is denied and no search is made. */
 const FALLBACK_ORIGIN: LatLon = { lat: 8.0883, lon: 77.5385 };
 
-export type Phase = "locating" | "ready" | "throwing" | "landed" | "error";
+export type Phase =
+  /** Nothing has been asked for yet: no location prompt, no map, no tiles. */
+  | "idle"
+  | "locating"
+  | "ready"
+  | "throwing"
+  | "landed"
+  | "error";
 
 /** How long the dart is in the air before the result is revealed. */
 const FLIGHT_MS = 700;
 
-export function useDartboard() {
+/**
+ * `active` false holds everything: no geolocation prompt and no origin, which
+ * is what keeps the caller from rendering the map. Embedded on the home page
+ * it stays false until the section is close to the viewport.
+ */
+export function useDartboard(active = true) {
   const [phase, setPhase] = useState<Phase>("locating");
   const [origin, setOriginState] = useState<LatLon | null>(null);
   const [radiusM, setRadiusM] = useState(100_000);
@@ -31,6 +43,8 @@ export function useDartboard() {
   const throwIdRef = useRef(0);
 
   useEffect(() => {
+    if (!active) return;
+
     if (typeof navigator === "undefined" || !navigator.geolocation) {
       queueMicrotask(() => {
         setOriginState(FALLBACK_ORIGIN);
@@ -62,7 +76,11 @@ export function useDartboard() {
       },
       { timeout: 10_000, maximumAge: 300_000 },
     );
-  }, []);
+
+    return () => {
+      settled = true;
+    };
+  }, [active]);
 
   const setOrigin = useCallback((next: LatLon) => {
     setOriginState(next);
@@ -124,7 +142,9 @@ export function useDartboard() {
   }, [origin, radiusM]);
 
   return {
-    phase,
+    // Before activation nothing has been asked for, so the stored phase is a
+    // starting value rather than a description of anything happening.
+    phase: active ? phase : "idle",
     origin,
     radiusM,
     setRadiusM,
