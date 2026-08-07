@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -20,28 +21,27 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const TITLE = "Abilash S L, Backend Engineer";
+
 export const metadata: Metadata = {
-  title: "Abilash S L, Backend Engineer",
-  description:
-    "Backend engineer on a video rendering pipeline handling 25,000+ renders a day across GKE and Cloud Run. Java, Spring Boot, Kafka, Redis, Kubernetes, GCP and AWS.",
-  metadataBase: new URL("https://portfolio-abilash.vercel.app"),
+  title: TITLE,
+  description: SITE_DESCRIPTION,
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Abilash S L, Backend Engineer",
-    description:
-      "Backend engineer on a video rendering pipeline handling 25,000+ renders a day across GKE and Cloud Run. Java, Spring Boot, Kafka, Redis, Kubernetes, GCP and AWS.",
-    url: "https://portfolio-abilash.vercel.app",
+    title: TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
     siteName: "Abilash S L Portfolio",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abilash S L, Backend Engineer",
-    description:
-      "Backend engineer on a video rendering pipeline handling 25,000+ renders a day across GKE and Cloud Run. Java, Spring Boot, Kafka, Redis, Kubernetes, GCP and AWS.",
+    title: TITLE,
+    description: SITE_DESCRIPTION,
   },
 };
 
