@@ -120,11 +120,38 @@ test("results still work, and choosing one clears the search", async ({
   await expect(page.getByRole("button", { name: "Chandigarh, India" })).toBeVisible();
   await page.getByRole("button", { name: "Chandigarh, India" }).click();
 
-  // Picking a place answers the question the search box was asking, so the
-  // whole block goes, status and all. Getting back to it currently means
-  // reloading, which is logged in STATE.md as its own item.
-  await expect(page.locator(".locsearch")).toHaveCount(0);
+  // The results clear and the query empties, but the box stays: see below.
+  await expect(page.locator(".locsearch__results")).toHaveCount(0);
+  await expect(input).toHaveValue("");
   await expect(page.locator(".controls__throw")).toBeEnabled();
+});
+
+test("the search stays after you use it, and says where you landed", async ({
+  page,
+}) => {
+  await page.route("**/api/search*", (route) =>
+    route.fulfill({
+      json: { results: [{ name: "Chandigarh, India", lat: 30.7333, lon: 76.7794 }] },
+    }),
+  );
+  await openSearch(page);
+
+  const input = page.getByLabel("Search for your location");
+  await input.fill("Chandigarh");
+  await findIt(page).click();
+  await page.getByRole("button", { name: "Chandigarh, India" }).click();
+
+  // It used to unmount here, so picking the wrong Chandigarh meant a reload.
+  await expect(page.locator(".locsearch")).toHaveCount(1);
+  await expect(input).toBeVisible();
+
+  // Losing the box also lost the only confirmation anything had happened.
+  await expect(status(page)).toContainText("Throwing from Chandigarh, India");
+
+  // And it has to work a second time.
+  await input.fill("Chandigarh");
+  await findIt(page).click();
+  await expect(page.getByRole("button", { name: "Chandigarh, India" })).toBeVisible();
 });
 
 test("the live region is in the DOM before there is anything to announce", async ({

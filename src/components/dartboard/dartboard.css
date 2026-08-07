@@ -26,12 +26,22 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* Two pills with nowhere to go. Below about 420px they were squeezed
+     narrower than their own text, so the label ran past the right edge and the
+     arrow dropped to a second line outside the border. Wrapping is the
+     structural guarantee; the media query below means it rarely has to. */
+  flex-wrap: wrap;
+  gap: 8px;
   pointer-events: none;
 }
 
 .dartboard__back-btn,
 .dartboard__fullscreen-btn {
   pointer-events: auto;
+  /* A pill has to be at least as wide as its label. Without these a flex
+     squeeze wins and the text leaves the border behind. */
+  flex-shrink: 0;
+  white-space: nowrap;
   padding: 8px 18px;
   background: var(--glass-bg);
   backdrop-filter: blur(16px);
@@ -63,6 +73,8 @@
 }
 
 .dartboard__header-title {
+  flex-shrink: 0;
+  white-space: nowrap;
   padding: 6px 16px;
   background: var(--glass-bg);
   backdrop-filter: blur(16px);
@@ -73,6 +85,22 @@
   font-weight: 600;
   color: var(--text-secondary);
   font-family: var(--font-mono);
+}
+
+/* Keeps the action on the right whatever else is in the row. Without it,
+   space-between drops the lone remaining pill to the left once the title
+   hides, so the button changes corner across the breakpoint. */
+.dartboard__header-actions {
+  margin-left: auto;
+}
+
+/* "Pick a range, then throw." is instruction, and the labelled slider and the
+   Throw button sit directly below saying the same thing. On a phone the map is
+   the scarce thing, so the instruction goes and the only real action stays. */
+@media (max-width: 520px) {
+  .dartboard__header-title {
+    display: none;
+  }
 }
 
 .dartboard__stage {

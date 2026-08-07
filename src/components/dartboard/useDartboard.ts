@@ -88,7 +88,11 @@ export function useDartboard(active = true) {
     setResult(null);
     setNearby([]);
     setError(null);
-    setNeedsManualLocation(false);
+    // Deliberately leaves needsManualLocation alone. It used to be cleared
+    // here, which unmounted the search box the moment you used it: pick the
+    // wrong Chandigarh and the only way back was a reload. Someone searching
+    // for a place is someone who may search again, and geolocation is not
+    // going to start working for them mid-session.
     setPhase("ready");
   }, []);
 

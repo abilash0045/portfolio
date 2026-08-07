@@ -29,7 +29,10 @@ type SearchState =
   | { kind: "searching" }
   | { kind: "results"; results: SearchResult[] }
   | { kind: "empty"; query: string }
-  | { kind: "failed" };
+  | { kind: "failed" }
+  /* The box used to vanish on picking, which was the only confirmation that
+     anything had happened. It stays now, so it has to say so itself. */
+  | { kind: "chosen"; name: string };
 
 export default function ThrowControls({
   radiusM,
@@ -110,6 +113,8 @@ export default function ThrowControls({
               `Nothing matched "${search.query}". Try a nearby town, or check the spelling.`}
             {search.kind === "failed" &&
               "Couldn't reach the place lookup. Try again in a moment, or throw from where the map already is."}
+            {search.kind === "chosen" &&
+              `Throwing from ${search.name}. Search again to move.`}
           </p>
 
           {search.kind === "results" && (
@@ -121,7 +126,7 @@ export default function ThrowControls({
                     className="locsearch__result"
                     onClick={() => {
                       onOriginChange({ lat: result.lat, lon: result.lon });
-                      setSearch({ kind: "idle" });
+                      setSearch({ kind: "chosen", name: result.name });
                       setQuery("");
                     }}
                   >
