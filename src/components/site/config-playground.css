@@ -111,9 +111,13 @@
   line-height: 1.6;
   color: var(--color-muted);
   margin: 0;
-  white-space: pre-wrap;
-  word-break: break-all;
+  /* `word-break: break-all` broke inside tokens, so at 390px the sample read
+     "sampl e-a" and "1 080p". `pre-wrap` then rewrapped the JSON and lost the
+     column alignment that makes it readable in the first place. Code does not
+     reflow: it holds its shape and scrolls sideways when it has to. */
+  white-space: pre;
   overflow-x: auto;
+  min-width: 0;
   flex: 1;
 }
 
