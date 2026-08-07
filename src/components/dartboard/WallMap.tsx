@@ -13,7 +13,20 @@ type Props = {
   shake: boolean;
 };
 
-const TILE_URL = "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+/* CARTO ships the same basemap in both polarities. Only `dark_all` was ever
+   used, so in light theme the map was a black slab dropped into a cream page. */
+const TILE_URL = {
+  dark: "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+  light: "https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+} as const;
+
+type Polarity = keyof typeof TILE_URL;
+
+/** The theme lives as an attribute on <html> and nothing broadcasts it. */
+const readPolarity = (): Polarity =>
+  document.documentElement.getAttribute("data-theme") === "light"
+    ? "light"
+    : "dark";
 const ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
   '&copy; <a href="https://carto.com/attributions">CARTO</a>';
@@ -23,6 +36,7 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
   const mapRef = useRef<L.Map | null>(null);
   const circleRef = useRef<L.Circle | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
+  const tilesRef = useRef<L.TileLayer | null>(null);
 
   // Init once. The ref guard survives React StrictMode's double-invoke in development.
   useEffect(() => {
@@ -35,14 +49,29 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
       scrollWheelZoom: false,
     }).setView([origin.lat, origin.lon], 9);
 
-    L.tileLayer(TILE_URL, { attribution: ATTRIBUTION, maxZoom: 19 }).addTo(map);
+    tilesRef.current = L.tileLayer(TILE_URL[readPolarity()], {
+      attribution: ATTRIBUTION,
+      maxZoom: 19,
+    }).addTo(map);
     mapRef.current = map;
 
+    // The theme toggle writes an attribute and tells nobody. Watching it beats
+    // threading a theme context down here for one string.
+    const observer = new MutationObserver(() =>
+      tilesRef.current?.setUrl(TILE_URL[readPolarity()]),
+    );
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
     return () => {
+      observer.disconnect();
       map.remove();
       mapRef.current = null;
       circleRef.current = null;
       markerRef.current = null;
+      tilesRef.current = null;
     };
     // Deliberately runs once. Origin changes are handled by the effect below.
     // eslint-disable-next-line react-hooks/exhaustive-deps

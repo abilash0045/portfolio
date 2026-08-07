@@ -52,6 +52,12 @@
      colour. This is the last of the alpha-as-colour values on the site. */
   --color-inset: oklch(11% 0.010 28);
 
+  /* The map's edge shading. Both were raw near-black values written when the
+     basemap was only ever CARTO's dark tiles. The tiles now follow the theme,
+     so these have to as well or the light map wears a black frame. */
+  --wallmap-vignette: oklch(10% 0.010 28 / 0.85);
+  --wallmap-hud-edge: oklch(10% 0.010 28 / 0.4);
+
   /* The ring is a token because keyboard focus is not a per-component
      decision. Components override the offset only where 3px is clipped. */
   --focus-ring: 2px solid var(--color-focus);
@@ -90,6 +96,9 @@
 /* Same anchor hue, only lightness and chroma move. Switching hue between
    modes is what makes a light theme feel like a different site. */
 [data-theme="light"] {
+  --wallmap-vignette: oklch(38% 0.012 40 / 0.20);
+  --wallmap-hud-edge: oklch(38% 0.012 40 / 0.10);
+
   --color-paper: oklch(97% 0.008 40);
   --color-paper-2: oklch(94% 0.010 40);
   --color-paper-3: oklch(90% 0.010 40);
