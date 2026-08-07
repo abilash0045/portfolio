@@ -72,9 +72,19 @@
   --radius-xl: 24px;
   --radius-pill: 9999px;
 
-  --font-body: var(--font-body), -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
-  --font-display: var(--font-display), -apple-system, BlinkMacSystemFont, "SF Pro Display", "Plus Jakarta Sans", sans-serif;
-  --font-mono: var(--font-mono), "SF Mono", "JetBrains Mono", monospace;
+  /* --font-body, --font-display and --font-mono are set on <html> by
+     next/font in layout.tsx. They used to be redeclared here as
+     `--font-body: var(--font-body), -apple-system, ...`, which is a custom
+     property defined in terms of itself: invalid at computed-value time, so
+     the whole declaration was thrown out, fallback chain included. All three
+     computed to nothing, every element fell through to the browser default,
+     and the entire site rendered in Times while 114 KB of Inter, Plus Jakarta
+     Sans and JetBrains Mono downloaded and styled none of it.
+
+     Nothing replaces them. next/font already emits a metric-matched local
+     fallback ("Inter Fallback" and friends) sized to the real face, which is
+     a better fallback than a hand-written system stack because it does not
+     shift the layout when the webfont arrives. */
 }
 
 /* Same anchor hue, only lightness and chroma move. Switching hue between
