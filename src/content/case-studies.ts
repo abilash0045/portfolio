@@ -66,6 +66,28 @@ export const caseStudies: CaseStudy[] = [
     inPageAnchor: "#architecture",
   },
   {
+    // This one is on this site, so nothing here is reconstructed from memory.
+    // Every number is from the upstream measurements in docs/DESIGN.md, taken
+    // 2026-08-05, and the behaviour described is the behaviour you can go and
+    // trigger further down the page.
+    slug: "dartboard",
+    title: "Weekend Dartboard",
+    headline:
+      "A map you throw a dart at, built on two public APIs where one of them fails about a third of the time.",
+    stack: ["TypeScript", "Next.js", "Leaflet", "Nominatim", "Overpass", "OpenStreetMap"],
+    problem:
+      "Pick how far you will travel, throw, and go wherever it lands. The interesting part is underneath: the two upstreams it needs behave nothing alike. One answers in about a second. The other fails roughly one call in three and takes eight to ten seconds to do it.",
+    architecture:
+      "Sampling is a pure function with no network in it. Reverse geocoding through Nominatim is the single blocking call and the result card renders on it. Overpass enrichment is fired alongside and never awaited. Both upstreams sit behind server routes that cache answers and hold each API to one request at a time, so a visitor cannot spend a shared rate limit.",
+    contribution:
+      "All of it. Measured both upstreams before designing around either, kept the unreliable one off the critical path, and wrote the sampling to distribute darts over the circle's area rather than its radius, which is the difference between an even scatter and a clump around the middle.",
+    challenges:
+      "Nominatim returns the same 'unable to geocode' body for open ocean and for unmapped land, with no field separating them. The card says the map has no record of the spot instead of picking one and sounding certain.",
+    results:
+      "A failed Overpass call is silence rather than an error: the nearby-places strip does not appear and the throw is untouched. Measured across three identical calls on 2026-08-05, Nominatim answered in 0.39s, 0.93s and 0.88s, while Overpass returned a 504, a 200 and a 429.",
+    inPageAnchor: "#dartboard-embedded-section",
+  },
+  {
     slug: "config-playground",
     title: "Visitor Pattern Config Engine",
     headline: "Extensible domain configuration engine reducing solution engineering approval cycles from 3 days to 1 day.",

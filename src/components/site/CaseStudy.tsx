@@ -3,7 +3,12 @@ import PipelineSimulator from "./PipelineSimulator";
 import ConfigVisitorPlayground from "./ConfigVisitorPlayground";
 
 export default function CaseStudy({ study }: { study: Study }) {
-  const isFullWidth = study.slug === "render-reliability" || study.slug === "config-playground";
+  // The three that have something to show further down the page get the full
+  // width. It also keeps the two half-width cards paired rather than leaving
+  // one alone in a row.
+  const isFullWidth = ["render-reliability", "dartboard", "config-playground"].includes(
+    study.slug,
+  );
 
   return (
     <article className={`study ${isFullWidth ? "study--full" : ""}`} id={study.slug} data-reveal>
