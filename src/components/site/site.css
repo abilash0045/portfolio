@@ -1,6 +1,11 @@
+/* 84rem left a 1920px monitor 70% used and a 2560px one 53%, which reads as
+   a narrow column adrift rather than a deliberate measure. The container is
+   allowed to grow because the grids, the map and the widgets all want the
+   room; the prose that would become unreadable at that width is capped on
+   its own below, which is where a measure belongs. */
 .site {
   width: 100%;
-  max-width: 84rem;
+  max-width: 120rem;
   margin: 0 auto;
   padding: 0 max(20px, 4vw) 120px;
 }
@@ -66,11 +71,14 @@
   font-family: var(--font-display);
 }
 
+/* The measure, kept off the container so the page can be wide and the
+   sentences still land around 65 characters. */
 .hero__lede {
   font-size: clamp(1.02rem, 1.8vw, 1.15rem);
   line-height: 1.7;
   color: var(--text-primary);
   margin: 0 0 16px;
+  max-width: 72ch;
 }
 
 .hero__lede--muted {

@@ -3,7 +3,8 @@
   top: 16px;
   z-index: 1000;
   width: calc(100% - max(20px, 4vw));
-  max-width: 84rem;
+  /* Tracks .site so the bar and the content share an edge. */
+  max-width: 120rem;
   margin: 0 auto;
 }
 
