@@ -297,8 +297,6 @@
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

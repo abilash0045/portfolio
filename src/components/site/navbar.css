@@ -14,12 +14,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 22px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-pill);
-  box-shadow: var(--glass-shadow);
+  /* Sticky, so content scrolls underneath it. A rule alone leaves the bar
+     sitting in the page rather than above it. */
+  box-shadow: var(--shadow-raised);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -184,11 +184,10 @@
     align-items: stretch;
     gap: 2px;
     padding: 10px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-lg);
-    box-shadow: var(--glass-shadow);
+    box-shadow: var(--shadow-raised);
   }
 
   .navbar__nav[data-open="false"] {

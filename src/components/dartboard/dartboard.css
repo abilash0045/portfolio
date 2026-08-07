@@ -11,8 +11,7 @@
 .dartboard--embedded {
   height: 580px;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--bg-card-border);
   margin: 40px 0;
   overflow: hidden;
 }
@@ -43,16 +42,14 @@
   flex-shrink: 0;
   white-space: nowrap;
   padding: 8px 18px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-pill);
   color: var(--text-primary);
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: var(--glass-shadow);
+  box-shadow: var(--shadow-raised);
   transition: all 0.2s ease;
 }
 
@@ -76,10 +73,8 @@
   flex-shrink: 0;
   white-space: nowrap;
   padding: 6px 16px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-pill);
   font-size: 0.82rem;
   font-weight: 600;
@@ -135,12 +130,11 @@
   max-width: 54rem;
   margin: 0 auto;
   padding: 16px 20px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
+  /* Floats over the map, same as the header pills. */
+  box-shadow: var(--shadow-raised);
   display: grid;
   gap: 12px;
 }

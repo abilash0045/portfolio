@@ -64,9 +64,17 @@
   --focus-ring-offset: 3px;
 
   --border-subtle: var(--color-rule);
-  --glass-bg: var(--color-paper-2);
-  --glass-border: var(--color-rule);
-  --glass-shadow: 0 8px 32px 0 oklch(8% 0.01 28 / 0.45);
+  /* The glass tokens are gone. --glass-bg and --glass-border were aliases of
+     --bg-card and --bg-card-border, so "glass" was two names for a surface the
+     site already had, and --glass-shadow was a 32px drop shadow on things that
+     do not float. Every backdrop-filter that went with them sat on a fully
+     opaque background, measured at alpha 1.0, so all sixteen were blurring
+     something nothing could see through.
+
+     What survives is elevation for things that genuinely sit above the page:
+     the sticky bar, the menu panel, and the chrome over the map. Tighter and
+     far lighter, because its job is separation, not depth. */
+  --shadow-raised: 0 2px 10px oklch(8% 0.010 28 / 0.50);
 
   --button-primary-hover: oklch(69% 0.170 28);
   --button-secondary-hover: var(--color-paper-3);
@@ -115,7 +123,7 @@
   --color-scroll-thumb: oklch(20% 0.014 28 / 0.22);
 
   --accent-red-glow: oklch(52% 0.190 28 / 0.20);
-  --glass-shadow: 0 8px 30px oklch(20% 0.014 28 / 0.10);
+  --shadow-raised: 0 2px 10px oklch(20% 0.014 28 / 0.09);
   --button-primary-hover: oklch(47% 0.190 28);
 }
 

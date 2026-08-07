@@ -23,8 +23,6 @@
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-xl);
   padding: 32px;
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(16px);
 }
 
 .philosophy-number {

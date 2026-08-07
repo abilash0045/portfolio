@@ -9,8 +9,6 @@
   border: 1px solid var(--color-border-interactive);
   border-radius: var(--radius-xl);
   padding: clamp(24px, 5vw, 44px);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(16px);
   text-align: center;
 }
 
