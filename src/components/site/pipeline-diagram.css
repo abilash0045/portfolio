@@ -1,0 +1,67 @@
+/* Sits inside .hero__avatar-card, which already carries the left rule and its
+   padding. A second one here would nest two rules 28px apart. */
+.pipeline {
+  align-self: stretch;
+  margin: 18px 0 0;
+}
+
+.pipeline__svg {
+  display: block;
+  width: 100%;
+  max-width: 26rem;
+  height: auto;
+  overflow: visible;
+}
+
+.pipeline__spine,
+.pipeline__branch {
+  stroke: var(--color-rule);
+  stroke-width: 1;
+  fill: none;
+}
+
+.pipeline__node {
+  fill: var(--bg-primary);
+  stroke: var(--text-secondary);
+  stroke-width: 1.5;
+}
+
+/* The render stage is the one the headline is about. */
+.pipeline__node--live {
+  fill: var(--color-accent);
+  stroke: var(--color-accent);
+}
+
+.pipeline__name {
+  fill: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pipeline__note,
+.pipeline__sub {
+  fill: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+
+.pipeline__sub-name {
+  fill: var(--text-primary);
+}
+
+.pipeline__caption {
+  margin: 14px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .pipeline {
+    margin-top: 28px;
+  }
+
+  .pipeline__svg {
+    max-width: 24rem;
+  }
+}

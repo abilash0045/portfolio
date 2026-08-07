@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PipelineDiagram from "./PipelineDiagram";
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
@@ -47,6 +48,8 @@ export default function Hero() {
             <div className="hero__avatar-role">Backend Engineer</div>
             <div className="hero__avatar-tech">Java · Spring · Kafka · K8s</div>
           </div>
+
+          <PipelineDiagram />
         </div>
       </div>
 
