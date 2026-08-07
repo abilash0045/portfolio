@@ -15,6 +15,9 @@
   }
 }
 
+/* No hover state. These cards are not clickable, and a lift plus a border
+   shift is the same promise the tech pills and study tech lists were making
+   before they lost theirs. The transition went with it: nothing else used it. */
 .magazine-card {
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
@@ -25,12 +28,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: transform 0.25s ease, border-color 0.25s ease;
-}
-
-.magazine-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--color-border-interactive);
 }
 
 .magazine-card--featured {
