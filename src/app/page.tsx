@@ -28,7 +28,7 @@ export default function Home() {
         <section id="case-studies" className="studies-section">
           <h2 className="section-title" data-reveal>Selected Work</h2>
           <p className="section-subtitle" data-reveal>
-            Structured bento-grid analysis of production distributed systems, media processing microservices, and performance wins
+            Things I built or fixed at work, with what broke, what I changed, and what it moved.
           </p>
           <div className="studies-grid">
             {caseStudies.map((study) => (

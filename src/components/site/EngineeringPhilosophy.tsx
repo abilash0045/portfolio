@@ -34,7 +34,7 @@ export default function EngineeringPhilosophy() {
     <section className="philosophy-section" id="philosophy">
       <h2 className="section-title" data-reveal>Engineering Philosophy</h2>
       <p className="section-subtitle" data-reveal>
-        Core technical principles for designing high-throughput, fault-tolerant backend architectures
+        What I reach for when a system has to stay up, and what I&apos;ve learned costs more than it saves.
       </p>
 
       <div className="philosophy-grid">

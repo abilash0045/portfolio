@@ -37,7 +37,7 @@ export default function TechStack() {
     <section className="tech-section" id="tech-stack">
       <h2 className="section-title" data-reveal>Technology Ecosystem</h2>
       <p className="section-subtitle" data-reveal>
-        Core languages, frameworks, databases, and infrastructure tools used in production backend architectures
+        Things I&apos;ve run in production, not things I&apos;ve read about.
       </p>
 
       <div className="tech-grid">

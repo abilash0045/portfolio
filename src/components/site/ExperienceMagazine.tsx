@@ -5,7 +5,7 @@ export default function ExperienceMagazine() {
     <section className="magazine-section" id="experience">
       <h2 className="section-title" data-reveal>Production Engineering Experience</h2>
       <p className="section-subtitle" data-reveal>
-        Magazine-style breakdown of systems architecture milestones and measurable business impact
+        The same work in longer form, in the order it actually happened.
       </p>
 
       <div className="magazine-grid">
