@@ -3,8 +3,8 @@ import "./magazine.css";
 export default function ExperienceMagazine() {
   return (
     <section className="magazine-section" id="experience">
-      <h2 className="section-title">Production Engineering Experience</h2>
-      <p className="section-subtitle">
+      <h2 className="section-title" data-reveal>Production Engineering Experience</h2>
+      <p className="section-subtitle" data-reveal>
         Magazine-style breakdown of systems architecture milestones and measurable business impact
       </p>
 
@@ -28,7 +28,7 @@ export default function ExperienceMagazine() {
           </div>
         </article>
 
-        <article className="magazine-card">
+        <article className="magazine-card" data-reveal>
           <div>
             <div className="magazine-meta">
               <span className="magazine-company">Distributed Systems</span>

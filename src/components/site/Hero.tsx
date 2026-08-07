@@ -40,9 +40,6 @@ export default function Hero() {
         </div>
 
         <div className="hero__avatar-card">
-          <div className="hero__avatar-circle">
-            <span>ASL</span>
-          </div>
           <div className="hero__avatar-info">
             <div className="hero__avatar-name">Abilash S L</div>
             <div className="hero__avatar-role">Backend Engineer</div>

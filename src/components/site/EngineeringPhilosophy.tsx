@@ -32,14 +32,14 @@ const principles: Principle[] = [
 export default function EngineeringPhilosophy() {
   return (
     <section className="philosophy-section" id="philosophy">
-      <h2 className="section-title">Engineering Philosophy</h2>
-      <p className="section-subtitle">
+      <h2 className="section-title" data-reveal>Engineering Philosophy</h2>
+      <p className="section-subtitle" data-reveal>
         Core technical principles for designing high-throughput, fault-tolerant backend architectures
       </p>
 
       <div className="philosophy-grid">
         {principles.map((p) => (
-          <div key={p.num} className="philosophy-card">
+          <div key={p.num} className="philosophy-card" data-reveal>
             <div className="philosophy-number">{p.num}</div>
             <h3 className="philosophy-title">{p.title}</h3>
             <p className="philosophy-desc">{p.desc}</p>

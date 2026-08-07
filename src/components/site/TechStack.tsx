@@ -35,14 +35,14 @@ const groups: TechGroup[] = [
 export default function TechStack() {
   return (
     <section className="tech-section" id="tech-stack">
-      <h2 className="section-title">Technology Ecosystem</h2>
-      <p className="section-subtitle">
+      <h2 className="section-title" data-reveal>Technology Ecosystem</h2>
+      <p className="section-subtitle" data-reveal>
         Core languages, frameworks, databases, and infrastructure tools used in production backend architectures
       </p>
 
       <div className="tech-grid">
         {groups.map((group) => (
-          <div key={group.category} className="tech-card">
+          <div key={group.category} className="tech-card" data-reveal>
             <div className="tech-card__header">
               <h3 className="tech-card__category">{group.category}</h3>
             </div>

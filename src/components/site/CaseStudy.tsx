@@ -6,7 +6,7 @@ export default function CaseStudy({ study }: { study: Study }) {
   const isFullWidth = study.slug === "render-reliability" || study.slug === "config-playground";
 
   return (
-    <article className={`study ${isFullWidth ? "study--full" : ""}`} id={study.slug}>
+    <article className={`study ${isFullWidth ? "study--full" : ""}`} id={study.slug} data-reveal>
       <div className="study__header">
         <span className="study__number">FEATURED PROJECT</span>
         <h3 className="study__title">{study.title}</h3>

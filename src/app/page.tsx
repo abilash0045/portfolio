@@ -7,6 +7,7 @@ import ExperienceMagazine from "@/components/site/ExperienceMagazine";
 import ContactSection from "@/components/site/ContactSection";
 import Footer from "@/components/site/Footer";
 import Dartboard from "@/components/dartboard/Dartboard";
+import ScrollReveal from "@/components/site/ScrollReveal";
 import { caseStudies } from "@/content/case-studies";
 import "@/components/site/site.css";
 
@@ -19,13 +20,14 @@ export default function Home() {
       </div>
 
       <Navbar />
+      <ScrollReveal />
 
       <main className="site">
         <Hero />
 
         <section id="case-studies" className="studies-section">
-          <h2 className="section-title">Selected Work</h2>
-          <p className="section-subtitle">
+          <h2 className="section-title" data-reveal>Selected Work</h2>
+          <p className="section-subtitle" data-reveal>
             Structured bento-grid analysis of production distributed systems, media processing microservices, and performance wins
           </p>
           <div className="studies-grid">
@@ -43,8 +45,8 @@ export default function Home() {
 
         {/* Embedded Interactive Dartboard Map Section */}
         <section id="dartboard-embedded-section" style={{ margin: "72px 0" }}>
-          <h2 className="section-title">Throw a dart at the map</h2>
-          <p className="section-subtitle">
+          <h2 className="section-title" data-reveal>Throw a dart at the map</h2>
+          <p className="section-subtitle" data-reveal>
             I am bad at deciding where to go on a free weekend, so I let a dart
             decide. Pick how far you are willing to travel, throw, and go
             wherever it lands. If it lands in the sea, it says so.
