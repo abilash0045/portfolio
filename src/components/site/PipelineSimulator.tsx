@@ -8,7 +8,10 @@ export default function PipelineSimulator() {
   const [cacheMode, setCacheMode] = useState<"none" | "redis">("redis");
 
   const reliability = storageMode === "ephemeral" ? 98 : 60;
-  const costReduction = cacheMode === "redis" ? 40 : 0;
+  // The cache's own share. This said 40, which is both cost wins added
+  // together: ~30% from this cache and ~10% from scale-to-zero, which is not
+  // on this widget at all. The two are independent and never one number.
+  const costReduction = cacheMode === "redis" ? 30 : 0;
   const cacheHitRate = cacheMode === "redis" ? 80 : 0;
 
   return (
@@ -126,7 +129,7 @@ export default function PipelineSimulator() {
           </div>
 
           <div className="sim-card">
-            <div className="sim-card__label">Cloud Spend Reduction</div>
+            <div className="sim-card__label">Cloud spend cut by the cache</div>
             <div className="sim-card__value">
               <span>~{costReduction}%</span>
               <span className={`sim-badge ${costReduction > 0 ? "sim-badge--info" : "sim-badge--danger"}`}>

@@ -74,7 +74,9 @@ export default function Hero() {
           <div className="hero__metric-value">
             ~40%
           </div>
-          <div className="hero__metric-label">Cloud spend cut</div>
+          {/* Two independent cuts that happen to sum, which is how DESIGN.md
+              words it. A bare "~40%" read as one win. */}
+          <div className="hero__metric-label">Cloud spend, cut twice</div>
         </div>
         <div className="hero__metric">
           <div className="hero__metric-value">

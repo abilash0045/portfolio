@@ -92,6 +92,43 @@ test.describe("nothing on this page claims something untrue", () => {
     }
   });
 
+  // ~30% came from the segment cache and ~10% from scale-to-zero. They are
+  // independent and must never read as one win. The widget's cache toggle
+  // claimed all ~40% for the cache, and the hero stated ~40% as one number.
+  test("the cache is credited with its own ~30%, not both wins", async ({ page }) => {
+    await page.goto("/");
+    const widget = page.locator("#architecture");
+    await widget.getByRole("button", { name: "Redis Segment Cache" }).click();
+
+    const spend = widget.locator(".sim-card", { hasText: /spend/i });
+    await expect(spend).toContainText("~30%");
+    await expect(spend).not.toContainText("40%");
+  });
+
+  test("wherever ~40% appears, it is shown as two cuts", async ({ page }) => {
+    await page.goto("/");
+    const contexts = await page.locator("main").evaluate((main) => {
+      const found: string[] = [];
+      const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        if (!node.textContent?.includes("40%")) continue;
+        // The block holding the figure, then the block around that: the
+        // metric with its label, the field with its heading.
+        let el = node.parentElement!;
+        while (getComputedStyle(el).display === "inline" && el.parentElement) {
+          el = el.parentElement;
+        }
+        found.push((el.parentElement ?? el).textContent ?? "");
+      }
+      return found;
+    });
+
+    expect(contexts.length, "the combined figure is gone entirely").toBeGreaterThan(0);
+    for (const text of contexts) {
+      expect(text, "~40% stated as one win").toMatch(/twice|~30%[\s\S]*~10%/);
+    }
+  });
+
   test("the contact form does not fake a send", async ({ page }) => {
     await page.goto("/");
     await page.fill("#contact-name", "Alex Recruiter");
