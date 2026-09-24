@@ -68,6 +68,14 @@ the cloud allowlist. It has one full-colour style, so each theme is a CSS filter
 instead of a second tile set. To bring the CARTO look back: get a key, restore CARTO's URLs in
 `WallMap.tsx` with it, drop the two filters, and credit CARTO in the attribution again.
 
+**2026-09-24: Under reduced motion, transitions are off, not short.**
+The guard in `globals.css` set every transition to 0.01ms, the way it does animations. That is not
+the same thing: `transition-property` defaults to `all`, so a blanket duration gives every element a
+transition on every property, and each style change reaches layout a frame late. It showed up as the
+map's reduced-motion test failing about one run in five under load, with the map already where it
+should be. Animations keep the near-zero duration so `animationend` still fires; nothing here waits
+on `transitionend`.
+
 ## Progress
 
 - [x] 2026-08-05: API behaviour measured (Nominatim, Overpass, both tile sources)
