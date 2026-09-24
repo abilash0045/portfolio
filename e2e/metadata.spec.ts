@@ -58,6 +58,21 @@ for (const { path, url } of PAGES) {
   });
 }
 
+// The tab icon was create-next-app's favicon.ico, Vercel's triangle, on every
+// tab and bookmark of this site.
+test("the tab icon is this site's own", async ({ page, request }) => {
+  await page.goto("/");
+  const href = await page.locator('link[rel="icon"]').first().getAttribute("href");
+  expect(href, "the icon link points somewhere else").toMatch(/^\/icon\b/);
+
+  const icon = await request.get(href!);
+  expect(icon.headers()["content-type"]).toContain("image/png");
+  const body = await icon.body();
+  expect(body.readUInt32BE(16) % 48, "search results want a multiple of 48px").toBe(0);
+
+  expect((await request.get("/favicon.ico")).status(), "the stock favicon is still served").toBe(404);
+});
+
 test("the card renders at the size it claims", async ({ request }) => {
   const response = await request.get("/opengraph-image");
   expect(response.status()).toBe(200);

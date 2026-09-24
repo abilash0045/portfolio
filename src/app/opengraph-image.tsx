@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { SITE_CARD, SITE_NAME, SITE_ROLE } from "@/lib/site";
+import { RESOLVED_COLOURS, SITE_CARD, SITE_NAME, SITE_ROLE } from "@/lib/site";
 
 export const alt = SITE_CARD.alt;
 
@@ -18,11 +18,7 @@ const [interRegular, interBold, glass] = await Promise.all([
 
 const background = `data:image/jpeg;base64,${glass.toString("base64")}`;
 
-/** The site's own tokens, resolved. Satori does not read CSS variables. */
-const INK = "#f2ebe9";
-const MUTED = "#b0a9a8";
-const ACCENT = "#e0554b";
-const PAPER = "#17100f";
+const { ink: INK, muted: MUTED, accent: ACCENT, paper: PAPER } = RESOLVED_COLOURS;
 
 /** The three numbers the site leads with, in the wording it uses. */
 const FACTS = [

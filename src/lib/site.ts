@@ -25,6 +25,17 @@ export const SHARED_OPEN_GRAPH = {
 } as const;
 
 /**
+ * The dark theme's tokens resolved to hex, for the images Satori draws (the
+ * link preview card and the tab icon). Satori does not read CSS variables.
+ */
+export const RESOLVED_COLOURS = {
+  ink: "#f2ebe9",
+  muted: "#b0a9a8",
+  accent: "#e0554b",
+  paper: "#17100f",
+} as const;
+
+/**
  * The link preview card drawn by app/opengraph-image.tsx. Only the segment
  * the file sits in gets it automatically; a page that sets its own openGraph
  * loses it and has to name it again, with these.
