@@ -243,7 +243,11 @@ test.describe("reduced motion is respected", () => {
     await expect(page.locator(".card")).toBeVisible({ timeout: 25_000 });
     await expect(page.locator(".leaflet-marker-icon")).toHaveCount(1);
 
-    const offCentre = await page.evaluate(() => {
+    // Two frames first. Under reduced motion globals.css gives every element a
+    // 0.01ms transition, so even a jump is one frame late to show in a box
+    // measurement. Two frames is a settled jump, and 2% of a 0.9s flight.
+    const offCentre = await page.evaluate(async () => {
+      for (let i = 0; i < 2; i += 1) await new Promise(requestAnimationFrame);
       const pin = document.querySelector(".leaflet-marker-icon")!.getBoundingClientRect();
       const map = document.querySelector(".leaflet-container")!.getBoundingClientRect();
       return Math.hypot(
