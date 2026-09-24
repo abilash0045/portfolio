@@ -225,6 +225,14 @@ test.describe("reduced motion is respected", () => {
       );
       expect(seconds, `transition still runs for ${duration}`).toBeLessThan(0.01);
     }
+
+    // And nothing that never had a transition is given one. transition-property
+    // defaults to all, so a blanket near-zero duration turned every style change
+    // on every element into a transition that reached layout a frame late.
+    const plain = await page
+      .locator("h1")
+      .evaluate((el) => getComputedStyle(el).transitionDuration);
+    expect(plain, "reduced motion gave a plain heading a transition").toBe("0s");
   });
 
   // Leaflet flies and pans in JavaScript, which no stylesheet can stop, so the
@@ -243,9 +251,10 @@ test.describe("reduced motion is respected", () => {
     await expect(page.locator(".card")).toBeVisible({ timeout: 25_000 });
     await expect(page.locator(".leaflet-marker-icon")).toHaveCount(1);
 
-    // Two frames first. Under reduced motion globals.css gives every element a
-    // 0.01ms transition, so even a jump is one frame late to show in a box
-    // measurement. Two frames is a settled jump, and 2% of a 0.9s flight.
+    // Two frames first, so a jump has been painted before its box is read.
+    // Until globals.css stopped giving every element a 0.01ms transition, an
+    // instant jump reached layout a frame late and this read it mid-frame.
+    // Two frames is a settled jump, and 2% of a 0.9s flight.
     const offCentre = await page.evaluate(async () => {
       for (let i = 0; i < 2; i += 1) await new Promise(requestAnimationFrame);
       const pin = document.querySelector(".leaflet-marker-icon")!.getBoundingClientRect();

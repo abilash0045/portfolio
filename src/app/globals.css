@@ -228,8 +228,12 @@ a {
 /* The project rule is that every animation respects this. Three stylesheets
    each guarded two or three of their own rules and the other twenty-odd
    transitions were unguarded, so the guard lives here instead: one block
-   that a new rule cannot escape. Durations go to near-zero rather than
+   that a new rule cannot escape. Animations go to near-zero rather than
    none so animationend still fires and nothing waits forever on it.
+   Transitions go to zero. They used to go to 0.01ms as well, but
+   transition-property defaults to all, so that gave every element on the
+   page a transition on every property: each style change, even an instant
+   jump, reached layout a frame late. Nothing here waits on transitionend.
    scroll-behavior is the one motion-sensitive visitors most often disable
    and it was set to smooth unconditionally. */
 @media (prefers-reduced-motion: reduce) {
@@ -240,7 +244,7 @@ a {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0s !important;
     scroll-behavior: auto !important;
   }
 }
