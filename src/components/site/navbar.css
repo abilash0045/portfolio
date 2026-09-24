@@ -20,7 +20,6 @@
   /* Sticky, so content scrolls underneath it. A rule alone leaves the bar
      sitting in the page rather than above it. */
   box-shadow: var(--shadow-raised);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navbar__brand {
@@ -62,7 +61,7 @@
   color: var(--text-secondary);
   padding: 6px 14px;
   border-radius: var(--radius-pill);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .navbar__link:hover {
@@ -108,7 +107,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .navbar__theme-btn:hover {

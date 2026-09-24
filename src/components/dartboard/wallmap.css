@@ -103,6 +103,34 @@
   font: inherit;
 }
 
+/* The map and its credit links take keyboard focus, and both sit flush
+   against an overflow: hidden edge, so the standard ring 3px outside them was
+   cut off entirely. Moving the map's own ring inside does not help: an
+   outline paints under the tile panes and the two overlays above them. So the
+   map draws its ring on a layer of its own, over the vignette and under the
+   controls, and the credit strip gets enough padding to hold its links'. */
+.wallmap__canvas.leaflet-container:focus-visible {
+  outline: none;
+}
+
+.wallmap__canvas.leaflet-container:focus-visible::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
+  outline: var(--focus-ring);
+  outline-offset: -3px;
+}
+
+.wallmap .leaflet-control-attribution {
+  padding: 3px 8px;
+}
+
+.wallmap .leaflet-control-attribution a:focus-visible {
+  outline-offset: 1px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .wallmap--shake .wallmap__canvas,
   .dartpin-ripple {

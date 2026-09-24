@@ -135,7 +135,7 @@
   padding: 14px 12px;
   text-align: center;
   position: relative;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .sim-node__icon {

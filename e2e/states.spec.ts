@@ -16,6 +16,7 @@ type FocusInfo = {
   outlineStyle: string;
   outlineWidth: number;
   matchesFocusVisible: boolean;
+  revisited: boolean;
 };
 
 /** Reads the focus indicator off whatever currently holds focus. */
@@ -25,7 +26,16 @@ async function activeFocusInfo(page: import("@playwright/test").Page) {
     if (!el || el === document.body || el === document.documentElement) {
       return null;
     }
-    const style = getComputedStyle(el);
+    // The walk below used to decide it had wrapped when a label repeated, and
+    // the page has several links that share one. It stopped at the second,
+    // two sections in. Marking the element itself is what "been here" means.
+    const revisited = el.hasAttribute("data-tab-walk");
+    el.setAttribute("data-tab-walk", "");
+    // The ring is the element's outline, or its ::after's where the element's
+    // own would be buried under its children. The map is the one that does it.
+    const own = getComputedStyle(el);
+    const style =
+      own.outlineStyle === "none" ? getComputedStyle(el, "::after") : own;
     const label =
       el.getAttribute("aria-label") ??
       (el.textContent ?? "").trim().slice(0, 40) ??
@@ -36,6 +46,7 @@ async function activeFocusInfo(page: import("@playwright/test").Page) {
       outlineStyle: style.outlineStyle,
       outlineWidth: parseFloat(style.outlineWidth) || 0,
       matchesFocusVisible: el.matches(":focus-visible"),
+      revisited,
     };
   });
 }
@@ -53,7 +64,7 @@ test("every control reachable by Tab shows a focus ring", async ({ page }) => {
     await page.keyboard.press("Tab");
     const info = await activeFocusInfo(page);
     if (!info) continue;
-    if (seen.includes(info.label)) break; // wrapped back to the start
+    if (info.revisited) break; // wrapped back to the start
     seen.push(info.label);
 
     const ringed =
@@ -71,6 +82,10 @@ test("every control reachable by Tab shows a focus ring", async ({ page }) => {
   expect(seen.length, "tab order should reach the page at all").toBeGreaterThan(
     10,
   );
+  expect(
+    seen.some((label) => label.includes("footer__link")),
+    "the walk stopped before the footer",
+  ).toBe(true);
   expect(unringed, "controls with no visible keyboard focus").toEqual([]);
 });
 
@@ -83,6 +98,43 @@ test("the form fields keep their focus ring", async ({ page }) => {
     expect(info, `${id} did not take focus`).not.toBeNull();
     expect(info!.outlineStyle, `${id} has outline: none`).not.toBe("none");
     expect(info!.outlineWidth, `${id} ring too thin`).toBeGreaterThanOrEqual(2);
+  }
+});
+
+// The map and its credit links sit flush against an overflow: hidden edge, so
+// the standard ring 3px outside them was cut off completely. Computed style
+// reports a perfectly good outline either way, which is why this measures
+// where the ring lands against every ancestor that clips.
+test("focus rings on the map are not cut off by its edges", async ({ page }) => {
+  await page.goto("/dartboard");
+  const credits = page.locator(".leaflet-control-attribution a");
+  await expect(credits.first()).toBeVisible();
+
+  const targets = [page.locator(".leaflet-container"), ...(await credits.all())];
+  for (const target of targets) {
+    await target.focus();
+    const cut = await target.evaluate((el) => {
+      const own = getComputedStyle(el);
+      const style = own.outlineStyle === "none" ? getComputedStyle(el, "::after") : own;
+      if (style.outlineStyle === "none") return `${el.className} has no ring at all`;
+      const reach = (parseFloat(style.outlineOffset) || 0) + (parseFloat(style.outlineWidth) || 0);
+      const box = el.getBoundingClientRect();
+      for (let p = el.parentElement; p; p = p.parentElement) {
+        const ps = getComputedStyle(p);
+        if (ps.overflowX === "visible" && ps.overflowY === "visible") continue;
+        const clip = p.getBoundingClientRect();
+        if (
+          box.left - reach < clip.left - 0.5 ||
+          box.top - reach < clip.top - 0.5 ||
+          box.right + reach > clip.right + 0.5 ||
+          box.bottom + reach > clip.bottom + 0.5
+        ) {
+          return `${el.textContent?.trim().slice(0, 20) || el.className} by ${p.className}`;
+        }
+      }
+      return null;
+    });
+    expect(cut, "focus ring cut off").toBeNull();
   }
 });
 
