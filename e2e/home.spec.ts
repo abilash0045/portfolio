@@ -129,6 +129,43 @@ test.describe("nothing on this page claims something untrue", () => {
     }
   });
 
+  // "Copy email" said "Copied" whether or not anything was copied. The
+  // clipboard is missing outside a secure context and refuses when denied.
+  test("the copy button never reports a copy that failed", async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, "clipboard", {
+        value: {
+          writeText: () =>
+            Promise.reject(new DOMException("Write permission denied.", "NotAllowedError")),
+        },
+      });
+    });
+    await page.goto("/");
+
+    await page.getByRole("button", { name: "Copy email" }).click();
+    const button = page.locator(".hero__btn--ghost");
+    await expect(button).toHaveText(/couldn't copy/i);
+    await expect(button).not.toHaveText(/^copied$/i);
+    // A screen reader is told what broke and handed the address instead.
+    await expect(
+      page.getByRole("status").filter({ hasText: "abilash0045@gmail.com" }),
+    ).toHaveCount(1);
+  });
+
+  test("a copy that works says so, and copies the address", async ({
+    page,
+    context,
+  }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/");
+
+    await page.getByRole("button", { name: "Copy email" }).click();
+    await expect(page.locator(".hero__btn--ghost")).toHaveText("Copied");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      "abilash0045@gmail.com",
+    );
+  });
+
   test("the contact form does not fake a send", async ({ page }) => {
     await page.goto("/");
     await page.fill("#contact-name", "Alex Recruiter");
