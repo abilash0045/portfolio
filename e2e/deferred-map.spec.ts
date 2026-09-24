@@ -1,14 +1,14 @@
 import { test, expect } from "@playwright/test";
 
 // The dartboard sits five sections down the home page. It used to boot Leaflet,
-// pull its stylesheet and fetch a screen of CARTO tiles during first paint, and
+// pull its stylesheet and fetch a screen of map tiles during first paint, and
 // ask for the visitor's location while they were still reading the hero. These
 // assertions fail if any of that moves back above the fold.
 
 function tileWatcher(page: import("@playwright/test").Page) {
   const tiles: string[] = [];
   page.on("request", (request) => {
-    if (request.url().includes("basemaps.cartocdn.com")) tiles.push(request.url());
+    if (request.url().startsWith("https://tile.openstreetmap.org/")) tiles.push(request.url());
   });
   return tiles;
 }

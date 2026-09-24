@@ -165,7 +165,11 @@ left to a generic error boundary.
 The map should read as a paper map on a wall, not as default Leaflet.
 
 CARTO light raster tiles, filtered toward aged paper (sepia with lifted contrast), a grain overlay, and
-pinned corners. The circle showing the throwing radius updates live as the slider moves, so the area
+pinned corners.
+
+Revised 2026-09-24: CARTO now watermarks tiles fetched without an API key, so the tiles are
+OpenStreetMap's own, and the theme is a CSS filter on the tile pane: grey and sepia for paper in
+light, a warm grey inversion in dark. The reasoning is in `NOTES.md`. The circle showing the throwing radius updates live as the slider moves, so the area
 visibly grows and shrinks before the throw.
 
 The throw: wind-up on mousedown, release on mouseup. The dart scales down as it flies — large to small

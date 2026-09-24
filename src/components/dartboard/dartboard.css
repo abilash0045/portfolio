@@ -50,7 +50,8 @@
   font-weight: 600;
   text-decoration: none;
   box-shadow: var(--shadow-raised);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+    transform 0.2s ease;
 }
 
 /* The second `color` here used to be var(--color-ink), which silently
@@ -120,10 +121,11 @@
   line-height: 1.6;
 }
 
-/* Floating Glass Control Panel */
+/* Floats over the map, clear of the credit strip along its bottom edge. At
+   16px it sat on the strip, which painted over its lower edge. */
 .dartboard__panel {
   position: absolute;
-  bottom: 16px;
+  bottom: 32px;
   left: max(12px, 3vw);
   right: max(12px, 3vw);
   z-index: 800;
@@ -180,7 +182,8 @@
   border-radius: var(--radius-pill);
   cursor: pointer;
   box-shadow: 0 4px 14px var(--accent-red-glow);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.2s ease, opacity 0.2s ease;
   min-height: 40px;
 }
 

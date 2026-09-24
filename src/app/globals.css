@@ -104,6 +104,10 @@
 /* Same anchor hue, only lightness and chroma move. Switching hue between
    modes is what makes a light theme feel like a different site. */
 [data-theme="light"] {
+  /* html below says dark for everyone, which left the scrollbars, the slider
+     track and form autofill drawn dark on the light page. */
+  color-scheme: light;
+
   --wallmap-vignette: oklch(38% 0.012 40 / 0.20);
   --wallmap-hud-edge: oklch(38% 0.012 40 / 0.10);
 
@@ -185,6 +189,20 @@ a {
   outline-offset: var(--focus-ring-offset);
 }
 
+/* Read out, never drawn. For status text a screen reader needs and a sighted
+   visitor already has from the control that changed. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Placeholders were inheriting the browser default, which is derived from
    the text colour and lands well under 4.5:1 on a dark field. */
 ::placeholder {
@@ -207,16 +225,15 @@ a {
   background: var(--color-neutral);
 }
 
-@keyframes pulse-slow {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.95); }
-}
-
 /* The project rule is that every animation respects this. Three stylesheets
    each guarded two or three of their own rules and the other twenty-odd
    transitions were unguarded, so the guard lives here instead: one block
-   that a new rule cannot escape. Durations go to near-zero rather than
+   that a new rule cannot escape. Animations go to near-zero rather than
    none so animationend still fires and nothing waits forever on it.
+   Transitions go to zero. They used to go to 0.01ms as well, but
+   transition-property defaults to all, so that gave every element on the
+   page a transition on every property: each style change, even an instant
+   jump, reached layout a frame late. Nothing here waits on transitionend.
    scroll-behavior is the one motion-sensitive visitors most often disable
    and it was set to smooth unconditionally. */
 @media (prefers-reduced-motion: reduce) {
@@ -227,7 +244,7 @@ a {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0s !important;
     scroll-behavior: auto !important;
   }
 }

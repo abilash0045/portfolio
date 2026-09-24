@@ -29,7 +29,6 @@ export const caseStudies: CaseStudy[] = [
       "Diagnosing non-reproducible MOV atom file header corruption caused by simultaneous read/write locks across shared network file systems.",
     results:
       "Raised pipeline render reliability from 60% to 98%, eliminated un-reproducible MOV atom errors, and scaled daily throughput to 25,000+ videos.",
-    inPageAnchor: "#architecture",
   },
   {
     slug: "whatsapp-automation",
@@ -46,7 +45,6 @@ export const caseStudies: CaseStudy[] = [
       "Handling upstream WhatsApp API rate limits and preventing message duplication under sudden burst traffic.",
     results:
       "Automated 85% of customer response workflows, reduced notification delivery latency to under 1.2 seconds, and achieved zero message loss.",
-    inPageAnchor: "#contact",
   },
   {
     slug: "cloud-cost",
@@ -63,7 +61,6 @@ export const caseStudies: CaseStudy[] = [
       "Decoupling monolithic render steps into granular segment tasks suitable for rapid spin-up and zero-downtime scaling.",
     results:
       "Reduced monthly cloud spend by ~40% across two independent wins: ~30% from segment caching (80% hit rate) and ~10% from scale-to-zero autoscaling.",
-    inPageAnchor: "#architecture",
   },
   {
     // This one is on this site, so nothing here is reconstructed from memory.
@@ -102,6 +99,5 @@ export const caseStudies: CaseStudy[] = [
       "Safely exposing complex model parameters (voice cloning, TTS, lip sync) to non-engineers without risking invalid production configurations.",
     results:
       "Shortened client configuration approval cycles from 3 days to 1 day and enabled self-service tuning for solution engineering teams.",
-    inPageAnchor: "#playground",
   },
 ];

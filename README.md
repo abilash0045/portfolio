@@ -34,4 +34,4 @@ If the dart lands in water, the site says so rather than re-rolling. Silently
 re-throwing until it hits land would bias the distribution while still calling
 itself random.
 
-Maps © OpenStreetMap contributors, © CARTO.
+Map data and tiles © OpenStreetMap contributors.

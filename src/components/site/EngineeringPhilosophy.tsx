@@ -14,17 +14,17 @@ const principles: Principle[] = [
   },
   {
     num: "02",
-    title: "Pod-Local Ephemeral Work execution",
+    title: "Pod-Local Ephemeral Work Execution",
     desc: "Concurrent media rendering should never mutate shared network storage mid-flight. Stage work on pod-local disk, complete execution, then publish output.",
   },
   {
     num: "03",
     title: "Sub-Entity Caching Boundaries",
-    desc: "Cache granular sub-segments (audio synthesis, lip sync vectors) rather than full monolithic outputs to achieve 80%+ cache hit rates across dynamic requests.",
+    desc: "Cache granular sub-segments (audio synthesis, lip sync vectors) rather than full monolithic outputs to reach cache hit rates around 80% across dynamic requests.",
   },
   {
     num: "04",
-    title: "Extensible Zero-Downtime APIs",
+    title: "Extensible Without Breaking Contracts",
     desc: "Architect closed data structures with visitor operations so new functionality can be introduced without mutating existing node types or breaking contracts.",
   },
 ];

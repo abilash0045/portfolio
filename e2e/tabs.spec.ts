@@ -85,6 +85,29 @@ test("arrow keys do not swallow page scrolling", async ({ page }) => {
   );
 });
 
+// On a phone both code panes scroll sideways rather than rewrap, and neither
+// could take focus, so a keyboard could see the start of each line and never
+// the end.
+test("a code pane that scrolls can be scrolled from the keyboard", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator("#playground").scrollIntoViewIfNeeded();
+
+  const panes = await page.locator("#playground pre").all();
+  expect(panes.length).toBe(2);
+  for (const pane of panes) {
+    const overflows = await pane.evaluate((el) => el.scrollWidth > el.clientWidth);
+    if (!overflows) continue;
+
+    await expect(pane, "a scrolling pane with no name").toHaveAttribute("aria-label", /.+/);
+    await pane.focus();
+    await expect(pane, "a scrolling pane that cannot take focus").toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect
+      .poll(() => pane.evaluate((el) => el.scrollLeft), { message: "arrow key did not scroll" })
+      .toBeGreaterThan(0);
+  }
+});
+
 test("Tab leaves the group instead of walking all four", async ({ page }) => {
   await page.getByRole("tab", { name: "ValidateVisitor" }).focus();
   await page.keyboard.press("Tab");

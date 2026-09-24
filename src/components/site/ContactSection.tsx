@@ -97,7 +97,6 @@ export default function ContactSection() {
           <a href={`mailto:${ADDRESS}`} className="contact-channel-link">
             {ADDRESS}
           </a>
-          <span>·</span>
           <a
             href="https://github.com/abilash0045"
             target="_blank"
@@ -106,7 +105,6 @@ export default function ContactSection() {
           >
             GitHub ↗
           </a>
-          <span>·</span>
           <a
             href="https://www.linkedin.com/in/abilash0045/"
             target="_blank"

@@ -1,13 +1,12 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { SITE_NAME, SITE_ROLE } from "@/lib/site";
+import { RESOLVED_COLOURS, SITE_CARD, SITE_NAME, SITE_ROLE } from "@/lib/site";
 
-export const alt =
-  "Abilash S L, backend engineer. 25,000 renders a day, 60% to 98% render reliability, 3 days to 1 day config approval.";
+export const alt = SITE_CARD.alt;
 
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+export const size = { width: SITE_CARD.width, height: SITE_CARD.height };
+export const contentType = SITE_CARD.type;
 
 const asset = (name: string) => readFile(join(process.cwd(), "assets", name));
 
@@ -19,11 +18,7 @@ const [interRegular, interBold, glass] = await Promise.all([
 
 const background = `data:image/jpeg;base64,${glass.toString("base64")}`;
 
-/** The site's own tokens, resolved. Satori does not read CSS variables. */
-const INK = "#f2ebe9";
-const MUTED = "#b0a9a8";
-const ACCENT = "#e0554b";
-const PAPER = "#17100f";
+const { ink: INK, muted: MUTED, accent: ACCENT, paper: PAPER } = RESOLVED_COLOURS;
 
 /** The three numbers the site leads with, in the wording it uses. */
 const FACTS = [
@@ -52,7 +47,9 @@ export default function Image() {
       >
         {/* The photograph is bright at the top left and dark at the bottom
             right, so a flat scrim would either wash out or crush half of it.
-            This one leans on the light corner and lets the red breathe. */}
+            This one leans on the light corner and lets the red breathe.
+            Satori has no z-index and paints in source order, so the scrim
+            comes first and everything after it lands on top. */}
         <div
           style={{
             position: "absolute",
@@ -66,7 +63,7 @@ export default function Image() {
           }}
         />
 
-        <div style={{ display: "flex", flexDirection: "column", zIndex: 1 }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
               display: "flex",
@@ -112,7 +109,6 @@ export default function Image() {
             display: "flex",
             alignItems: "flex-end",
             justifyContent: "space-between",
-            zIndex: 1,
           }}
         >
           <div style={{ display: "flex", gap: 56 }}>

@@ -13,30 +13,25 @@ type Props = {
   shake: boolean;
 };
 
-/* CARTO ships the same basemap in both polarities. Only `dark_all` was ever
-   used, so in light theme the map was a black slab dropped into a cream page. */
-const TILE_URL = {
-  dark: "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-  light: "https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-} as const;
-
-type Polarity = keyof typeof TILE_URL;
-
-/** The theme lives as an attribute on <html> and nothing broadcasts it. */
-const readPolarity = (): Polarity =>
-  document.documentElement.getAttribute("data-theme") === "light"
-    ? "light"
-    : "dark";
+/* OpenStreetMap's own tiles. This was CARTO's dark_all and light_all until
+   CARTO started stamping every tile requested without an API key with "API KEY
+   REQUIRED", in late August 2026. OSM ships one full-colour style, so each
+   theme is a CSS filter on the tile pane in wallmap.css, which also means
+   nothing here has to watch the theme. */
+const TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 const ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-  '&copy; <a href="https://carto.com/attributions">CARTO</a>';
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+/* Leaflet pans and flies in JavaScript, which the reduced-motion rule in
+   globals.css cannot reach. Asked on every move, so changing the setting
+   applies from the next throw. */
+const animate = () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export default function WallMap({ origin, radiusM, landing, shake }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const circleRef = useRef<L.Circle | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
-  const tilesRef = useRef<L.TileLayer | null>(null);
 
   // Init once. The ref guard survives React StrictMode's double-invoke in development.
   useEffect(() => {
@@ -49,29 +44,17 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
       scrollWheelZoom: false,
     }).setView([origin.lat, origin.lon], 9);
 
-    tilesRef.current = L.tileLayer(TILE_URL[readPolarity()], {
+    L.tileLayer(TILE_URL, {
       attribution: ATTRIBUTION,
       maxZoom: 19,
     }).addTo(map);
     mapRef.current = map;
 
-    // The theme toggle writes an attribute and tells nobody. Watching it beats
-    // threading a theme context down here for one string.
-    const observer = new MutationObserver(() =>
-      tilesRef.current?.setUrl(TILE_URL[readPolarity()]),
-    );
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-    });
-
     return () => {
-      observer.disconnect();
       map.remove();
       mapRef.current = null;
       circleRef.current = null;
       markerRef.current = null;
-      tilesRef.current = null;
     };
     // Deliberately runs once. Origin changes are handled by the effect below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +76,7 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
     }).addTo(map);
     circleRef.current = circle;
 
-    if (!landing) map.fitBounds(circle.getBounds(), { padding: [40, 40] });
+    if (!landing) map.fitBounds(circle.getBounds(), { padding: [40, 40], animate: animate() });
   }, [origin.lat, origin.lon, radiusM, landing]);
 
   // Landing pin with neon glow and expanding ripple animation.
@@ -121,7 +104,7 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
     }).addTo(map);
     markerRef.current = marker;
 
-    map.flyTo([landing.lat, landing.lon], 11, { duration: 0.9 });
+    map.flyTo([landing.lat, landing.lon], 11, { duration: 0.9, animate: animate() });
   }, [landing]);
 
   return (

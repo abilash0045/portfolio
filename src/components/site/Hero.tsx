@@ -1,15 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PipelineDiagram from "./PipelineDiagram";
 
-export default function Hero() {
-  const [copied, setCopied] = useState(false);
+const EMAIL = "abilash0045@gmail.com";
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText("abilash0045@gmail.com");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+type CopyResult = "idle" | "copied" | "failed";
+
+const BUTTON_LABEL: Record<CopyResult, string> = {
+  idle: "Copy email",
+  copied: "Copied",
+  failed: "Couldn't copy. It's below.",
+};
+
+/** For screen readers, which do not reliably announce a button relabelling. */
+const ANNOUNCEMENT: Record<CopyResult, string> = {
+  idle: "",
+  copied: `Copied ${EMAIL}.`,
+  failed: `Your browser didn't let the page copy. The address is ${EMAIL}.`,
+};
+
+export default function Hero() {
+  const [copy, setCopy] = useState<CopyResult>("idle");
+  const resetRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => () => window.clearTimeout(resetRef.current), []);
+
+  // This used to say "Copied" unconditionally. The clipboard is missing
+  // outside a secure context and refuses when permission is denied, and in
+  // both cases the button reported a copy that never happened.
+  const copyEmail = async () => {
+    let result: CopyResult;
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      result = "copied";
+    } catch {
+      result = "failed";
+    }
+    setCopy(result);
+    window.clearTimeout(resetRef.current);
+    resetRef.current = window.setTimeout(
+      () => setCopy("idle"),
+      result === "copied" ? 2500 : 6000,
+    );
   };
 
   return (
@@ -17,7 +50,7 @@ export default function Hero() {
       <div className="hero__top-row">
         <div>
           <div className="hero__badge">
-            <span className="hero__badge-pulse" aria-hidden="true" />
+            <span className="hero__badge-dot" aria-hidden="true" />
             <span>Backend engineer, distributed systems</span>
           </div>
 
@@ -74,7 +107,9 @@ export default function Hero() {
           <div className="hero__metric-value">
             ~40%
           </div>
-          <div className="hero__metric-label">Cloud spend cut</div>
+          {/* Two independent cuts that happen to sum, which is how DESIGN.md
+              words it. A bare "~40%" read as one win. */}
+          <div className="hero__metric-label">Cloud spend, cut twice</div>
         </div>
         <div className="hero__metric">
           <div className="hero__metric-value">
@@ -91,10 +126,13 @@ export default function Hero() {
         <button
           type="button"
           className="hero__btn hero__btn--ghost"
-          onClick={copyEmail}
+          onClick={() => void copyEmail()}
         >
-          {copied ? "Copied" : "Copy email"}
+          {BUTTON_LABEL[copy]}
         </button>
+        <p className="visually-hidden" role="status">
+          {ANNOUNCEMENT[copy]}
+        </p>
       </div>
 
       <div className="hero__socials">
@@ -106,7 +144,6 @@ export default function Hero() {
         >
           GitHub ↗
         </a>
-        <span>·</span>
         <a
           href="https://www.linkedin.com/in/abilash0045/"
           target="_blank"
@@ -115,9 +152,8 @@ export default function Hero() {
         >
           LinkedIn ↗
         </a>
-        <span>·</span>
-        <a href="mailto:abilash0045@gmail.com" className="hero__social-link">
-          abilash0045@gmail.com
+        <a href={`mailto:${EMAIL}`} className="hero__social-link">
+          {EMAIL}
         </a>
       </div>
     </header>

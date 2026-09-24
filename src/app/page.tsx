@@ -28,11 +28,11 @@ export default function Home() {
         <section id="case-studies" className="studies-section">
           <h2 className="section-title" data-reveal>Selected Work</h2>
           <p className="section-subtitle" data-reveal>
-            Things I built or fixed at work, with what broke, what I changed, and what it moved.
+            Things I built or fixed, with what broke, what I changed, and what it moved.
           </p>
           <div className="studies-grid">
-            {caseStudies.map((study) => (
-              <CaseStudy key={study.slug} study={study} />
+            {caseStudies.map((study, index) => (
+              <CaseStudy key={study.slug} study={study} number={index + 1} />
             ))}
           </div>
         </section>

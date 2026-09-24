@@ -10,42 +10,67 @@ import { SITE_URL } from "../src/lib/site";
 const content = (page: Page, selector: string) =>
   page.locator(selector).getAttribute("content");
 
-test("the canonical and Open Graph urls point at the real host", async ({
-  page,
-}) => {
-  await page.goto("/");
+// The dartboard inherited the home page's canonical and og:url, which tells a
+// search engine it is a copy of the home page and sends every shared link's
+// preview there. Each page has to name itself.
+const PAGES = [
+  { path: "/", url: SITE_URL },
+  { path: "/dartboard", url: `${SITE_URL}/dartboard` },
+];
 
-  const canonical = await page
-    .locator('link[rel="canonical"]')
-    .getAttribute("href");
-  expect(canonical).toBe(SITE_URL);
-  expect(await content(page, 'meta[property="og:url"]')).toBe(SITE_URL);
+for (const { path, url } of PAGES) {
+  test(`${path}: the canonical and Open Graph urls name this page on the real host`, async ({
+    page,
+  }) => {
+    await page.goto(path);
 
-  for (const value of [canonical, await content(page, 'meta[property="og:url"]')]) {
-    expect(value, "a url still points at a host that is not this site").not.toContain(
-      "portfolio-abilash",
+    const canonical = await page
+      .locator('link[rel="canonical"]')
+      .getAttribute("href");
+    expect(canonical).toBe(url);
+    expect(await content(page, 'meta[property="og:url"]')).toBe(url);
+
+    for (const value of [canonical, await content(page, 'meta[property="og:url"]')]) {
+      expect(value, "a url still points at a host that is not this site").not.toContain(
+        "portfolio-abilash",
+      );
+    }
+  });
+
+  test(`${path}: the link preview has an image, sized and described`, async ({ page }) => {
+    await page.goto(path);
+
+    const image = await content(page, 'meta[property="og:image"]');
+    expect(image, "no og:image, so shares render as a bare text card").toBeTruthy();
+    expect(image!.startsWith(SITE_URL), "og:image must be absolute").toBe(true);
+
+    expect(await content(page, 'meta[property="og:image:width"]')).toBe("1200");
+    expect(await content(page, 'meta[property="og:image:height"]')).toBe("630");
+
+    const alt = await content(page, 'meta[property="og:image:alt"]');
+    expect(alt?.length ?? 0).toBeGreaterThan(20);
+
+    // summary_large_image without an image is the combination that was shipped.
+    expect(await content(page, 'meta[name="twitter:card"]')).toBe(
+      "summary_large_image",
     );
-  }
-});
+    expect(await content(page, 'meta[name="twitter:image"]')).toBeTruthy();
+  });
+}
 
-test("the link preview has an image, sized and described", async ({ page }) => {
+// The tab icon was create-next-app's favicon.ico, Vercel's triangle, on every
+// tab and bookmark of this site.
+test("the tab icon is this site's own", async ({ page, request }) => {
   await page.goto("/");
+  const href = await page.locator('link[rel="icon"]').first().getAttribute("href");
+  expect(href, "the icon link points somewhere else").toMatch(/^\/icon\b/);
 
-  const image = await content(page, 'meta[property="og:image"]');
-  expect(image, "no og:image, so shares render as a bare text card").toBeTruthy();
-  expect(image!.startsWith(SITE_URL), "og:image must be absolute").toBe(true);
+  const icon = await request.get(href!);
+  expect(icon.headers()["content-type"]).toContain("image/png");
+  const body = await icon.body();
+  expect(body.readUInt32BE(16) % 48, "search results want a multiple of 48px").toBe(0);
 
-  expect(await content(page, 'meta[property="og:image:width"]')).toBe("1200");
-  expect(await content(page, 'meta[property="og:image:height"]')).toBe("630");
-
-  const alt = await content(page, 'meta[property="og:image:alt"]');
-  expect(alt?.length ?? 0).toBeGreaterThan(20);
-
-  // summary_large_image without an image is the combination that was shipped.
-  expect(await content(page, 'meta[name="twitter:card"]')).toBe(
-    "summary_large_image",
-  );
-  expect(await content(page, 'meta[name="twitter:image"]')).toBeTruthy();
+  expect((await request.get("/favicon.ico")).status(), "the stock favicon is still served").toBe(404);
 });
 
 test("the card renders at the size it claims", async ({ request }) => {

@@ -41,14 +41,16 @@
   color: var(--color-accent);
 }
 
-.hero__badge-pulse {
+/* Still, on purpose. It used to pulse forever, which is the "online now,
+   available" light every generated portfolio wears, and the only thing on the
+   page moving without being asked. */
+.hero__badge-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--accent-red);
   color: var(--color-on-accent);
   box-shadow: 0 0 10px var(--accent-red);
-  animation: pulse-slow 1.8s infinite;
 }
 
 .hero__name {
@@ -199,7 +201,12 @@
   font-size: 0.92rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  /* The properties that change, by name. `all` also caught the outline, so
+     the focus ring grew in from nothing over a quarter of a second instead of
+     being there the moment focus landed. */
+  transition-property: background-color, border-color, color, box-shadow, transform;
+  transition-duration: 0.25s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   border: none;
   min-height: 44px;
@@ -248,10 +255,15 @@
   transform: translateY(0);
 }
 
+/* Wraps between links and never inside one. It had neither: on a phone the
+   row squeezed each link until "GitHub ↗" broke and left its arrow alone on
+   a second line. The "·" separators went too, since a wrapped row put one at
+   the start of a line with nothing before it. Space does their job. */
 .hero__socials {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 8px 22px;
   margin-top: 24px;
   font-family: var(--font-mono);
   font-size: 0.85rem;
@@ -261,6 +273,7 @@
 .hero__social-link {
   color: var(--text-secondary);
   text-decoration: none;
+  white-space: nowrap;
   transition: color 0.2s ease;
 }
 
@@ -424,7 +437,8 @@
   background: var(--color-paper-2);
   border: 1px solid var(--border-subtle);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .study__link-btn:hover {

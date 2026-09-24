@@ -66,6 +66,114 @@ test.describe("nothing on this page claims something untrue", () => {
     }
   });
 
+  // Four of the five case studies said "See it below" and meant something
+  // else. Two pointed at the widget in their own card, which sits above the
+  // link naming it; one pointed at that widget from the next card down; one
+  // pointed at the contact form, which has nothing to do with WhatsApp.
+  test("a link that says below points at something below it", async ({ page }) => {
+    await page.goto("/");
+    const links = await page.locator("a", { hasText: /below/i }).all();
+    expect(links.length).toBeGreaterThan(0);
+
+    for (const link of links) {
+      const where = await link.evaluate((a) => {
+        const target = document.querySelector(a.getAttribute("href") ?? "");
+        if (!target) return null;
+        return {
+          label: `${a.textContent?.trim()} -> ${a.getAttribute("href")}`,
+          linkBottom: a.getBoundingClientRect().bottom,
+          targetTop: target.getBoundingClientRect().top,
+        };
+      });
+      expect(where, "a 'below' link to nothing on this page").not.toBeNull();
+      expect(where!.targetTop, `${where!.label} points up`).toBeGreaterThan(
+        where!.linkBottom,
+      );
+    }
+  });
+
+  // ~30% came from the segment cache and ~10% from scale-to-zero. They are
+  // independent and must never read as one win. The widget's cache toggle
+  // claimed all ~40% for the cache, and the hero stated ~40% as one number.
+  test("the cache is credited with its own ~30%, not both wins", async ({ page }) => {
+    await page.goto("/");
+    const widget = page.locator("#architecture");
+    await widget.getByRole("button", { name: "Redis Segment Cache" }).click();
+
+    const spend = widget.locator(".sim-card", { hasText: /spend/i });
+    await expect(spend).toContainText("~30%");
+    await expect(spend).not.toContainText("40%");
+  });
+
+  test("wherever ~40% appears, it is shown as two cuts", async ({ page }) => {
+    await page.goto("/");
+    const contexts = await page.locator("main").evaluate((main) => {
+      const found: string[] = [];
+      const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        if (!node.textContent?.includes("40%")) continue;
+        // The block holding the figure, then the block around that: the
+        // metric with its label, the field with its heading.
+        let el = node.parentElement!;
+        while (getComputedStyle(el).display === "inline" && el.parentElement) {
+          el = el.parentElement;
+        }
+        found.push((el.parentElement ?? el).textContent ?? "");
+      }
+      return found;
+    });
+
+    expect(contexts.length, "the combined figure is gone entirely").toBeGreaterThan(0);
+    for (const text of contexts) {
+      expect(text, "~40% stated as one win").toMatch(/twice|~30%[\s\S]*~10%/);
+    }
+  });
+
+  // "Copy email" said "Copied" whether or not anything was copied. The
+  // clipboard is missing outside a secure context and refuses when denied.
+  test("the copy button never reports a copy that failed", async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, "clipboard", {
+        value: {
+          writeText: () =>
+            Promise.reject(new DOMException("Write permission denied.", "NotAllowedError")),
+        },
+      });
+    });
+    await page.goto("/");
+
+    await page.getByRole("button", { name: "Copy email" }).click();
+    const button = page.locator(".hero__btn--ghost");
+    await expect(button).toHaveText(/couldn't copy/i);
+    await expect(button).not.toHaveText(/^copied$/i);
+    // A screen reader is told what broke and handed the address instead.
+    await expect(
+      page.getByRole("status").filter({ hasText: "abilash0045@gmail.com" }),
+    ).toHaveCount(1);
+  });
+
+  test("a copy that works says so, and copies the address", async ({
+    page,
+    context,
+  }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/");
+
+    await page.getByRole("button", { name: "Copy email" }).click();
+    await expect(page.locator(".hero__btn--ghost")).toHaveText("Copied");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      "abilash0045@gmail.com",
+    );
+  });
+
+  // The segment cache hits about 80%, as every other mention on the page says.
+  // One card rounded that into a floor, "80%+".
+  test("no measured percentage is turned into a floor", async ({ page }) => {
+    await page.goto("/");
+    const body = (await page.textContent("main")) ?? "";
+    expect(body.match(/\d+%\+/g) ?? []).toEqual([]);
+  });
+
   test("the contact form does not fake a send", async ({ page }) => {
     await page.goto("/");
     await page.fill("#contact-name", "Alex Recruiter");
@@ -171,6 +279,60 @@ test("home page stays about the work", async ({ page }) => {
   const body = ((await page.textContent("body")) ?? "").toLowerCase();
   expect(body).not.toContain("open to work");
   expect(body).not.toContain("lpa");
+});
+
+// The second role sat in the left half of its row next to nothing, and every
+// case study wore the same "FEATURED PROJECT" label.
+test("no card sits alone in half a row, and no two case studies share a label", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  const holes = await page.locator(".magazine-grid").evaluate((grid) => {
+    const width = grid.getBoundingClientRect().width;
+    const rows = new Map<number, DOMRect[]>();
+    for (const card of Array.from(grid.children)) {
+      const box = card.getBoundingClientRect();
+      const top = Math.round(box.top);
+      rows.set(top, [...(rows.get(top) ?? []), box]);
+    }
+    return [...rows.values()]
+      .filter((row) => row.length === 1 && row[0].width < width - 1)
+      .map((row) => Math.round(row[0].width));
+  });
+  expect(holes, "a card sits alone in half a row").toEqual([]);
+
+  const labels = await page.locator(".study__number").allTextContents();
+  expect(new Set(labels).size, `labels repeat: ${labels.join(", ")}`).toBe(labels.length);
+});
+
+// At 390px "GitHub ↗" broke inside itself and stranded its arrow on a second
+// line, and a wrapped row could open with a "·" that separated nothing.
+test("link rows wrap between links, never inside one", async ({ page }) => {
+  for (const width of [320, 390, 768, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const rows = page.locator(".hero__socials, .contact-channels");
+
+    const broken = await rows.locator("a").evaluateAll((links) =>
+      links
+        .filter(
+          (a) => a.getBoundingClientRect().height > parseFloat(getComputedStyle(a).fontSize) * 2,
+        )
+        .map((a) => a.textContent?.trim()),
+    );
+    expect(broken, `links broken across lines at ${width}px`).toEqual([]);
+
+    const strays = await rows.evaluateAll((els) =>
+      els.flatMap((row) =>
+        Array.from(row.children)
+          .filter((child) => child.tagName !== "A")
+          .map((child) => child.textContent?.trim()),
+      ),
+    );
+    expect(strays, "separators that can strand at the start of a line").toEqual([]);
+  }
 });
 
 test("home page is responsive from small mobile to ultra-wide", async ({

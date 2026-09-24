@@ -38,7 +38,8 @@ attribution are never cut.
   root cause, never KEDA. The ~30% and ~10% cost wins are independent and must not merge
   into one ~40% story.
 - No "open to work", compensation figures, or relocation intent anywhere on the site.
-- OpenStreetMap and CARTO attribution stays visible on the map.
+- OpenStreetMap attribution stays visible on the map. If the tiles ever come from someone
+  else again (they were CARTO's until September 2026), that provider is credited beside it.
 - Respect `prefers-reduced-motion` in every animation.
 
 <!-- BEGIN:nextjs-agent-rules -->

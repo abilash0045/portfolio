@@ -1,8 +1,10 @@
 import { test, expect, type Page } from "@playwright/test";
 
 // The basemap was CARTO's dark_all in both themes, so in light theme the map
-// was a black slab dropped into a cream page. The tiles follow the theme now,
-// and so do the two edge shades that were written assuming dark tiles.
+// was a black slab dropped into a cream page. Then CARTO started stamping every
+// tile fetched without an API key with "API KEY REQUIRED". The tiles are
+// OpenStreetMap's now, in one style, and the theme is a filter on the tile
+// pane. The two edge shades written assuming dark tiles follow it too.
 
 async function setTheme(page: Page, theme: "light" | "dark") {
   await page.evaluate((t) => {
@@ -18,28 +20,47 @@ const tileUrls = (page: Page) =>
     ),
   );
 
+const paneFilter = (page: Page) =>
+  page.locator(".leaflet-tile-pane").evaluate((el) => getComputedStyle(el).filter);
+
+test("every tile comes from OpenStreetMap, none from a host that watermarks it", async ({
+  page,
+}) => {
+  const requested: string[] = [];
+  page.on("request", (request) => requested.push(request.url()));
+
+  await page.goto("/dartboard", { waitUntil: "networkidle" });
+  await expect
+    .poll(async () => (await tileUrls(page)).length, { message: "no tiles on the map" })
+    .toBeGreaterThan(0);
+
+  for (const url of await tileUrls(page)) {
+    expect(url, "tile from somewhere other than OpenStreetMap").toMatch(
+      /^https:\/\/tile\.openstreetmap\.org\/\d+\/\d+\/\d+\.png$/,
+    );
+  }
+  expect(requested.filter((url) => url.includes("cartocdn.com"))).toEqual([]);
+});
+
 test("the basemap follows the theme, including when it changes live", async ({
   page,
 }) => {
   await page.goto("/dartboard", { waitUntil: "networkidle" });
   await expect(page.locator(".leaflet-container")).toHaveCount(1);
 
-  await setTheme(page, "light");
-  await expect
-    .poll(async () => (await tileUrls(page)).some((u) => u.includes("light_all")), {
-      message: "light theme still serving dark tiles",
-    })
-    .toBe(true);
-  expect((await tileUrls(page)).every((u) => !u.includes("dark_all"))).toBe(true);
+  await setTheme(page, "dark");
+  const dark = await paneFilter(page);
+  expect(dark, "dark theme is showing the light map").toContain("invert");
 
   // The toggle writes an attribute and broadcasts nothing, so this is the part
-  // that breaks quietly: switching back has to swap the tiles again.
+  // that breaks quietly: switching has to restyle the tiles already on screen.
+  await setTheme(page, "light");
+  const light = await paneFilter(page);
+  expect(light, "light theme is showing the dark map").not.toContain("invert");
+  expect(light, "light theme lost the paper tone").toContain("sepia");
+
   await setTheme(page, "dark");
-  await expect
-    .poll(async () => (await tileUrls(page)).some((u) => u.includes("dark_all")), {
-      message: "dark theme still serving light tiles",
-    })
-    .toBe(true);
+  expect(await paneFilter(page), "switching back did not restore the dark map").toBe(dark);
 });
 
 test("no near-black edge shading is left over the light map", async ({ page }) => {
