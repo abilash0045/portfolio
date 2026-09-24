@@ -166,6 +166,14 @@ test.describe("nothing on this page claims something untrue", () => {
     );
   });
 
+  // The segment cache hits about 80%, as every other mention on the page says.
+  // One card rounded that into a floor, "80%+".
+  test("no measured percentage is turned into a floor", async ({ page }) => {
+    await page.goto("/");
+    const body = (await page.textContent("main")) ?? "";
+    expect(body.match(/\d+%\+/g) ?? []).toEqual([]);
+  });
+
   test("the contact form does not fake a send", async ({ page }) => {
     await page.goto("/");
     await page.fill("#contact-name", "Alex Recruiter");

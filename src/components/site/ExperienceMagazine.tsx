@@ -5,7 +5,7 @@ export default function ExperienceMagazine() {
     <section className="magazine-section" id="experience">
       <h2 className="section-title" data-reveal>Production Engineering Experience</h2>
       <p className="section-subtitle" data-reveal>
-        The same work in longer form, in the order it actually happened.
+        The same work in longer form, most recent first.
       </p>
 
       <div className="magazine-grid">
