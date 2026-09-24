@@ -33,6 +33,14 @@ test("the radius slider changes the stated range", async ({ page }) => {
   expect(after).toContain("400 km");
 });
 
+test("the page keeps its content in a main landmark", async ({ page }) => {
+  await page.goto("/dartboard");
+  const main = page.getByRole("main");
+  await expect(main).toHaveCount(1);
+  await expect(main.getByRole("button", { name: /throw the dart/i })).toBeVisible();
+  await expect(main.locator(".leaflet-container")).toHaveCount(1);
+});
+
 test("the map credits OpenStreetMap", async ({ page }) => {
   await page.goto("/dartboard");
   await expect(page.locator(".leaflet-control-attribution")).toContainText(

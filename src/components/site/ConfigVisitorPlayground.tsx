@@ -157,22 +157,32 @@ what it did.`;
         })}
       </div>
 
+      {/* Both code panes keep their shape and scroll sideways on a phone,
+          and a pane that scrolls has to take focus or a keyboard cannot
+          scroll it. Each is a named region so focus lands somewhere that
+          says what it is. */}
       <div className="pg-workspace">
         <div className="pg-pane">
           <div className="pg-pane__title">Config Node Input AST</div>
-          <pre className="pg-code pg-code--input">{inputNodes}</pre>
+          <pre
+            className="pg-code pg-code--input"
+            tabIndex={0}
+            role="region"
+            aria-label="Config node input"
+          >
+            {inputNodes}
+          </pre>
         </div>
 
         {/* One panel serving four tabs, so it is labelled by whichever tab is
-            selected. tabIndex 0 because it holds no focusable content of its
-            own and a keyboard visitor still has to be able to reach the text
-            the tabs just changed. */}
+            selected. The output inside it takes focus, which is also how a
+            keyboard visitor reaches the text the tabs just changed, so the
+            panel itself no longer needs a tab stop. */}
         <div
           className="pg-pane"
           role="tabpanel"
           id={PANEL_ID}
           aria-labelledby={tabId(activeVisitor)}
-          tabIndex={0}
         >
           <div className="pg-pane__title">
             {/* node.accept(visitor), the way round the pattern actually goes.
@@ -180,7 +190,14 @@ what it did.`;
             <span>config.accept({selectedLabel})</span>
             <span className="pg-pane__note">Illustration, not a live system</span>
           </div>
-          <pre className="pg-code">{getVisitorOutput()}</pre>
+          <pre
+            className="pg-code"
+            tabIndex={0}
+            role="region"
+            aria-label={`${selectedLabel} output`}
+          >
+            {getVisitorOutput()}
+          </pre>
         </div>
       </div>
 
