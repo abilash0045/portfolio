@@ -28,8 +28,12 @@ test("every component named is one the page already names in prose", async ({
       .join(" "),
   );
 
-  // Everything the diagram names has to appear in the case studies too.
-  const prose = (await page.textContent("#case-studies")) ?? "";
+  // Everything the diagram names has to appear in the case studies' own words
+  // too. The diagram sits inside the first study now, so "the page" is the
+  // studies' headlines and facts, which leaves out the diagram's own labels.
+  const prose = (
+    await page.locator("#work").locator(".study__headline, .study__facts").allTextContents()
+  ).join(" ");
   for (const component of [
     "Kafka",
     "GKE",

@@ -1,161 +1,82 @@
-"use client";
+import CopyEmail from "./CopyEmail";
+import Figure from "./Figure";
+import { EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_NAME, SITE_ROLE } from "@/lib/site";
 
-import { useEffect, useRef, useState } from "react";
-import PipelineDiagram from "./PipelineDiagram";
-
-const EMAIL = "abilash0045@gmail.com";
-
-type CopyResult = "idle" | "copied" | "failed";
-
-const BUTTON_LABEL: Record<CopyResult, string> = {
-  idle: "Copy email",
-  copied: "Copied",
-  failed: "Couldn't copy. It's below.",
-};
-
-/** For screen readers, which do not reliably announce a button relabelling. */
-const ANNOUNCEMENT: Record<CopyResult, string> = {
-  idle: "",
-  copied: `Copied ${EMAIL}.`,
-  failed: `Your browser didn't let the page copy. The address is ${EMAIL}.`,
-};
+const METRICS = [
+  { value: "25,000+", label: "Daily video renders" },
+  { value: "60% → 98%", label: "Render reliability" },
+  // Two independent cuts that happen to sum, which is how DESIGN.md words it.
+  // A bare "~40%" read as one win.
+  { value: "~40%", label: "Cloud spend, cut twice" },
+  { value: "3d → 1d", label: "Config approval cycle" },
+];
 
 export default function Hero() {
-  const [copy, setCopy] = useState<CopyResult>("idle");
-  const resetRef = useRef<number | undefined>(undefined);
-
-  useEffect(() => () => window.clearTimeout(resetRef.current), []);
-
-  // This used to say "Copied" unconditionally. The clipboard is missing
-  // outside a secure context and refuses when permission is denied, and in
-  // both cases the button reported a copy that never happened.
-  const copyEmail = async () => {
-    let result: CopyResult;
-    try {
-      await navigator.clipboard.writeText(EMAIL);
-      result = "copied";
-    } catch {
-      result = "failed";
-    }
-    setCopy(result);
-    window.clearTimeout(resetRef.current);
-    resetRef.current = window.setTimeout(
-      () => setCopy("idle"),
-      result === "copied" ? 2500 : 6000,
-    );
-  };
-
   return (
-    <header className="hero" id="overview">
-      <div className="hero__top-row">
-        <div>
-          <div className="hero__badge">
-            <span className="hero__badge-dot" aria-hidden="true" />
-            <span>Backend engineer, distributed systems</span>
-          </div>
+    <section className="hero" id="overview" aria-labelledby="hero-title">
+      <div className="container">
+        <p className="hero__eyebrow">
+          <span className="hero__dot" aria-hidden="true" />
+          {SITE_NAME}
+          <span aria-hidden="true">/</span>
+          {SITE_ROLE}
+        </p>
 
-          <h1 className="hero__name">
-            I keep a 25,000-render-a-day pipeline cheap and standing up.
-          </h1>
+        <h1 className="hero__title" id="hero-title">
+          I keep a 25,000-render-a-day pipeline <em>cheap</em> and{" "}
+          <em>standing&nbsp;up</em>.
+        </h1>
 
+        <div className="hero__row">
           <p className="hero__lede">
             At Whilter I work on the video rendering pipeline: Java and Spring
             Boot over Kafka, Redis and MongoDB, running on GKE and Cloud Run
             across GCP and AWS.
           </p>
 
-          <p className="hero__lede hero__lede--muted">
-            Most of what I do lands on either the cloud bill or the on-call
-            dashboard. How media gets cached, how render jobs get queued and
-            scaled, and what breaks when shared storage, concurrency and bursty
-            traffic all arrive at once.
-          </p>
-        </div>
+          <div className="hero__actions">
+            <div className="hero__cta">
+              <a className="button button--primary" href="#work">
+                See the work
+              </a>
+              <CopyEmail className="button button--secondary copy-email" addressIs="below" />
+            </div>
 
-        <div className="hero__avatar-card">
-          <div className="hero__avatar-info">
-            <div className="hero__avatar-name">Abilash S L</div>
-            <div className="hero__avatar-role">Backend Engineer</div>
-            <div className="hero__avatar-tech">Java · Spring · Kafka · K8s</div>
+            <div className="hero__socials">
+              <a
+                className="hero__social-link"
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub ↗
+              </a>
+              <a
+                className="hero__social-link"
+                href={LINKEDIN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn ↗
+              </a>
+              <a className="hero__social-link" href={`mailto:${EMAIL}`}>
+                {EMAIL}
+              </a>
+            </div>
           </div>
-
-          <PipelineDiagram />
         </div>
-      </div>
 
-      <div className="hero__tech-badges" aria-label="Core stack">
-        <span className="hero__tech-tag">Java</span>
-        <span className="hero__tech-tag">Spring Boot</span>
-        <span className="hero__tech-tag">Kafka</span>
-        <span className="hero__tech-tag">Kubernetes</span>
-        <span className="hero__tech-tag">AWS / GCP</span>
-        <span className="hero__tech-tag">Redis</span>
+        <dl className="hero__metrics">
+          {METRICS.map((metric) => (
+            <div className="hero__metric" key={metric.label}>
+              <dt className="hero__metric-label">{metric.label}</dt>
+              <dd className="hero__metric-value">
+                <Figure value={metric.value} />
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
-
-      <div className="hero__metrics">
-        <div className="hero__metric">
-          <div className="hero__metric-value">25,000+</div>
-          <div className="hero__metric-label">Daily video renders</div>
-        </div>
-        <div className="hero__metric">
-          <div className="hero__metric-value">
-            60% → 98%
-          </div>
-          <div className="hero__metric-label">Render reliability</div>
-        </div>
-        <div className="hero__metric">
-          <div className="hero__metric-value">
-            ~40%
-          </div>
-          {/* Two independent cuts that happen to sum, which is how DESIGN.md
-              words it. A bare "~40%" read as one win. */}
-          <div className="hero__metric-label">Cloud spend, cut twice</div>
-        </div>
-        <div className="hero__metric">
-          <div className="hero__metric-value">
-            3d → 1d
-          </div>
-          <div className="hero__metric-label">Config approval cycle</div>
-        </div>
-      </div>
-
-      <div className="hero__cta-group">
-        <a className="hero__btn hero__btn--primary" href="#case-studies">
-          Read the case studies
-        </a>
-        <button
-          type="button"
-          className="hero__btn hero__btn--ghost"
-          onClick={() => void copyEmail()}
-        >
-          {BUTTON_LABEL[copy]}
-        </button>
-        <p className="visually-hidden" role="status">
-          {ANNOUNCEMENT[copy]}
-        </p>
-      </div>
-
-      <div className="hero__socials">
-        <a
-          href="https://github.com/abilash0045"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hero__social-link"
-        >
-          GitHub ↗
-        </a>
-        <a
-          href="https://www.linkedin.com/in/abilash0045/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hero__social-link"
-        >
-          LinkedIn ↗
-        </a>
-        <a href={`mailto:${EMAIL}`} className="hero__social-link">
-          {EMAIL}
-        </a>
-      </div>
-    </header>
+    </section>
   );
 }

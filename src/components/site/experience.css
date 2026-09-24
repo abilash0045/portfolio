@@ -1,0 +1,72 @@
+/* Roles as rows on the same two columns as the section heads: who and when on
+   the left, what on the right. Rules between them, no cards. */
+.timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline__item {
+  display: grid;
+  gap: 20px;
+  padding-block: clamp(36px, 5vw, 64px);
+  border-top: 1px solid var(--color-rule);
+}
+
+@media (min-width: 900px) {
+  .timeline__item {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(32px, 6vw, 96px);
+  }
+}
+
+.timeline__title {
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+.timeline__org {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-accent);
+}
+
+.timeline__period {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.timeline__lead {
+  max-width: var(--measure);
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.timeline__lead strong {
+  font-weight: 600;
+}
+
+/* Native markers, so the list stays a list to every screen reader, drawn as
+   an accent dash. */
+.timeline__points {
+  display: grid;
+  gap: 12px;
+  max-width: var(--measure);
+  margin: 24px 0 0;
+  padding-left: 1.6em;
+  list-style-type: "–  ";
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.timeline__points li::marker {
+  color: var(--color-accent);
+}

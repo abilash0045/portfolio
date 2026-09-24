@@ -1,487 +1,294 @@
-/* 84rem left a 1920px monitor 70% used and a 2560px one 53%, which reads as
-   a narrow column adrift rather than a deliberate measure. The container is
-   allowed to grow because the grids, the map and the widgets all want the
-   room; the prose that would become unreadable at that width is capped on
-   its own below, which is where a measure belongs. */
-.site {
-  width: 100%;
-  max-width: 120rem;
-  margin: 0 auto;
-  padding: 0 max(20px, 4vw) 120px;
+/* Page scaffolding: sections, their headings, buttons, links, the hero and the
+   footer. Sections run full width so their top rule crosses the whole page;
+   the content inside sits in .container. */
+
+.section {
+  padding-block: clamp(72px, 10vw, 144px);
+  border-top: 1px solid var(--color-rule);
 }
 
-/* Hero Section */
-.hero {
-  padding: 64px 0 40px;
-}
-
-.hero__top-row {
+/* Index and title on the left, the one-line intro on the right, sitting on
+   the title's baseline. On a phone they stack. */
+.section-head {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 32px;
-  align-items: start;
+  gap: 20px;
+  margin-bottom: clamp(40px, 6vw, 88px);
 }
 
-@media (max-width: 900px) {
-  .hero__top-row {
-    grid-template-columns: 1fr;
+@media (min-width: 900px) {
+  .section-head {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(32px, 6vw, 96px);
+    align-items: end;
   }
 }
 
-.hero__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 28px;
+.section-head__index {
+  display: block;
+  margin-bottom: 18px;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 500;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--color-accent);
 }
 
-/* Still, on purpose. It used to pulse forever, which is the "online now,
-   available" light every generated portfolio wears, and the only thing on the
-   page moving without being asked. */
-.hero__badge-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent-red);
-  color: var(--color-on-accent);
-  box-shadow: 0 0 10px var(--accent-red);
+.section-head__title {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
 }
 
-.hero__name {
-  font-size: clamp(2.2rem, 5vw, 3.6rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--text-primary) 30%, var(--text-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.hero__value-prop {
-  font-size: clamp(1.1rem, 2.2vw, 1.35rem);
-  font-weight: 700;
-  line-height: 1.5;
-  color: var(--accent-cyan);
-  margin: 0 0 16px;
-  font-family: var(--font-display);
-}
-
-/* The measure, kept off the container so the page can be wide and the
-   sentences still land around 65 characters. */
-.hero__lede {
-  font-size: clamp(1.02rem, 1.8vw, 1.15rem);
-  line-height: 1.7;
-  color: var(--text-primary);
-  margin: 0 0 16px;
-  max-width: 72ch;
-}
-
-.hero__lede--muted {
+.section-head__intro {
+  max-width: 46ch;
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  line-height: 1.55;
   color: var(--text-secondary);
-  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
 }
 
-/* Avatar Card */
-.hero__avatar-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 0 0 0 28px;
-  border-left: 1px solid var(--color-rule);
-}
-
-.hero__avatar-name {
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  font-family: var(--font-display);
-}
-
-.hero__avatar-role {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--accent-red);
-  font-family: var(--font-mono);
-  margin-top: 2px;
-}
-
-.hero__avatar-tech {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  margin-top: 4px;
-}
-
-/* Floating Tech Badges */
-.hero__tech-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 22px;
-  margin: 30px 0;
-}
-
-/* A span in a list of six. It had a hover brightening and a transition to
-   go with it, which promises a click target that was never there. */
-.hero__tech-tag {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--color-neutral);
-}
-
-/* Metric Highlights Bar */
-.hero__metrics {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 32px;
-  margin: 44px 0;
-  padding: 28px 0;
-  border-top: 1px solid var(--color-rule);
-  border-bottom: 1px solid var(--color-rule);
-}
-
-@media (max-width: 900px) {
-  .hero__metrics {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .hero__metrics {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    padding: 16px;
-  }
-}
-
-.hero__metric {
-  text-align: left;
-}
-
-.hero__metric-value {
-  font-family: var(--font-display);
-  font-size: clamp(1.4rem, 3vw, 1.85rem);
-  font-weight: 800;
-  color: var(--text-primary);
-  line-height: 1.1;
-  margin-bottom: 4px;
-}
-
-.hero__metric-label {
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-/* CTA Group */
-.hero__cta-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 28px;
-}
-
-.hero__btn {
+/* Buttons say the verb, and look like buttons: a filled one for the thing to
+   do next, an outlined one for the alternative. */
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 24px;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
   font-family: var(--font-body);
-  font-size: 0.92rem;
-  font-weight: 600;
-  cursor: pointer;
-  /* The properties that change, by name. `all` also caught the outline, so
-     the focus ring grew in from nothing over a quarter of a second instead of
-     being there the moment focus landed. */
-  transition-property: background-color, border-color, color, box-shadow, transform;
-  transition-duration: 0.25s;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
-  border: none;
-  min-height: 44px;
-}
-
-.hero__btn--primary {
-  background: var(--accent-red);
-  color: var(--color-on-accent);
-  box-shadow: 0 4px 14px var(--accent-red-glow);
-}
-.hero__btn--primary:hover {
-  background: var(--button-primary-hover);
-  color: var(--color-on-accent);
-  transform: translateY(-2px);
-  /* Was var(--color-accent): a solid fill in the blur slot, which reads as
-     a hard halo rather than a shadow. */
-  box-shadow: 0 6px 20px var(--accent-red-glow);
-}
-
-.hero__btn--secondary {
-  background: var(--color-paper-2);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-primary);
-}
-.hero__btn--secondary:hover {
-  background: var(--color-paper-3);
-  border-color: var(--color-border-interactive);
-  transform: translateY(-2px);
-}
-
-.hero__btn--ghost {
-  background: transparent;
-  border: 1px dashed var(--border-subtle);
-  color: var(--text-secondary);
-}
-.hero__btn--ghost:hover {
-  color: var(--text-primary);
-  border-color: var(--text-secondary);
-  background: var(--color-paper-2);
-}
-
-/* Press feedback. Everything that lifts on hover settles back to zero when
-   held, which is the whole point of the lift. Nothing on the site had an
-   :active state before, so a click landed with no acknowledgement. */
-.hero__btn:active {
-  transform: translateY(0);
-}
-
-/* Wraps between links and never inside one. It had neither: on a phone the
-   row squeezed each link until "GitHub ↗" broke and left its arrow alone on
-   a second line. The "·" separators went too, since a wrapped row put one at
-   the start of a line with nothing before it. Space does their job. */
-.hero__socials {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 22px;
-  margin-top: 24px;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.hero__social-link {
-  color: var(--text-secondary);
-  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1;
   white-space: nowrap;
-  transition: color 0.2s ease;
-}
-
-.hero__social-link:hover,
-.hero__social-link:active {
-  color: var(--accent-red);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-/* Case Studies Grid Layout */
-.studies-section {
-  padding-top: 48px;
-}
-
-.studies-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin-top: 24px;
-}
-
-@media (max-width: 900px) {
-  .studies-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* No hover state. These cards are not clickable, and a lift plus a border
-   shift is the same promise the tech pills and study tech lists were making
-   before they lost theirs. The transition went with it: nothing else used it. */
-.study {
-  padding: 28px;
-  background: var(--bg-card);
-  border: 1px solid var(--bg-card-border);
-  border-radius: var(--radius-lg);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.study--full {
-  grid-column: 1 / -1;
-}
-
-.study__header {
-  margin-bottom: 20px;
-}
-
-.study__number {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--accent-red);
-  display: block;
-  margin-bottom: 6px;
-}
-
-.study__title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-  margin-bottom: 8px;
-}
-
-.study__headline {
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-/* Structured Project Fields */
-.study__structured-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 768px) {
-  .study__structured-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.study__field {
-  background: var(--color-paper);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-}
-
-.study__field--full {
-  grid-column: 1 / -1;
-}
-
-.study__field-title {
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-
-.study__field-text {
-  font-size: 0.92rem;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  margin: 0;
-}
-
-.study__footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.study__stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* An li in a stack list. Same story as .hero__tech-tag: it lit up on hover
-   and did nothing when clicked. */
-.study__tech {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 500;
-  padding: 5px 12px;
-  background: var(--color-paper-2);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-pill);
-  color: var(--text-secondary);
-}
-
-.study__links {
-  display: flex;
-  gap: 10px;
-}
-
-.study__link-btn {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  color: var(--text-primary);
-  background: var(--color-paper-2);
-  border: 1px solid var(--border-subtle);
-  text-decoration: none;
+  cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease,
     transform 0.2s ease;
 }
 
-.study__link-btn:hover {
-  background: var(--color-paper-3);
-  border-color: var(--text-secondary);
+.button--primary {
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
-.study__link-btn--primary {
-  background: var(--accent-red);
-  color: var(--color-on-accent);
-  border-color: var(--accent-red);
-}
-
-.study__link-btn--primary:hover {
-  background: var(--button-primary-hover);
+.button--primary:hover {
+  background: var(--color-accent);
   color: var(--color-on-accent);
 }
 
-/* Neither variant lifts on hover, so the press moves down instead of back. */
-.study__link-btn:active {
+.button--secondary {
+  background: transparent;
+  border-color: var(--color-border-interactive);
+  color: var(--text-primary);
+}
+
+.button--secondary:hover {
+  border-color: var(--text-primary);
+  background: var(--color-paper-2);
+}
+
+.button:active {
   transform: translateY(1px);
 }
 
-/* Footer Section */
-.footer {
-  padding: 56px 0 0;
-  border-top: 1px solid var(--border-subtle);
-  color: var(--text-muted);
-  font-size: 0.9rem;
+.text-link {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-interactive);
+  text-underline-offset: 4px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 
-.footer__grid {
+.text-link:hover {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
+}
+
+/* The arrow in figures like "60% → 98%". */
+.figure-arrow {
+  margin: 0 0.18em;
+  color: var(--color-accent);
+  font-weight: 400;
+}
+
+/* Hero. Type does the work: one oversized line, the one sentence under it that
+   says where, and the four numbers the site leads with. */
+.hero {
+  padding-block: clamp(56px, 10vw, 136px) clamp(56px, 8vw, 104px);
+}
+
+.hero__eyebrow {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
+  align-items: center;
+  gap: 6px 12px;
+  margin-bottom: clamp(28px, 4vw, 52px);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.hero__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.hero__title {
+  max-width: 15ch;
+  font-size: clamp(2.8rem, 8.4vw, 8.5rem);
+  font-weight: 600;
+  line-height: 0.93;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+/* The two words the sentence leans on, in the serif. */
+.hero__title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.hero__row {
+  display: grid;
+  gap: 32px;
+  margin-top: clamp(36px, 5vw, 64px);
+}
+
+@media (min-width: 900px) {
+  .hero__row {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: clamp(32px, 6vw, 96px);
+    align-items: end;
+  }
+}
+
+.hero__lede {
+  max-width: 42ch;
+  font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.hero__actions {
+  display: grid;
+  justify-items: start;
+  gap: 22px;
+}
+
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Wraps between links and never inside one: on a phone a squeezed row once
+   broke "GitHub ↗" and left its arrow alone on a second line. No separators,
+   since a wrapped row would start a line with one. */
+.hero__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.hero__social-link {
+  white-space: nowrap;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.hero__social-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.hero__metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 24px;
+  margin: clamp(56px, 8vw, 112px) 0 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--color-rule);
+}
+
+@media (min-width: 900px) {
+  .hero__metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Value above label on screen; label first in the source, because a <dt> has
+   to come before its <dd>. Each metric is a size container so its value can
+   be sized to the column it sits in: sized to the viewport, "60% → 98%" was
+   wider than its column from phones up to about 1200px, and on a phone it
+   pushed the whole page sideways. */
+.hero__metric {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 10px;
+  container-type: inline-size;
+}
+
+.hero__metric-value {
+  margin: 0;
+  font-size: clamp(1.25rem, 17cqi, 3.4rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+
+.hero__metric-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Footer. Outside main, so it is the page's contentinfo landmark. */
+.footer {
+  padding-block: 40px 56px;
+  border-top: 1px solid var(--color-rule);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px 40px;
+}
+
+.footer__credit {
+  max-width: 52ch;
+}
+
+.footer__name {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .footer__links {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 8px 24px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -489,11 +296,9 @@
 
 .footer__link {
   color: var(--text-secondary);
-  font-weight: 500;
+  transition: color 0.2s ease;
 }
-.footer__link:hover,
-.footer__link:active {
-  color: var(--accent-red);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+
+.footer__link:hover {
+  color: var(--color-accent);
 }

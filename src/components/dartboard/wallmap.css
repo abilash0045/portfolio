@@ -70,9 +70,9 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--accent-red);
+  background: var(--color-accent);
   border: 2px solid var(--color-ink);
-  box-shadow: 0 0 12px var(--accent-red), 0 0 24px var(--accent-red);
+  box-shadow: 0 0 12px var(--color-accent), 0 0 24px var(--color-accent);
   z-index: 2;
 }
 
@@ -81,7 +81,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 2px solid var(--accent-cyan);
+  border: 2px solid var(--color-accent);
   opacity: 0.8;
   animation: ripple-expand 1.8s infinite cubic-bezier(0.2, 0.8, 0.2, 1);
   z-index: 1;

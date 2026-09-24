@@ -1,14 +1,21 @@
 import { test, expect } from "@playwright/test";
 
+const SECTIONS = [
+  "Selected work",
+  "Experience",
+  "How I work",
+  "Toolbox",
+  "Throw a dart at the map",
+  "Get in touch.",
+];
+
 test("home page carries the work", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("Abilash S L").first()).toBeVisible();
   await expect(page.getByText("25,000+").first()).toBeVisible();
-  await expect(page.getByText("Selected Work").first()).toBeVisible();
-  await expect(page.getByText("Engineering Philosophy")).toBeVisible();
-  await expect(page.getByText("Technology Ecosystem")).toBeVisible();
-  await expect(page.getByText("Production Engineering Experience")).toBeVisible();
-  await expect(page.getByText("Get in touch")).toBeVisible();
+  for (const name of SECTIONS) {
+    await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+  }
 });
 
 // These assertions are the point of this file. Fabricated content reached this
@@ -131,26 +138,43 @@ test.describe("nothing on this page claims something untrue", () => {
 
   // "Copy email" said "Copied" whether or not anything was copied. The
   // clipboard is missing outside a secure context and refuses when denied.
-  test("the copy button never reports a copy that failed", async ({ page }) => {
-    await page.addInitScript(() => {
-      Object.defineProperty(navigator, "clipboard", {
-        value: {
-          writeText: () =>
-            Promise.reject(new DOMException("Write permission denied.", "NotAllowedError")),
-        },
+  // There are two of these buttons, and each one's fallback names a direction.
+  for (const { section, direction } of [
+    { section: ".hero", direction: "below" },
+    { section: "#contact", direction: "above" },
+  ] as const) {
+    test(`the copy button in ${section} never reports a copy that failed`, async ({
+      page,
+    }) => {
+      await page.addInitScript(() => {
+        Object.defineProperty(navigator, "clipboard", {
+          value: {
+            writeText: () =>
+              Promise.reject(new DOMException("Write permission denied.", "NotAllowedError")),
+          },
+        });
       });
-    });
-    await page.goto("/");
+      await page.goto("/");
 
-    await page.getByRole("button", { name: "Copy email" }).click();
-    const button = page.locator(".hero__btn--ghost");
-    await expect(button).toHaveText(/couldn't copy/i);
-    await expect(button).not.toHaveText(/^copied$/i);
-    // A screen reader is told what broke and handed the address instead.
-    await expect(
-      page.getByRole("status").filter({ hasText: "abilash0045@gmail.com" }),
-    ).toHaveCount(1);
-  });
+      const button = page.locator(section).locator(".copy-email");
+      await button.click();
+      await expect(button).toHaveText(new RegExp(`couldn't copy. it's ${direction}`, "i"));
+      await expect(button).not.toHaveText(/^copied$/i);
+      // A screen reader is told what broke and handed the address instead.
+      await expect(
+        page.getByRole("status").filter({ hasText: "abilash0045@gmail.com" }),
+      ).toHaveCount(1);
+
+      // And the address is where the button says it is.
+      const address = page.locator(section).locator('a[href="mailto:abilash0045@gmail.com"]');
+      const [buttonBox, addressBox] = [await button.boundingBox(), await address.boundingBox()];
+      if (direction === "below") {
+        expect(addressBox!.y, "the address is not below").toBeGreaterThan(buttonBox!.y);
+      } else {
+        expect(addressBox!.y, "the address is not above").toBeLessThan(buttonBox!.y);
+      }
+    });
+  }
 
   test("a copy that works says so, and copies the address", async ({
     page,
@@ -159,8 +183,9 @@ test.describe("nothing on this page claims something untrue", () => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await page.goto("/");
 
-    await page.getByRole("button", { name: "Copy email" }).click();
-    await expect(page.locator(".hero__btn--ghost")).toHaveText("Copied");
+    const button = page.locator(".hero .copy-email");
+    await button.click();
+    await expect(button).toHaveText("Copied");
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
       "abilash0045@gmail.com",
     );
@@ -174,18 +199,18 @@ test.describe("nothing on this page claims something untrue", () => {
     expect(body.match(/\d+%\+/g) ?? []).toEqual([]);
   });
 
-  test("the contact form does not fake a send", async ({ page }) => {
+  // There is no backend to send a message, so there is no form to fill in:
+  // the address itself, as a real mailto link, is the way to get in touch.
+  test("contact is a real address, not a form that pretends to send", async ({
+    page,
+  }) => {
     await page.goto("/");
-    await page.fill("#contact-name", "Alex Recruiter");
-    await page.fill("#contact-email", "alex@example.com");
-    await page.fill("#contact-message", "Are you free to talk this week?");
+    const contact = page.locator("#contact");
 
+    await expect(contact.locator("form, input, textarea")).toHaveCount(0);
     await expect(
-      page.getByRole("button", { name: /open in your mail app/i }),
-    ).toBeVisible();
-
-    // The page says plainly that it sends nothing itself.
-    await expect(page.getByText(/nothing is sent from this page/i)).toBeVisible();
+      contact.getByRole("link", { name: "abilash0045@gmail.com" }),
+    ).toHaveAttribute("href", "mailto:abilash0045@gmail.com");
 
     const body = ((await page.textContent("body")) ?? "").toLowerCase();
     expect(body).not.toContain("message sent");
@@ -230,10 +255,11 @@ test.describe("navigation works on a phone", () => {
     await toggle.click();
     await expect(nav).toBeVisible();
     await expect(toggle).toHaveAttribute("aria-expanded", "true");
-    await expect(page.getByRole("link", { name: "Selected Work" })).toBeVisible();
+    const work = nav.getByRole("link", { name: "Work", exact: true });
+    await expect(work).toBeVisible();
 
     // Choosing a destination should close the panel behind you.
-    await page.getByRole("link", { name: "Selected Work" }).click();
+    await work.click();
     await expect(nav).toBeHidden();
   });
 
@@ -282,14 +308,16 @@ test("home page stays about the work", async ({ page }) => {
 });
 
 // The second role sat in the left half of its row next to nothing, and every
-// case study wore the same "FEATURED PROJECT" label.
-test("no card sits alone in half a row, and no two case studies share a label", async ({
+// case study wore the same "FEATURED PROJECT" label. The roles are full-width
+// rows now; the principles are the one two-up grid left, and a fifth would
+// sit alone.
+test("nothing sits alone in half a row, and no two case studies share a label", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
 
-  const holes = await page.locator(".magazine-grid").evaluate((grid) => {
+  const holes = await page.locator(".principles").evaluate((grid) => {
     const width = grid.getBoundingClientRect().width;
     const rows = new Map<number, DOMRect[]>();
     for (const card of Array.from(grid.children)) {
@@ -313,7 +341,7 @@ test("link rows wrap between links, never inside one", async ({ page }) => {
   for (const width of [320, 390, 768, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    const rows = page.locator(".hero__socials, .contact-channels");
+    const rows = page.locator(".hero__socials, .contact-channels, .footer__links");
 
     const broken = await rows.locator("a").evaluateAll((links) =>
       links
@@ -324,10 +352,16 @@ test("link rows wrap between links, never inside one", async ({ page }) => {
     );
     expect(broken, `links broken across lines at ${width}px`).toEqual([]);
 
+    // Each item is a link, or a list item holding a link and nothing else.
     const strays = await rows.evaluateAll((els) =>
       els.flatMap((row) =>
         Array.from(row.children)
-          .filter((child) => child.tagName !== "A")
+          .filter((child) => {
+            const link = child.tagName === "LI" ? child.firstElementChild : child;
+            return !(
+              link?.tagName === "A" && child.textContent?.trim() === link.textContent?.trim()
+            );
+          })
           .map((child) => child.textContent?.trim()),
       ),
     );
@@ -342,17 +376,38 @@ test("home page is responsive from small mobile to ultra-wide", async ({
   await page.goto("/");
   await expect(page.getByText("Abilash S L").first()).toBeVisible();
 
-  // Nothing should push the document wider than the viewport.
-  const overflow = await page.evaluate(
-    () =>
-      document.documentElement.scrollWidth -
-      document.documentElement.clientWidth,
-  );
-  expect(overflow, "page scrolls horizontally at 375px").toBeLessThanOrEqual(1);
+  // Nothing should push the document wider than the viewport. The hero's
+  // "60% → 98%" once did, at every phone width up to 390px.
+  for (const width of [320, 360, 375, 390]) {
+    await page.setViewportSize({ width, height: 667 });
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow, `page scrolls horizontally at ${width}px`).toBeLessThanOrEqual(1);
+  }
 
   await page.setViewportSize({ width: 768, height: 1024 });
-  await expect(page.getByText("Production Engineering Experience")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Experience", exact: true })).toBeVisible();
 
   await page.setViewportSize({ width: 2560, height: 1440 });
-  await expect(page.getByText("Engineering Philosophy")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "How I work", exact: true })).toBeVisible();
+});
+
+// The big figures do not wrap and are sized to their column, so they are the
+// thing most likely to spill into the next column when a figure gets longer.
+test("no figure is wider than the column it sits in", async ({ page }) => {
+  for (const width of [320, 390, 900, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const spilled = await page
+      .locator(".hero__metric-value, .study__metric-value")
+      .evaluateAll((els) =>
+        els
+          .filter((el) => el.scrollWidth > el.clientWidth + 1)
+          .map((el) => `${el.textContent} (${el.scrollWidth}px in ${el.clientWidth}px)`),
+      );
+    expect(spilled, `figures spill out of their column at ${width}px`).toEqual([]);
+  }
 });

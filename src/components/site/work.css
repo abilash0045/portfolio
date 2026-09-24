@@ -1,0 +1,167 @@
+.work-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A rule and space between studies, no box around them. */
+.study {
+  display: grid;
+  gap: 32px;
+  padding-block: clamp(48px, 7vw, 104px);
+  border-top: 1px solid var(--color-rule);
+}
+
+.work-list > li:first-child .study {
+  padding-top: 0;
+  border-top: 0;
+}
+
+@media (min-width: 960px) {
+  .study {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(40px, 6vw, 104px);
+  }
+
+  /* The skim column holds still while the reading column scrolls past it. */
+  .study__aside {
+    position: sticky;
+    top: calc(var(--header-height) + 32px);
+    align-self: start;
+  }
+
+  .study__extra {
+    grid-column: 1 / -1;
+  }
+}
+
+.study__number {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+}
+
+.study__of {
+  color: var(--text-muted);
+}
+
+.study__title {
+  margin: 14px 0 16px;
+  font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.study__headline {
+  max-width: 44ch;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+/* Sized to the column, like the hero's, so a figure never breaks across two
+   lines partway through. */
+.study__metric {
+  display: grid;
+  gap: 10px;
+  margin: 32px 0 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-rule);
+  container-type: inline-size;
+}
+
+.study__metric-value {
+  font-size: clamp(1.6rem, 11cqi, 3.6rem);
+  white-space: nowrap;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.study__metric-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Plain text in a list. Not a control, so no hover and no pointer. */
+.study__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.study__tech {
+  padding: 5px 11px;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.study__facts {
+  margin: 0;
+}
+
+.study__fact {
+  display: grid;
+  gap: 8px;
+  padding: 22px 0;
+  border-top: 1px solid var(--color-rule);
+}
+
+.study__fact:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+@media (min-width: 640px) {
+  .study__fact {
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+.study__fact dt {
+  padding-top: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.study__fact dd {
+  max-width: var(--measure);
+  margin: 0;
+  font-size: 1.06rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.study__fact--result dd {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.study__jump {
+  display: inline-block;
+  margin-top: 28px;
+  font-weight: 500;
+}
+
+.study__extra {
+  margin-top: clamp(8px, 2vw, 24px);
+}

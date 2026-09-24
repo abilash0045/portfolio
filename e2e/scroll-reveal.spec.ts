@@ -9,18 +9,18 @@ test("content below the fold arrives hidden and settles in on scroll", async ({
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/", { waitUntil: "networkidle" });
 
-  const card = page.locator(".tech-card").first();
-  expect(await opacityOf(page, ".tech-card"), "started visible").toBeLessThan(0.1);
+  const row = page.locator(".toolbox__row").first();
+  expect(await opacityOf(page, ".toolbox__row"), "started visible").toBeLessThan(0.1);
 
-  await card.scrollIntoViewIfNeeded();
+  await row.scrollIntoViewIfNeeded();
   await expect
-    .poll(() => opacityOf(page, ".tech-card"), { message: "never revealed" })
+    .poll(() => opacityOf(page, ".toolbox__row"), { message: "never revealed" })
     .toBeGreaterThan(0.99);
 
   // Once revealed it stays revealed; scrolling away must not hide it again.
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(300);
-  expect(await opacityOf(page, ".tech-card")).toBeGreaterThan(0.99);
+  expect(await opacityOf(page, ".toolbox__row")).toBeGreaterThan(0.99);
 });
 
 test("what is already on screen is not animated in", async ({ page }) => {
@@ -28,7 +28,7 @@ test("what is already on screen is not animated in", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
 
   // The hero carries no data-reveal, so it must never be transparent.
-  expect(await opacityOf(page, ".hero__name")).toBe(1);
+  expect(await opacityOf(page, ".hero__title")).toBe(1);
 });
 
 test("reduced motion gets the content, not a shortened animation", async ({
@@ -39,7 +39,7 @@ test("reduced motion gets the content, not a shortened animation", async ({
   await page.goto("/", { waitUntil: "networkidle" });
 
   // The hidden state must not apply at all, so nothing depends on JS running.
-  for (const sel of [".tech-card", ".study", ".philosophy-card", ".magazine-card"]) {
+  for (const sel of [".toolbox__row", ".study", ".principle", ".timeline__item"]) {
     expect(await opacityOf(page, sel), `${sel} hidden under reduced motion`).toBe(1);
   }
 });
@@ -52,7 +52,7 @@ test("with JavaScript off the page is not left blank", async ({ browser }) => {
 
   // ScrollReveal never runs here. If the hidden state were unconditional,
   // every card below the fold would be invisible forever.
-  for (const sel of [".tech-card", ".study", ".philosophy-card"]) {
+  for (const sel of [".toolbox__row", ".study", ".principle", ".timeline__item"]) {
     expect(await opacityOf(page, sel), `${sel} invisible without JS`).toBe(1);
   }
   await context.close();

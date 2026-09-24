@@ -7,12 +7,12 @@
   color: var(--text-primary);
 }
 
-/* Embedded Variant inside Portfolio Page */
+/* On the home page, under its section head, which already sets the space
+   above it. */
 .dartboard--embedded {
   height: 580px;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   border: 1px solid var(--bg-card-border);
-  margin: 40px 0;
   overflow: hidden;
 }
 
@@ -61,7 +61,7 @@
 .dartboard__fullscreen-btn:hover {
   background: var(--color-accent);
   color: var(--color-on-accent);
-  border-color: var(--accent-red);
+  border-color: var(--color-accent);
   transform: translateY(-1px);
 }
 
@@ -164,9 +164,12 @@
   margin-bottom: 6px;
 }
 
+/* No side margin: Chrome gives a range input 2px each side, which on top of
+   width: 100% made it 4px wider than its row. */
 .controls__slider {
   width: 100%;
-  accent-color: var(--accent-red);
+  margin-inline: 0;
+  accent-color: var(--color-accent);
   height: 6px;
   border-radius: var(--radius-pill);
 }
@@ -176,12 +179,12 @@
   font-size: 0.92rem;
   font-weight: 700;
   font-family: var(--font-body);
-  background: var(--accent-red);
+  background: var(--color-accent);
   color: var(--color-on-accent);
   border: none;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  box-shadow: 0 4px 14px var(--accent-red-glow);
+  box-shadow: 0 4px 14px var(--color-accent-glow);
   transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
     transform 0.2s ease, opacity 0.2s ease;
   min-height: 40px;
@@ -191,7 +194,7 @@
   background: var(--button-primary-hover);
   color: var(--color-on-accent);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px var(--accent-red-glow);
+  box-shadow: 0 6px 20px var(--color-accent-glow);
 }
 
 .controls__throw:active:not(:disabled) {
@@ -310,8 +313,8 @@
   margin: -22px 0 0 -22px;
   z-index: 600;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, var(--accent-red) 0 32%, transparent 33%),
-              linear-gradient(var(--accent-cyan) 0 100%) center/3px 44px no-repeat;
+  background: radial-gradient(circle at 50% 50%, var(--color-accent) 0 32%, transparent 33%),
+              linear-gradient(var(--color-ink) 0 100%) center/3px 44px no-repeat;
   animation: dart-throw 700ms cubic-bezier(0.3, 0.7, 0.4, 1) forwards;
 }
 
@@ -327,7 +330,7 @@
   padding: 14px 18px;
   background: var(--color-inset);
   border: 1px solid var(--border-subtle);
-  border-left: 3px solid var(--accent-red);
+  border-left: 3px solid var(--color-accent);
   border-radius: var(--radius-md);
   animation: card-rise 260ms ease-out;
 }

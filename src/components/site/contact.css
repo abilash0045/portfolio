@@ -1,135 +1,89 @@
-.contact-section {
-  margin: 80px 0;
+/* The close. The one other place the type goes as big as the hero's. */
+.contact__title {
+  font-size: clamp(3rem, 11vw, 10rem);
+  line-height: 0.92;
+  letter-spacing: -0.055em;
 }
 
-.contact-card {
-  max-width: 44rem;
-  margin: 0 auto;
-  background: var(--bg-card);
-  border: 1px solid var(--color-border-interactive);
-  border-radius: var(--radius-xl);
-  padding: clamp(24px, 5vw, 44px);
-  text-align: center;
+.contact__title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.025em;
 }
 
-.contact-title {
-  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-  font-weight: 800;
-  color: var(--text-primary);
-  font-family: var(--font-display);
-  margin-bottom: 12px;
+.contact__grid {
+  display: grid;
+  gap: 36px;
+  margin-top: clamp(40px, 6vw, 80px);
+  padding-top: clamp(28px, 4vw, 44px);
+  border-top: 1px solid var(--color-rule);
 }
 
-.contact-desc {
-  font-size: 1.02rem;
-  line-height: 1.65;
+@media (min-width: 900px) {
+  .contact__grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(32px, 6vw, 96px);
+  }
+}
+
+.contact__lede {
+  max-width: 40ch;
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  line-height: 1.55;
   color: var(--text-secondary);
-  margin: 0 auto 32px;
-  max-width: 34rem;
 }
 
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  text-align: left;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-label {
-  font-size: 0.8rem;
+.contact__email {
+  display: inline-block;
+  font-size: clamp(1.5rem, 4.2vw, 3.6rem);
   font-weight: 600;
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  /* A phone narrower than the address breaks it rather than scrolling the
+     page sideways. */
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-interactive);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 
-.form-input,
-.form-textarea {
-  width: 100%;
-  padding: 14px 16px;
-  background: var(--color-inset);
-  border: 1px solid var(--color-border-interactive);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  transition: border-color 0.2s ease;
+.contact__email:hover {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
 }
 
-/* This rule used to be `outline: none` plus an ink border, which took the
-   only focus indicator on the form away and replaced it with a 1px colour
-   shift. The ring comes from the global rule; the border moves as well so
-   the field reads as active from the inside too. */
-.form-input:focus-visible,
-.form-textarea:focus-visible {
-  border-color: var(--color-focus);
-}
-
-.form-textarea {
-  min-height: 130px;
-  resize: vertical;
-}
-
-.submit-btn {
-  padding: 14px 32px;
-  font-size: 0.98rem;
-  font-weight: 700;
-  color: var(--color-on-accent);
-  background: var(--color-accent);
-  border: none;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  min-height: 48px;
-}
-
-/* Hover used to set the same background it already had, so the only signal
-   was the lift. It now darkens like every other primary button. */
-.submit-btn:hover {
-  background: var(--button-primary-hover);
-  transform: translateY(-2px);
-}
-
-.submit-btn:active {
-  transform: translateY(0);
-}
-
-.contact-channels {
+.contact__actions {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 8px 22px;
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--color-border-interactive);
+  align-items: center;
+  gap: 16px 28px;
+  margin-top: 28px;
 }
 
 /* Same as the hero's row: whole links, no separators to strand at the start
    of a wrapped line. */
+.contact-channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .contact-channel-link {
   font-family: var(--font-mono);
   font-size: 0.88rem;
   color: var(--text-secondary);
-  text-decoration: none;
   white-space: nowrap;
   transition: color 0.2s ease;
 }
 
-.contact-channel-link:hover,
-.contact-channel-link:active {
+.contact-channel-link:hover {
   color: var(--color-accent);
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-
-.contact-note {
-  margin: 10px 0 0;
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  text-align: center;
 }

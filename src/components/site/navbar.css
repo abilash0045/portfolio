@@ -1,11 +1,12 @@
+/* A full-width bar pinned to the top. It sits above content scrolling under it,
+   so it keeps the raised shadow; nothing in normal flow gets one. */
 .navbar-wrapper {
   position: sticky;
-  top: 16px;
+  top: 0;
   z-index: 1000;
-  width: calc(100% - max(20px, 4vw));
-  /* Tracks .site so the bar and the content share an edge. */
-  max-width: 120rem;
-  margin: 0 auto;
+  background: var(--color-paper);
+  border-bottom: 1px solid var(--color-rule);
+  box-shadow: var(--shadow-raised);
 }
 
 .navbar {
@@ -13,54 +14,67 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 22px;
-  background: var(--bg-card);
-  border: 1px solid var(--bg-card-border);
+  gap: 24px;
+  min-height: var(--header-height);
+}
+
+/* Off screen until it takes focus, then the first thing a keyboard sees. */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+  padding: 10px 16px;
   border-radius: var(--radius-pill);
-  /* Sticky, so content scrolls underneath it. A rule alone leaves the bar
-     sitting in the page rather than above it. */
-  box-shadow: var(--shadow-raised);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transform: translateY(-160%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
 }
 
 .navbar__brand {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-weight: 600;
+  font-size: 0.98rem;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
 }
 
-.navbar__avatar {
+.navbar__mark {
+  display: grid;
+  place-items: center;
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-red), var(--accent-purple));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--color-ink);
-  box-shadow: 0 2px 8px var(--accent-red-glow);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .navbar__nav {
   display: flex;
   align-items: center;
-  gap: 6px;
-  list-style: none;
-  margin: 0;
+  gap: 4px;
+  margin: 0 0 0 auto;
   padding: 0;
+  list-style: none;
 }
 
 .navbar__link {
-  font-size: 0.88rem;
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.92rem;
   font-weight: 500;
   color: var(--text-secondary);
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
   transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
@@ -72,52 +86,27 @@
 .navbar__actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-
-.navbar__status {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 12px;
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  font-weight: 500;
-  color: var(--color-muted);
-  background: var(--color-paper-2);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-pill);
-}
-
-.navbar__status-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--color-accent);
+  gap: 10px;
 }
 
 .navbar__theme-btn {
-  background: transparent;
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border-interactive);
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: transparent;
+  color: var(--text-primary);
   cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease,
     transform 0.2s ease;
 }
 
 .navbar__theme-btn:hover {
-  color: var(--text-primary);
-  border-color: var(--text-secondary);
-  background: var(--color-paper-3);
+  border-color: var(--text-primary);
+  background: var(--color-paper-2);
 }
-
-
 
 /* Menu control. Hidden on wide screens, where the inline list is visible. */
 .navbar__menu-btn {
@@ -125,19 +114,19 @@
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  padding: 8px 14px;
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  background: transparent;
+  padding: 8px 16px;
   border: 1px solid var(--color-border-interactive);
   border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
 }
 
 .navbar__menu-btn:hover {
-  background: var(--bg-card-hover);
+  background: var(--color-paper-2);
 }
 
 .navbar__menu-bars {
@@ -151,24 +140,17 @@
 .navbar__menu-bars span {
   display: block;
   height: 1.5px;
-  background: currentColor;
   border-radius: 2px;
+  background: currentColor;
 }
 
-/* The ring itself now comes from the global :focus-visible rule. This block
-   used to also set border-radius: var(--radius-sm), which reshaped the pill
-   links into rounded rects for as long as they held focus. */
 .navbar__link:active,
 .navbar__menu-btn:active,
 .navbar__theme-btn:active {
   transform: translateY(1px);
 }
 
-@media (max-width: 768px) {
-  .navbar__status {
-    display: none;
-  }
-
+@media (max-width: 820px) {
   .navbar__menu-btn {
     display: inline-flex;
   }
@@ -177,16 +159,16 @@
      removed from the tab order rather than merely invisible. */
   .navbar__nav {
     position: absolute;
-    top: calc(100% + 10px);
-    left: 0;
-    right: 0;
+    top: calc(100% + 1px);
+    left: calc(-1 * var(--gutter));
+    right: calc(-1 * var(--gutter));
     flex-direction: column;
     align-items: stretch;
     gap: 2px;
-    padding: 10px;
-    background: var(--bg-card);
-    border: 1px solid var(--bg-card-border);
-    border-radius: var(--radius-lg);
+    margin: 0;
+    padding: 12px var(--gutter) 20px;
+    background: var(--color-paper);
+    border-bottom: 1px solid var(--color-rule);
     box-shadow: var(--shadow-raised);
   }
 
@@ -201,19 +183,9 @@
   .navbar__link {
     display: flex;
     align-items: center;
-    min-height: 44px;
-    padding: 10px 14px;
-    font-size: 0.95rem;
+    min-height: 48px;
+    padding: 10px 12px;
+    font-size: 1.05rem;
     border-radius: var(--radius-sm);
-  }
-
-  .navbar__link:hover {
-    background: var(--bg-card-hover);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .navbar__nav {
-    transition: none;
   }
 }

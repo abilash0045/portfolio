@@ -1,89 +1,89 @@
 import type { CaseStudy as Study } from "@/content/case-studies";
+import Figure from "./Figure";
+import PipelineDiagram from "./PipelineDiagram";
 import PipelineSimulator from "./PipelineSimulator";
 import ConfigVisitorPlayground from "./ConfigVisitorPlayground";
 
-export default function CaseStudy({ study, number }: { study: Study; number: number }) {
-  // The three that have something to show further down the page get the full
-  // width. It also keeps the two half-width cards paired rather than leaving
-  // one alone in a row.
-  const isFullWidth = ["render-reliability", "dartboard", "config-playground"].includes(
-    study.slug,
-  );
+/** The prose fields, in reading order, with the label each one gets. */
+const FACTS = [
+  { key: "problem", label: "Problem" },
+  { key: "architecture", label: "Architecture" },
+  { key: "contribution", label: "What I did" },
+  { key: "challenges", label: "The hard part" },
+  { key: "results", label: "Result" },
+] as const;
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+type Props = { study: Study; number: number; total: number };
+
+/**
+ * One case study. The left column holds what a skim needs, the title, the
+ * figure and the stack, and stays put on a wide screen while the right column
+ * carries the reading. The two studies with something to try get it below.
+ */
+export default function CaseStudy({ study, number, total }: Props) {
+  const titleId = `${study.slug}-title`;
 
   return (
-    <article className={`study ${isFullWidth ? "study--full" : ""}`} id={study.slug} data-reveal>
-      <div className="study__header">
-        {/* Every card used to say FEATURED PROJECT, which on five cards out
-            of five says nothing. Their order is deliberate (DESIGN.md), so
-            the number is the one thing worth putting here. */}
-        <span className="study__number">{String(number).padStart(2, "0")}</span>
-        <h3 className="study__title">{study.title}</h3>
+    <article className="study" id={study.slug} aria-labelledby={titleId} data-reveal>
+      <div className="study__aside">
+        <p className="study__number">
+          {pad(number)} <span className="study__of">/ {pad(total)}</span>
+        </p>
+        <h3 className="study__title" id={titleId}>
+          {study.title}
+        </h3>
         <p className="study__headline">{study.headline}</p>
-      </div>
 
-      <div className="study__structured-grid">
-        <div className="study__field">
-          <h4 className="study__field-title">Problem</h4>
-          <p className="study__field-text">{study.problem}</p>
-        </div>
+        <p className="study__metric">
+          <span className="study__metric-value">
+            <Figure value={study.metric.value} />
+          </span>
+          <span className="study__metric-label">{study.metric.label}</span>
+        </p>
 
-        <div className="study__field">
-          <h4 className="study__field-title">Architecture</h4>
-          <p className="study__field-text">{study.architecture}</p>
-        </div>
-
-        <div className="study__field">
-          <h4 className="study__field-title">My Contribution</h4>
-          <p className="study__field-text">{study.contribution}</p>
-        </div>
-
-        <div className="study__field">
-          <h4 className="study__field-title">Challenges</h4>
-          <p className="study__field-text">{study.challenges}</p>
-        </div>
-
-        <div className="study__field study__field--full">
-          <h4 className="study__field-title">Results &amp; Impact</h4>
-          <p className="study__field-text" style={{ color: "var(--accent-green)", fontWeight: 600 }}>
-            {study.results}
-          </p>
-        </div>
-      </div>
-
-      {/* Embedded Interactive Simulators */}
-      {study.slug === "render-reliability" && <PipelineSimulator />}
-      {study.slug === "config-playground" && <ConfigVisitorPlayground />}
-
-      <div className="study__footer">
-        <ul className="study__stack" aria-label="Tech Stack">
+        <ul className="study__stack" aria-label="Stack">
           {study.stack.map((tech) => (
             <li key={tech} className="study__tech">
               {tech}
             </li>
           ))}
         </ul>
-
-        <div className="study__links">
-          {study.githubUrl && (
-            <a
-              href={study.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="study__link-btn"
-            >
-              GitHub ↗
-            </a>
-          )}
-          {study.inPageAnchor && (
-            <a
-              href={study.inPageAnchor}
-              className="study__link-btn study__link-btn--primary"
-            >
-              See it below ↓
-            </a>
-          )}
-        </div>
       </div>
+
+      <div className="study__body">
+        <dl className="study__facts">
+          {FACTS.map(({ key, label }) => (
+            <div
+              key={key}
+              className={`study__fact${key === "results" ? " study__fact--result" : ""}`}
+            >
+              <dt>{label}</dt>
+              <dd>{study[key]}</dd>
+            </div>
+          ))}
+        </dl>
+
+        {study.slug === "render-reliability" && <PipelineDiagram />}
+
+        {study.inPageAnchor && (
+          <a className="text-link study__jump" href={study.inPageAnchor}>
+            See it below ↓
+          </a>
+        )}
+      </div>
+
+      {study.slug === "render-reliability" && (
+        <div className="study__extra">
+          <PipelineSimulator />
+        </div>
+      )}
+      {study.slug === "config-playground" && (
+        <div className="study__extra">
+          <ConfigVisitorPlayground />
+        </div>
+      )}
     </article>
   );
 }

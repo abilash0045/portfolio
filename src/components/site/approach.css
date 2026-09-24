@@ -1,0 +1,130 @@
+/* Four principles on a two-by-two, divided by rules rather than boxed. */
+.principles {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-rule);
+}
+
+@media (min-width: 900px) {
+  .principles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.principle {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding-block: clamp(32px, 4vw, 52px);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+@media (min-width: 900px) {
+  .principle:nth-child(odd) {
+    padding-right: clamp(28px, 4vw, 64px);
+    border-right: 1px solid var(--color-rule);
+  }
+
+  .principle:nth-child(even) {
+    padding-left: clamp(28px, 4vw, 64px);
+  }
+}
+
+/* The serif from the hero, used for the numbers and nowhere else in here. */
+.principle__num {
+  font-family: var(--font-serif);
+  font-size: 2.6rem;
+  font-style: italic;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+.principle__title {
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.principle__desc {
+  max-width: 54ch;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* The toolbox is an index: category on the left column line, what is in it on
+   the right, set large enough to read at a glance. */
+.toolbox {
+  margin-top: clamp(64px, 9vw, 128px);
+}
+
+.toolbox__head {
+  display: grid;
+  row-gap: 10px;
+  margin-bottom: 28px;
+}
+
+.toolbox__title {
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  letter-spacing: -0.035em;
+}
+
+.toolbox__intro {
+  color: var(--text-secondary);
+}
+
+.toolbox__list {
+  margin: 0;
+}
+
+.toolbox__row {
+  display: grid;
+  row-gap: 8px;
+  padding-block: 20px;
+  border-top: 1px solid var(--color-rule);
+}
+
+/* On the section head's columns, so the tools line up under its intro. */
+@media (min-width: 900px) {
+  .toolbox__head,
+  .toolbox__row {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(32px, 6vw, 96px);
+    align-items: baseline;
+  }
+}
+
+.toolbox__row:last-child {
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.toolbox__category {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.toolbox__items {
+  margin: 0;
+}
+
+/* Gaps, not separators: a wrapped line would start with one. Plain text, not
+   a control, so no hover. */
+.toolbox__items ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toolbox__item {
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
