@@ -182,6 +182,14 @@ Anti-slop rules from the global voice spec apply: no purple gradient, no three-c
 hero with a generic tagline. Motion respects `prefers-reduced-motion` — the dart snaps to its landing
 point instead of animating.
 
+The page around the map, revised 2026-09-24: an editorial one-pager on a single grid. Warm neutral
+paper and ink in both themes with one vermilion accent, kept to the section numbers, the arrows in
+figures, and the dart. Geist for text, Geist Mono for labels, Instrument Serif italic for the two
+words the headline leans on and nowhere else in the hero. Sections are separated by rules and space,
+not cards; the only panels are the two widgets and the map, because those are used rather than read.
+Each case study keeps its title, headline figure and stack in a column that holds still while its
+facts scroll past. The reasoning is in `NOTES.md`.
+
 ## Content
 
 Case studies, in this order. The first leads because "resisted a week of team-wide investigation" is the
