@@ -47,7 +47,9 @@ export default function Image() {
       >
         {/* The photograph is bright at the top left and dark at the bottom
             right, so a flat scrim would either wash out or crush half of it.
-            This one leans on the light corner and lets the red breathe. */}
+            This one leans on the light corner and lets the red breathe.
+            Satori has no z-index and paints in source order, so the scrim
+            comes first and everything after it lands on top. */}
         <div
           style={{
             position: "absolute",
@@ -61,7 +63,7 @@ export default function Image() {
           }}
         />
 
-        <div style={{ display: "flex", flexDirection: "column", zIndex: 1 }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
               display: "flex",
@@ -107,7 +109,6 @@ export default function Image() {
             display: "flex",
             alignItems: "flex-end",
             justifyContent: "space-between",
-            zIndex: 1,
           }}
         >
           <div style={{ display: "flex", gap: 56 }}>
