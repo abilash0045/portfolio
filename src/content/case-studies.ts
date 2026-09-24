@@ -47,18 +47,21 @@ export const caseStudies: CaseStudy[] = [
       "Automated 85% of customer response workflows, reduced notification delivery latency to under 1.2 seconds, and achieved zero message loss.",
   },
   {
+    // Told the way docs/DESIGN.md tells it: two independent wins, and the
+    // autoscaling change is a move off KEDA on GKE, not a KEDA setup.
     slug: "cloud-cost",
-    title: "Kubernetes Auto Scaling & Performance Optimization",
-    headline: "Cost-optimized Kubernetes microservices with KEDA consumer-lag autoscaling and scale-to-zero Cloud Run instances.",
-    stack: ["Kubernetes", "KEDA", "AWS EKS", "GCP Pub/Sub", "Cloud Run", "Redis", "Kafka"],
+    title: "Cutting Cloud Spend, Twice",
+    headline:
+      "Two independent cuts to cloud spend: a segment-level Redis cache, then moving render autoscaling off KEDA on GKE onto Cloud Run, scaled on Pub/Sub queue depth.",
+    stack: ["Redis", "GKE", "KEDA", "Kafka", "Pub/Sub", "Cloud Run"],
     problem:
-      "Static worker pools on GKE created high idle infrastructure spend during off-peak hours while causing buffer lag during peak traffic spikes.",
+      "Spend was leaking two ways. TTS, voice-clone and lip-sync segments were generated again for every user, even when their parameters overlapped with someone else's. And the render pods on GKE, autoscaled by KEDA on Kafka lag, still cost money while they sat idle.",
     architecture:
-      "Hybrid autoscaling architecture combining KEDA Kafka consumer lag metrics for heavy pod clusters with GCP Cloud Run scale-to-zero queue depth triggers.",
+      "A Redis cache at segment level, shared across users, so a TTS, voice-clone or lip-sync segment with the same parameters is generated once. Render autoscaling moved from KEDA on GKE, which scaled on Kafka consumer lag, to a Cloud Run autoscaler driven by Pub/Sub queue depth that scales to zero between bursts.",
     contribution:
-      "Configured KEDA autoscalers, implemented segment-level Redis caching reaching an 80% hit rate, and migrated bursty queues to Cloud Run.",
+      "Built the segment cache, which holds about an 80% hit rate, and migrated render autoscaling off KEDA onto the Cloud Run autoscaler.",
     challenges:
-      "Decoupling monolithic render steps into granular segment tasks suitable for rapid spin-up and zero-downtime scaling.",
+      "Decoupling monolithic render steps into granular segment tasks, small enough to cache and quick enough to start from zero.",
     results:
       "Reduced monthly cloud spend by ~40% across two independent wins: ~30% from segment caching (80% hit rate) and ~10% from scale-to-zero autoscaling.",
   },
