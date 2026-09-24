@@ -11,8 +11,16 @@
   inset: 0;
 }
 
+/* OpenStreetMap's tiles come in one full-colour style, so the theme is a
+   filter. Dark inverts it to a warm grey, light takes it to aged paper. On the
+   pane rather than each tile: one layer to composite, and a theme switch
+   restyles every tile already on screen without fetching any of them again. */
 .wallmap__canvas .leaflet-tile-pane {
-  filter: brightness(0.95) contrast(1.1);
+  filter: invert(1) grayscale(1) brightness(0.75) contrast(1.1) sepia(0.25);
+}
+
+[data-theme="light"] .wallmap__canvas .leaflet-tile-pane {
+  filter: grayscale(1) sepia(0.3) brightness(1.03) contrast(0.92);
 }
 
 .wallmap__vignette {

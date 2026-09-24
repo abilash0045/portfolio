@@ -58,6 +58,16 @@ real guarantee, without pretending.
 Abilash's call: it's a portfolio, a broken deploy isn't an incident. Everything runs for the signal;
 nothing blocks. Auto-fix reacts to failures, which is what makes the phone loop close.
 
+**2026-09-24: The map uses OpenStreetMap's own tiles, not CARTO's.**
+Since late August 2026 CARTO answers every tile request that carries no API key with a tile that has
+"API KEY REQUIRED" printed across it. The request still returns 200, so nothing failed and nothing
+alerted; the live map simply said "API KEY REQUIRED" all over itself. Free keys exist
+(carto.com/basemaps/apikey), but getting one is a sign-up in a browser, and the map working should
+not wait on that. `tile.openstreetmap.org` was measured on 2026-08-05 (200 in 0.16s) and is already on
+the cloud allowlist. It has one full-colour style, so each theme is a CSS filter on the tile pane
+instead of a second tile set. To bring the CARTO look back: get a key, restore CARTO's URLs in
+`WallMap.tsx` with it, drop the two filters, and credit CARTO in the attribution again.
+
 ## Progress
 
 - [x] 2026-08-05: API behaviour measured (Nominatim, Overpass, both tile sources)
