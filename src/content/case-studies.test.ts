@@ -41,6 +41,34 @@ describe("the dartboard case study", () => {
   });
 });
 
+describe("the cost case study", () => {
+  const study = caseStudies.find((c) => c.slug === "cloud-cost")!;
+  // DESIGN.md's own account of this story: content item 2, up to item 3.
+  const account = design.slice(
+    design.indexOf("2. **Cutting cloud spend"),
+    design.indexOf("3. **A config playground"),
+  );
+
+  // It listed AWS EKS and told the autoscaling as a KEDA build, "configured
+  // KEDA autoscalers" in a "hybrid" alongside Cloud Run. DESIGN.md has the
+  // autoscaling moving off KEDA on GKE and onto Cloud Run.
+  it("names only technology that DESIGN.md's account of it names", () => {
+    expect(account.length, "DESIGN.md's account of this story moved").toBeGreaterThan(100);
+    for (const tech of study.stack) {
+      expect(account, `${tech} is not in DESIGN.md's account of this work`).toContain(tech);
+    }
+  });
+
+  it("tells the autoscaling as a move off KEDA, not a KEDA build", () => {
+    const done = [study.headline, study.architecture, study.contribution].join(" ");
+    const mentions = done.match(/\w+ KEDA\b/g) ?? [];
+    expect(mentions.length, "the move off KEDA is not told at all").toBeGreaterThan(0);
+    for (const mention of mentions) {
+      expect(mention, `KEDA as something built here: "${mention}"`).toMatch(/^(from|off) KEDA/);
+    }
+  });
+});
+
 describe("every case study", () => {
   it("fills every field it promises", () => {
     for (const study of caseStudies) {
