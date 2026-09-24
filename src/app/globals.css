@@ -104,6 +104,10 @@
 /* Same anchor hue, only lightness and chroma move. Switching hue between
    modes is what makes a light theme feel like a different site. */
 [data-theme="light"] {
+  /* html below says dark for everyone, which left the scrollbars, the slider
+     track and form autofill drawn dark on the light page. */
+  color-scheme: light;
+
   --wallmap-vignette: oklch(38% 0.012 40 / 0.20);
   --wallmap-hud-edge: oklch(38% 0.012 40 / 0.10);
 

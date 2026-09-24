@@ -1,7 +1,21 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import Link from "next/link";
+import {
+  applyInitialTheme,
+  chooseTheme,
+  currentTheme,
+  THEME_KEY,
+  type Theme,
+} from "@/lib/theme";
 import "./navbar.css";
 
 const SECTIONS = [
@@ -13,26 +27,28 @@ const SECTIONS = [
   { href: "#contact", label: "Contact" },
 ];
 
+/** The theme lives on <html>. This lets the toggle hear it change. */
+function subscribeToTheme(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+  return () => observer.disconnect();
+}
+
 export default function Navbar() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  // The server cannot know the theme, so it renders the dark toggle and React
+  // swaps in the real one straight after hydration rather than calling the
+  // difference a mismatch.
+  const theme = useSyncExternalStore(subscribeToTheme, currentTheme, (): Theme => "dark");
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement | null>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("portfolio-theme") as
-      | "dark"
-      | "light"
-      | null;
-    const initial =
-      saved ||
-      (window.matchMedia("(prefers-color-scheme: light)").matches
-        ? "light"
-        : "dark");
-    queueMicrotask(() => {
-      setTheme(initial);
-      document.documentElement.setAttribute("data-theme", initial);
-    });
-  }, []);
+  // React's development remount strips attributes it does not manage from
+  // <html>, this one included. In production the inline script has already
+  // set it and this writes the same value again.
+  useLayoutEffect(() => applyInitialTheme(THEME_KEY), []);
 
   const closeMenu = useCallback((returnFocus = false) => {
     setMenuOpen(false);
@@ -60,12 +76,7 @@ export default function Navbar() {
     return () => wide.removeEventListener("change", onChange);
   }, [menuOpen, closeMenu]);
 
-  const toggleTheme = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    localStorage.setItem("portfolio-theme", next);
-    document.documentElement.setAttribute("data-theme", next);
-  };
+  const toggleTheme = () => chooseTheme(theme === "dark" ? "light" : "dark");
 
   return (
     <header className="navbar-wrapper">

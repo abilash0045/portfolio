@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
+import { applyInitialTheme, THEME_KEY } from "@/lib/theme";
 import "./globals.css";
+
+/** Runs during parsing, before first paint. See applyInitialTheme. */
+const THEME_SCRIPT = `(${applyInitialTheme.toString()})(${JSON.stringify(THEME_KEY)})`;
 
 const inter = Inter({
   subsets: ["latin"],
@@ -54,6 +58,9 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>{children}</body>
     </html>
   );
