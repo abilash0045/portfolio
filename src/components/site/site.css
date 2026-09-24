@@ -255,10 +255,15 @@
   transform: translateY(0);
 }
 
+/* Wraps between links and never inside one. It had neither: on a phone the
+   row squeezed each link until "GitHub ↗" broke and left its arrow alone on
+   a second line. The "·" separators went too, since a wrapped row put one at
+   the start of a line with nothing before it. Space does their job. */
 .hero__socials {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 8px 22px;
   margin-top: 24px;
   font-family: var(--font-mono);
   font-size: 0.85rem;
@@ -268,6 +273,7 @@
 .hero__social-link {
   color: var(--text-secondary);
   text-decoration: none;
+  white-space: nowrap;
   transition: color 0.2s ease;
 }
 

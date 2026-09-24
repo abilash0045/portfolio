@@ -273,6 +273,34 @@ test("home page stays about the work", async ({ page }) => {
   expect(body).not.toContain("lpa");
 });
 
+// At 390px "GitHub ↗" broke inside itself and stranded its arrow on a second
+// line, and a wrapped row could open with a "·" that separated nothing.
+test("link rows wrap between links, never inside one", async ({ page }) => {
+  for (const width of [320, 390, 768, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const rows = page.locator(".hero__socials, .contact-channels");
+
+    const broken = await rows.locator("a").evaluateAll((links) =>
+      links
+        .filter(
+          (a) => a.getBoundingClientRect().height > parseFloat(getComputedStyle(a).fontSize) * 2,
+        )
+        .map((a) => a.textContent?.trim()),
+    );
+    expect(broken, `links broken across lines at ${width}px`).toEqual([]);
+
+    const strays = await rows.evaluateAll((els) =>
+      els.flatMap((row) =>
+        Array.from(row.children)
+          .filter((child) => child.tagName !== "A")
+          .map((child) => child.textContent?.trim()),
+      ),
+    );
+    expect(strays, "separators that can strand at the start of a line").toEqual([]);
+  }
+});
+
 test("home page is responsive from small mobile to ultra-wide", async ({
   page,
 }) => {

@@ -144,7 +144,6 @@ export default function Hero() {
         >
           GitHub ↗
         </a>
-        <span>·</span>
         <a
           href="https://www.linkedin.com/in/abilash0045/"
           target="_blank"
@@ -153,7 +152,6 @@ export default function Hero() {
         >
           LinkedIn ↗
         </a>
-        <span>·</span>
         <a href={`mailto:${EMAIL}`} className="hero__social-link">
           {EMAIL}
         </a>
