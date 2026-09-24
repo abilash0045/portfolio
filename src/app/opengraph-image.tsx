@@ -1,13 +1,12 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { SITE_NAME, SITE_ROLE } from "@/lib/site";
+import { SITE_CARD, SITE_NAME, SITE_ROLE } from "@/lib/site";
 
-export const alt =
-  "Abilash S L, backend engineer. 25,000 renders a day, 60% to 98% render reliability, 3 days to 1 day config approval.";
+export const alt = SITE_CARD.alt;
 
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+export const size = { width: SITE_CARD.width, height: SITE_CARD.height };
+export const contentType = SITE_CARD.type;
 
 const asset = (name: string) => readFile(join(process.cwd(), "assets", name));
 

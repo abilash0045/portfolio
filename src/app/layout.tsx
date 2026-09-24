@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
-import { SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
+import { SHARED_OPEN_GRAPH, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 import { applyInitialTheme, THEME_KEY } from "@/lib/theme";
 import "./globals.css";
 
@@ -35,12 +35,10 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
+    ...SHARED_OPEN_GRAPH,
     title: TITLE,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
-    siteName: "Abilash S L Portfolio",
-    type: "website",
-    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",

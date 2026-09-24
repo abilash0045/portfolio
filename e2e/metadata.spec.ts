@@ -10,43 +10,53 @@ import { SITE_URL } from "../src/lib/site";
 const content = (page: Page, selector: string) =>
   page.locator(selector).getAttribute("content");
 
-test("the canonical and Open Graph urls point at the real host", async ({
-  page,
-}) => {
-  await page.goto("/");
+// The dartboard inherited the home page's canonical and og:url, which tells a
+// search engine it is a copy of the home page and sends every shared link's
+// preview there. Each page has to name itself.
+const PAGES = [
+  { path: "/", url: SITE_URL },
+  { path: "/dartboard", url: `${SITE_URL}/dartboard` },
+];
 
-  const canonical = await page
-    .locator('link[rel="canonical"]')
-    .getAttribute("href");
-  expect(canonical).toBe(SITE_URL);
-  expect(await content(page, 'meta[property="og:url"]')).toBe(SITE_URL);
+for (const { path, url } of PAGES) {
+  test(`${path}: the canonical and Open Graph urls name this page on the real host`, async ({
+    page,
+  }) => {
+    await page.goto(path);
 
-  for (const value of [canonical, await content(page, 'meta[property="og:url"]')]) {
-    expect(value, "a url still points at a host that is not this site").not.toContain(
-      "portfolio-abilash",
+    const canonical = await page
+      .locator('link[rel="canonical"]')
+      .getAttribute("href");
+    expect(canonical).toBe(url);
+    expect(await content(page, 'meta[property="og:url"]')).toBe(url);
+
+    for (const value of [canonical, await content(page, 'meta[property="og:url"]')]) {
+      expect(value, "a url still points at a host that is not this site").not.toContain(
+        "portfolio-abilash",
+      );
+    }
+  });
+
+  test(`${path}: the link preview has an image, sized and described`, async ({ page }) => {
+    await page.goto(path);
+
+    const image = await content(page, 'meta[property="og:image"]');
+    expect(image, "no og:image, so shares render as a bare text card").toBeTruthy();
+    expect(image!.startsWith(SITE_URL), "og:image must be absolute").toBe(true);
+
+    expect(await content(page, 'meta[property="og:image:width"]')).toBe("1200");
+    expect(await content(page, 'meta[property="og:image:height"]')).toBe("630");
+
+    const alt = await content(page, 'meta[property="og:image:alt"]');
+    expect(alt?.length ?? 0).toBeGreaterThan(20);
+
+    // summary_large_image without an image is the combination that was shipped.
+    expect(await content(page, 'meta[name="twitter:card"]')).toBe(
+      "summary_large_image",
     );
-  }
-});
-
-test("the link preview has an image, sized and described", async ({ page }) => {
-  await page.goto("/");
-
-  const image = await content(page, 'meta[property="og:image"]');
-  expect(image, "no og:image, so shares render as a bare text card").toBeTruthy();
-  expect(image!.startsWith(SITE_URL), "og:image must be absolute").toBe(true);
-
-  expect(await content(page, 'meta[property="og:image:width"]')).toBe("1200");
-  expect(await content(page, 'meta[property="og:image:height"]')).toBe("630");
-
-  const alt = await content(page, 'meta[property="og:image:alt"]');
-  expect(alt?.length ?? 0).toBeGreaterThan(20);
-
-  // summary_large_image without an image is the combination that was shipped.
-  expect(await content(page, 'meta[name="twitter:card"]')).toBe(
-    "summary_large_image",
-  );
-  expect(await content(page, 'meta[name="twitter:image"]')).toBeTruthy();
-});
+    expect(await content(page, 'meta[name="twitter:image"]')).toBeTruthy();
+  });
+}
 
 test("the card renders at the size it claims", async ({ request }) => {
   const response = await request.get("/opengraph-image");
