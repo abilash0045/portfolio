@@ -14,7 +14,7 @@ import { RESOLVED_COLOURS } from "@/lib/site";
 export const size = { width: 96, height: 96 };
 export const contentType = "image/png";
 
-const interBold = await readFile(join(process.cwd(), "assets", "Inter-Bold.ttf"));
+const geistSemiBold = await readFile(join(process.cwd(), "assets", "Geist-SemiBold.ttf"));
 
 export default function Icon() {
   return new ImageResponse(
@@ -29,9 +29,9 @@ export default function Icon() {
           borderRadius: "50%",
           background: RESOLVED_COLOURS.accent,
           color: RESOLVED_COLOURS.paper,
-          fontFamily: "Inter",
+          fontFamily: "Geist",
           fontSize: 62,
-          fontWeight: 700,
+          fontWeight: 600,
           letterSpacing: -2,
         }}
       >
@@ -40,7 +40,7 @@ export default function Icon() {
     ),
     {
       ...size,
-      fonts: [{ name: "Inter", data: interBold, style: "normal", weight: 700 }],
+      fonts: [{ name: "Geist", data: geistSemiBold, style: "normal", weight: 600 }],
     },
   );
 }

@@ -1,134 +1,106 @@
-/* One accent, anchored at hue 28. Every neutral carries a trace of that
-   chroma so the greys belong to the same page as the red. The previous
-   palette was Tailwind's stock values unmodified (#3b82f6 is blue-500,
-   #a1a1aa is zinc-400), which is the most recognisable generated-UI tell
-   there is, and it ran seven accents at once. */
+/* Paper and ink, one accent. The rebuild moved off the reddish near-black that
+   tinted every neutral, towards warm paper and a vermilion that shows up in
+   small doses: the numbers, the links on hover, the dart. Every text pairing
+   here was measured at 4.68:1 or better in both themes, and every control
+   boundary at 3.5:1, before it went in.
+
+   Dark is the :root default and light overrides it, because the inline script
+   in layout.tsx sets data-theme before first paint and JavaScript-off visitors
+   get the dark page the site has always served them. */
 :root {
-  --color-paper: oklch(14% 0.010 28);
-  --color-paper-2: oklch(18% 0.012 28);
-  --color-paper-3: oklch(23% 0.012 28);
-  --color-rule: oklch(31% 0.010 28);
+  --color-paper: oklch(15% 0.004 60);
+  --color-paper-2: oklch(18.5% 0.005 60);
+  --color-paper-3: oklch(22.5% 0.006 60);
+  --color-rule: oklch(28% 0.006 60);
   /* Separate token for the boundary of an actual control. WCAG's 3:1
      requirement covers UI components, not decorative hairlines, and a 3:1
-     outline on every card would read as a table. */
-  --color-border-interactive: oklch(50% 0.012 28);
-  --color-grid: oklch(95% 0.006 40 / 0.03);
-  --color-scroll-thumb: oklch(95% 0.006 40 / 0.16);
-  --color-neutral: oklch(60% 0.010 28);
-  --color-muted: oklch(74% 0.008 28);
-  --color-ink: oklch(95% 0.006 40);
-  --color-accent: oklch(64% 0.170 28);
-  --color-focus: oklch(72% 0.170 28);
-  --color-on-accent: oklch(14% 0.010 28);
+     outline on every block would read as a table. */
+  --color-border-interactive: oklch(52% 0.008 70);
+  --color-neutral: oklch(66% 0.006 85);
+  --color-muted: oklch(78% 0.006 85);
+  --color-ink: oklch(95.5% 0.004 85);
+  --color-accent: oklch(71% 0.17 40);
+  --color-accent-glow: oklch(71% 0.17 40 / 0.28);
+  --color-focus: oklch(71% 0.17 40);
+  --color-on-accent: oklch(15% 0.004 60);
+  --color-scroll-thumb: oklch(95.5% 0.004 85 / 0.18);
 
-  /* Surfaces are opaque values, not alpha. Transparency modifies an
-     overlay; it does not define a colour. */
+  /* One surface for anything set into a panel: text fields, code panes, the
+     trough behind a segmented toggle. Opaque, so it is the same colour over
+     any parent. */
+  --color-inset: oklch(12.5% 0.004 60);
+
+  /* The names the map and the two widgets were written against. */
   --bg-primary: var(--color-paper);
   --bg-card: var(--color-paper-2);
   --bg-card-hover: var(--color-paper-3);
   --bg-card-border: var(--color-rule);
-
+  --border-subtle: var(--color-rule);
   --text-primary: var(--color-ink);
   --text-secondary: var(--color-muted);
   --text-muted: var(--color-neutral);
+  --button-primary-hover: oklch(76% 0.15 40);
 
-  /* The decorative accents are gone. Anything that used to reach for a
-     second hue now reaches for the ink, which is what "one accent, three
-     percent of the viewport" actually means in practice. */
-  --accent-red: var(--color-accent);
-  --accent-red-glow: oklch(64% 0.170 28 / 0.28);
-  --accent-blue: var(--color-ink);
-  --accent-violet: var(--color-ink);
-  --accent-purple: var(--color-ink);
-  --accent-cyan: var(--color-ink);
-  --accent-green: var(--color-ink);
-  --accent-amber: var(--color-ink);
-
-  /* One surface for anything set into a card: text fields, result rows,
-     the trough behind a segmented toggle, the panes inside the two
-     widgets. Nine different rgba(0, 0, 0, 0.2-0.5) values used to do this
-     job, and every one of them stays near-black in light theme no matter
-     what the theme says, because alpha over an unknown parent is not a
-     colour. This is the last of the alpha-as-colour values on the site. */
-  --color-inset: oklch(11% 0.010 28);
-
-  /* The map's edge shading. Both were raw near-black values written when the
-     basemap was only ever CARTO's dark tiles. The tiles now follow the theme,
-     so these have to as well or the light map wears a black frame. */
-  --wallmap-vignette: oklch(10% 0.010 28 / 0.85);
-  --wallmap-hud-edge: oklch(10% 0.010 28 / 0.4);
+  /* The map's edge shading, which has to follow the tiles' theme or the light
+     map wears a black frame. */
+  --wallmap-vignette: oklch(9% 0.004 60 / 0.85);
+  --wallmap-hud-edge: oklch(9% 0.004 60 / 0.4);
 
   /* The ring is a token because keyboard focus is not a per-component
      decision. Components override the offset only where 3px is clipped. */
   --focus-ring: 2px solid var(--color-focus);
   --focus-ring-offset: 3px;
 
-  --border-subtle: var(--color-rule);
-  /* The glass tokens are gone. --glass-bg and --glass-border were aliases of
-     --bg-card and --bg-card-border, so "glass" was two names for a surface the
-     site already had, and --glass-shadow was a 32px drop shadow on things that
-     do not float. Every backdrop-filter that went with them sat on a fully
-     opaque background, measured at alpha 1.0, so all sixteen were blurring
-     something nothing could see through.
-
-     What survives is elevation for things that genuinely sit above the page:
-     the sticky bar, the menu panel, and the chrome over the map. Tighter and
-     far lighter, because its job is separation, not depth. */
-  --shadow-raised: 0 2px 10px oklch(8% 0.010 28 / 0.50);
-
-  --button-primary-hover: oklch(69% 0.170 28);
-  --button-secondary-hover: var(--color-paper-3);
-  --button-secondary-border: var(--color-rule);
+  /* Elevation only for what genuinely sits above the page: the sticky bar,
+     the menu panel, and the chrome over the map. Its job is separation, not
+     depth. There are no glass tokens and no backdrop blur anywhere. */
+  --shadow-raised: 0 1px 0 oklch(0% 0 0 / 0.35), 0 10px 30px oklch(0% 0 0 / 0.35);
 
   --radius-sm: 8px;
-  --radius-md: 14px;
+  --radius-md: 12px;
   --radius-lg: 20px;
-  --radius-xl: 24px;
+  --radius-xl: 28px;
   --radius-pill: 9999px;
 
-  /* --font-body, --font-display and --font-mono are set on <html> by
-     next/font in layout.tsx. They used to be redeclared here as
-     `--font-body: var(--font-body), -apple-system, ...`, which is a custom
-     property defined in terms of itself: invalid at computed-value time, so
-     the whole declaration was thrown out, fallback chain included. All three
-     computed to nothing, every element fell through to the browser default,
-     and the entire site rendered in Times while 114 KB of Inter, Plus Jakarta
-     Sans and JetBrains Mono downloaded and styled none of it.
+  /* --font-body, --font-mono and --font-serif are set on <html> by next/font
+     in layout.tsx, with metric-matched local fallbacks. Never redeclare them
+     here in terms of themselves: a custom property defined as its own var()
+     is invalid, the whole declaration is dropped, and the site once rendered
+     in Times that way while every webfont downloaded and styled nothing.
+     Display type is the body family at heavier weights and tighter tracking. */
+  --font-display: var(--font-body);
 
-     Nothing replaces them. next/font already emits a metric-matched local
-     fallback ("Inter Fallback" and friends) sized to the real face, which is
-     a better fallback than a hand-written system stack because it does not
-     shift the layout when the webfont arrives. */
+  --gutter: clamp(20px, 5vw, 56px);
+  --container: 88rem;
+  --header-height: 64px;
+  --measure: 62ch;
 }
 
-/* Same anchor hue, only lightness and chroma move. Switching hue between
-   modes is what makes a light theme feel like a different site. */
 [data-theme="light"] {
-  /* html below says dark for everyone, which left the scrollbars, the slider
-     track and form autofill drawn dark on the light page. */
+  /* html below says dark for everyone, which would draw the scrollbars, the
+     slider track and form autofill for a dark page on the light one. */
   color-scheme: light;
 
-  --wallmap-vignette: oklch(38% 0.012 40 / 0.20);
-  --wallmap-hud-edge: oklch(38% 0.012 40 / 0.10);
+  --color-paper: oklch(98.6% 0.004 85);
+  --color-paper-2: oklch(96.4% 0.005 85);
+  --color-paper-3: oklch(93.6% 0.006 85);
+  --color-rule: oklch(89.5% 0.006 85);
+  --color-border-interactive: oklch(62% 0.008 70);
+  --color-neutral: oklch(50% 0.008 60);
+  --color-muted: oklch(38% 0.008 60);
+  --color-ink: oklch(19% 0.008 60);
+  --color-accent: oklch(53.5% 0.185 36);
+  --color-accent-glow: oklch(53.5% 0.185 36 / 0.18);
+  --color-focus: oklch(53.5% 0.185 36);
+  --color-on-accent: oklch(99% 0.003 85);
+  --color-scroll-thumb: oklch(19% 0.008 60 / 0.22);
+  --color-inset: oklch(99.6% 0.002 85);
+  --button-primary-hover: oklch(48% 0.185 36);
 
-  --color-paper: oklch(97% 0.008 40);
-  --color-paper-2: oklch(94% 0.010 40);
-  --color-paper-3: oklch(90% 0.010 40);
-  --color-rule: oklch(84% 0.010 40);
-  --color-neutral: oklch(52% 0.012 28);
-  --color-muted: oklch(41% 0.012 28);
-  --color-ink: oklch(20% 0.014 28);
-  --color-accent: oklch(52% 0.190 28);
-  --color-focus: oklch(52% 0.190 28);
-  --color-on-accent: oklch(97% 0.008 40);
-  --color-border-interactive: oklch(58% 0.014 28);
-  --color-inset: oklch(99% 0.003 40);
-  --color-grid: oklch(20% 0.014 28 / 0.05);
-  --color-scroll-thumb: oklch(20% 0.014 28 / 0.22);
+  --wallmap-vignette: oklch(40% 0.008 60 / 0.18);
+  --wallmap-hud-edge: oklch(40% 0.008 60 / 0.09);
 
-  --accent-red-glow: oklch(52% 0.190 28 / 0.20);
-  --shadow-raised: 0 2px 10px oklch(20% 0.014 28 / 0.09);
-  --button-primary-hover: oklch(47% 0.190 28);
+  --shadow-raised: 0 1px 0 oklch(19% 0.008 60 / 0.06), 0 10px 30px oklch(19% 0.008 60 / 0.07);
 }
 
 *, *::before, *::after {
@@ -137,7 +109,10 @@
 
 html {
   scroll-behavior: smooth;
+  /* Anchor jumps land below the sticky header instead of under it. */
+  scroll-padding-top: calc(var(--header-height) + 20px);
   color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -146,32 +121,28 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 1.0625rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 
-/* A single quiet grid. The three blurred radial orbs that used to sit
-   here are the most recognisable generated-page background there is. */
-.ambient-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  overflow: hidden;
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
-.ambient-bg__grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, var(--color-grid) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--color-grid) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 30%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 30%, transparent 100%);
+p {
+  margin: 0;
+  text-wrap: pretty;
 }
 
 a {
@@ -179,11 +150,20 @@ a {
   text-decoration: none;
 }
 
-/* Every focusable thing gets the same ring, defined once. Before this,
-   four selectors in navbar.css had a ring and nothing else on the site
-   did, so tabbing off the header went dark. Declaring it on the universal
-   match means a control added later cannot forget it. Outline follows the
-   element's own border-radius, so pills stay pills while focused. */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+/* The one width everything lines up to. */
+.container {
+  width: min(100% - 2 * var(--gutter), var(--container));
+  margin-inline: auto;
+}
+
+/* Every focusable thing gets the same ring, defined once, so a control added
+   later cannot forget it. Outline follows the element's own border-radius, so
+   pills stay pills while focused. */
 :focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-ring-offset);
@@ -203,14 +183,13 @@ a {
   border: 0;
 }
 
-/* Placeholders were inheriting the browser default, which is derived from
-   the text colour and lands well under 4.5:1 on a dark field. */
+/* The browser's default placeholder is derived from the text colour and lands
+   well under 4.5:1. */
 ::placeholder {
   color: var(--text-muted);
   opacity: 1;
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -225,17 +204,13 @@ a {
   background: var(--color-neutral);
 }
 
-/* The project rule is that every animation respects this. Three stylesheets
-   each guarded two or three of their own rules and the other twenty-odd
-   transitions were unguarded, so the guard lives here instead: one block
-   that a new rule cannot escape. Animations go to near-zero rather than
-   none so animationend still fires and nothing waits forever on it.
-   Transitions go to zero. They used to go to 0.01ms as well, but
-   transition-property defaults to all, so that gave every element on the
-   page a transition on every property: each style change, even an instant
-   jump, reached layout a frame late. Nothing here waits on transitionend.
-   scroll-behavior is the one motion-sensitive visitors most often disable
-   and it was set to smooth unconditionally. */
+/* The project rule is that every animation respects this, so the guard lives
+   here, in one block that a new rule cannot escape. Animations go to near-zero
+   rather than none so animationend still fires and nothing waits forever on it.
+   Transitions go to zero: transition-property defaults to all, so a blanket
+   near-zero duration would give every element on the page a transition on
+   every property, and each style change would reach layout a frame late.
+   Nothing here waits on transitionend. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -254,11 +229,9 @@ a {
 
    Both conditions on this query are load-bearing, and they are on the hidden
    state rather than on the transition on purpose. `scripting: enabled` means a
-   browser with JavaScript off never hides anything, so a reader without it
-   sees the whole page instead of a blank one; a browser that does not know the
-   feature fails the query and does the same. `prefers-reduced-motion` means
-   someone who asked for less of it gets the content outright, with nothing to
-   animate rather than an animation shortened to nothing.
+   browser with JavaScript off never hides anything; a browser that does not
+   know the feature fails the query and does the same. `prefers-reduced-motion`
+   means someone who asked for less of it gets the content outright.
 
    ScrollReveal.tsx sets data-revealed. It cannot add the hidden state itself:
    that has to ship in the HTML or the page would paint, hide, then reveal. */
@@ -267,8 +240,8 @@ a {
     opacity: 0;
     transform: translateY(14px);
     transition:
-      opacity 520ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+      opacity 560ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
     will-change: opacity, transform;
   }
 

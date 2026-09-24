@@ -65,16 +65,26 @@ test("the glass tokens are gone, not just unused", async ({ page }) => {
 test("only things that float are elevated", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/", { waitUntil: "networkidle" });
-  await page.locator("#case-studies").scrollIntoViewIfNeeded();
+  await page.locator("#work").scrollIntoViewIfNeeded();
 
   const shadowed = (sel: string) =>
     page.locator(sel).first().evaluate((el) => getComputedStyle(el).boxShadow);
 
   // In normal flow: a rule and a surface, nothing hovering.
-  for (const sel of [".study", ".tech-card", ".philosophy-card", ".magazine-card"]) {
+  for (const sel of [
+    ".study",
+    ".timeline__item",
+    ".principle",
+    ".toolbox__row",
+    ".sim-container",
+    ".pg-container",
+    ".pipeline",
+  ]) {
     expect(await shadowed(sel), `${sel} still casts a shadow`).toBe("none");
   }
 
   // Sticky over scrolling content, so it needs to sit above the page.
-  expect(await shadowed(".navbar"), "the sticky bar lost its separation").not.toBe("none");
+  expect(await shadowed(".navbar-wrapper"), "the sticky bar lost its separation").not.toBe(
+    "none",
+  );
 });

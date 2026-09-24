@@ -1,149 +1,142 @@
+/* The visitor playground, under the config case study. */
 .pg-container {
-  margin: 32px 0 40px;
-  background: var(--bg-card);
-  border: 1px solid var(--bg-card-border);
-  border-radius: var(--radius-lg);
-  padding: clamp(16px, 3vw, 28px);
   width: 100%;
+  padding: clamp(20px, 3.4vw, 40px);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-xl);
+  background: var(--color-paper-2);
 }
 
 .pg-header {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .pg-title {
-  font-size: clamp(1.1rem, 2vw, 1.3rem);
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  letter-spacing: -0.03em;
 }
 
 .pg-subtitle {
-  font-size: clamp(0.82rem, 1.5vw, 0.9rem);
+  max-width: 60ch;
+  font-size: 0.95rem;
   color: var(--text-secondary);
-  margin: 0;
 }
 
 .pg-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .pg-tab {
-  background: var(--color-inset);
+  min-height: 40px;
+  padding: 8px 16px;
   border: 1px solid var(--color-border-interactive);
+  border-radius: var(--radius-pill);
+  background: transparent;
   color: var(--text-secondary);
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: var(--radius-md);
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-  min-height: 38px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+    transform 0.2s ease;
 }
 
-/* Both of these key off aria-selected rather than a class, so what a tab
-   looks like and what a screen reader is told about it cannot drift apart.
-   The selected look used to ride on a .pg-tab--active class, and an
-   unscoped .pg-tab:hover outspecified it: hovering the selected tab put ink
-   text on the accent fill at 2.45:1 and dropped its selected appearance at
-   the same time. */
+/* Both states key off aria-selected rather than a class, so what a tab looks
+   like and what a screen reader is told about it cannot drift apart. */
 .pg-tab[aria-selected="false"]:hover {
+  border-color: var(--text-primary);
   color: var(--text-primary);
-  background: var(--color-paper-3);
+}
+
+.pg-tab[aria-selected="true"] {
+  border-color: var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
 .pg-tab:active {
   transform: translateY(1px);
 }
 
-.pg-tab[aria-selected="true"] {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--color-on-accent);
-}
-
 .pg-workspace {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 14px;
   width: 100%;
 }
 
-@media (max-width: 860px) {
+@media (min-width: 860px) {
   .pg-workspace {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
+/* No overflow: hidden here. The code scrolls itself, and clipping the pane
+   would clip the code's focus ring with it. */
 .pg-pane {
-  background: var(--color-inset);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 16px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-lg);
+  background: var(--color-inset);
 }
 
+/* overflow-wrap because "config.accept(ValidateVisitor)" is one word to the
+   browser and wider than the pane on a 320px phone. */
 .pg-pane__title {
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  margin-bottom: 10px;
   display: flex;
+  flex-wrap: wrap;
+  overflow-wrap: anywhere;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 6px;
+  margin-bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Says outright that the pane is an illustration, not something executing. */
+.pg-pane__note {
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--text-muted);
 }
 
 .pg-code {
-  font-family: var(--font-mono);
-  font-size: clamp(0.75rem, 1.2vw, 0.82rem);
-  line-height: 1.6;
-  color: var(--color-muted);
+  flex: 1;
+  min-width: 0;
   margin: 0;
-  /* `word-break: break-all` broke inside tokens, so at 390px the sample read
-     "sampl e-a" and "1 080p". `pre-wrap` then rewrapped the JSON and lost the
-     column alignment that makes it readable in the first place. Code does not
-     reflow: it holds its shape and scrolls sideways when it has to. */
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  /* Code does not reflow: it holds its shape and scrolls sideways when it has
+     to. break-all once split "sample-a" into "sampl e-a" at 390px. */
   white-space: pre;
   overflow-x: auto;
-  min-width: 0;
-  flex: 1;
 }
 
 .pg-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-subtle);
-  font-size: 0.8rem;
+  gap: 8px 24px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-rule);
+  font-size: 0.88rem;
   color: var(--text-secondary);
 }
 
 .pg-stat-val {
-  font-weight: 700;
-  color: var(--accent-amber);
-}
-
-.pg-code--input {
-  color: var(--color-muted);
-}
-
-/* Says outright that the pane is an illustration. The previous label read
-   "Live Execution" over output nothing had executed. */
-.pg-pane__note {
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--color-neutral);
+  font-weight: 600;
+  color: var(--text-primary);
 }

@@ -1,35 +1,33 @@
+import { EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_NAME, SOURCE_URL } from "@/lib/site";
+
 export default function Footer() {
   return (
     <footer className="footer">
-      <div className="footer__grid">
-        <div>
-          <p style={{ margin: "0 0 4px", fontWeight: 600, color: "var(--text-primary)" }}>
-            Abilash S L
-          </p>
-          <p style={{ margin: 0 }}>
-            Open source engineering portfolio. Built with Next.js 16, TypeScript, Leaflet &amp; OpenStreetMap.
-          </p>
-        </div>
+      <div className="container footer__inner">
+        <p className="footer__credit">
+          <span className="footer__name">{SITE_NAME}</span>. Built with Next.js,
+          Leaflet and OpenStreetMap.
+        </p>
 
         <ul className="footer__links">
           <li>
-            <a className="footer__link" href="https://github.com/abilash0045" target="_blank" rel="noopener noreferrer">
+            <a className="footer__link" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
               GitHub
             </a>
           </li>
           <li>
-            <a className="footer__link" href="https://www.linkedin.com/in/abilash0045/" target="_blank" rel="noopener noreferrer">
+            <a className="footer__link" href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
               LinkedIn
             </a>
           </li>
           <li>
-            <a className="footer__link" href="mailto:abilash0045@gmail.com">
+            <a className="footer__link" href={`mailto:${EMAIL}`}>
               Email
             </a>
           </li>
           <li>
-            <a className="footer__link" href="https://github.com/abilash0045/portfolio" target="_blank" rel="noopener noreferrer">
-              Source Code
+            <a className="footer__link" href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
+              Source
             </a>
           </li>
         </ul>

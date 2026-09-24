@@ -19,16 +19,15 @@ test("the font tokens actually resolve", async ({ page }) => {
       body: root.getPropertyValue("--font-body").trim(),
       display: root.getPropertyValue("--font-display").trim(),
       mono: root.getPropertyValue("--font-mono").trim(),
+      serif: root.getPropertyValue("--font-serif").trim(),
     };
   });
 
-  expect(tokens.body, "--font-body resolves to nothing").toContain("Inter");
-  expect(tokens.display, "--font-display resolves to nothing").toContain(
-    "Plus Jakarta Sans",
-  );
-  expect(tokens.mono, "--font-mono resolves to nothing").toContain(
-    "JetBrains Mono",
-  );
+  expect(tokens.body, "--font-body resolves to nothing").toMatch(/^['"]?Geist['"]?,/);
+  // Display type is the body family, set heavier and tighter.
+  expect(tokens.display, "--font-display resolves to nothing").toMatch(/^['"]?Geist['"]?,/);
+  expect(tokens.mono, "--font-mono resolves to nothing").toContain("Geist Mono");
+  expect(tokens.serif, "--font-serif resolves to nothing").toContain("Instrument Serif");
 });
 
 test("the page renders in the fonts it downloads, not a browser default", async ({
@@ -43,9 +42,10 @@ test("the page renders in the fonts it downloads, not a browser default", async 
     };
     return {
       body: fam("body"),
-      heading: fam(".hero__name"),
+      heading: fam(".hero__title"),
       lede: fam(".hero__lede"),
-      mono: fam(".hero__tech-tag"),
+      mono: fam(".hero__eyebrow"),
+      serif: fam(".hero__title em"),
     };
   });
 
@@ -55,15 +55,20 @@ test("the page renders in the fonts it downloads, not a browser default", async 
     );
   }
 
-  expect(resolved.body).toContain("Inter");
-  expect(resolved.heading).toContain("Inter");
+  const first = (family: string) => family.split(",")[0].replace(/["']/g, "").trim();
+  expect(first(resolved.body)).toBe("Geist");
+  expect(first(resolved.heading)).toBe("Geist");
+  expect(first(resolved.lede)).toBe("Geist");
+  expect(first(resolved.mono)).toBe("Geist Mono");
+  // The serif is meant to be seen: the two italic words in the headline.
+  expect(first(resolved.serif)).toBe("Instrument Serif");
 });
 
 test("every downloaded family is used by something", async ({ page }) => {
   await page.goto("/");
 
   const unused = await page.evaluate(() => {
-    const wanted = ["Inter", "Plus Jakarta Sans", "JetBrains Mono"];
+    const wanted = ["Geist", "Geist Mono", "Instrument Serif"];
     const inUse = new Set<string>();
     document.querySelectorAll("*").forEach((el) => {
       const first = getComputedStyle(el).fontFamily.split(",")[0].replace(/["']/g, "").trim();

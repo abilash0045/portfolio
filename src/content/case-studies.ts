@@ -2,6 +2,9 @@ export type CaseStudy = {
   slug: string;
   title: string;
   headline: string;
+  /** The one figure the card leads with. Every number in it is one the study's
+      own text already states; case-studies.test.ts holds it to that. */
+  metric: { value: string; label: string };
   stack: string[];
   problem: string;
   architecture: string;
@@ -18,6 +21,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "render-reliability",
     title: "AI Video Generation Platform",
     headline: "Scalable event-driven video rendering microservices processing 25,000+ daily renders across GKE and Cloud Run.",
+    metric: { value: "60% → 98%", label: "Render reliability" },
     stack: ["Java", "Spring Boot", "Kafka", "Kubernetes", "AWS EFS", "GCP Cloud Run", "MongoDB"],
     problem:
       "Render success sat at 60%. Four out of ten renders failed un-reproducibly under concurrent load, with retries consuming excessive cloud compute and delaying output delivery.",
@@ -34,6 +38,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "whatsapp-automation",
     title: "WhatsApp Automation Platform",
     headline: "High-throughput messaging and notification workflows integrating Spring Boot, bot engines, and REST APIs.",
+    metric: { value: "85%", label: "Customer response workflows automated" },
     stack: ["Java", "Spring Boot", "Spring Security", "REST APIs", "Botpress", "MySQL", "Redis"],
     problem:
       "Manual customer response flows and fragmented messaging systems caused high latency and low engagement during high-volume notification bursts.",
@@ -53,6 +58,7 @@ export const caseStudies: CaseStudy[] = [
     title: "Cutting Cloud Spend, Twice",
     headline:
       "Two independent cuts to cloud spend: a segment-level Redis cache, then moving render autoscaling off KEDA on GKE onto Cloud Run, scaled on Pub/Sub queue depth.",
+    metric: { value: "~30% + ~10%", label: "Cloud spend, cut twice" },
     stack: ["Redis", "GKE", "KEDA", "Kafka", "Pub/Sub", "Cloud Run"],
     problem:
       "Spend was leaking two ways. TTS, voice-clone and lip-sync segments were generated again for every user, even when their parameters overlapped with someone else's. And the render pods on GKE, autoscaled by KEDA on Kafka lag, still cost money while they sat idle.",
@@ -74,6 +80,7 @@ export const caseStudies: CaseStudy[] = [
     title: "Weekend Dartboard",
     headline:
       "A map you throw a dart at, built on two public APIs where one of them fails about a third of the time.",
+    metric: { value: "504 · 200 · 429", label: "Three identical Overpass calls, measured" },
     stack: ["TypeScript", "Next.js", "Leaflet", "Nominatim", "Overpass", "OpenStreetMap"],
     problem:
       "Pick how far you will travel, throw, and go wherever it lands. The interesting part is underneath: the two upstreams it needs behave nothing alike. One answers in about a second. The other fails roughly one call in three and takes eight to ten seconds to do it.",
@@ -91,6 +98,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "config-playground",
     title: "Visitor Pattern Config Engine",
     headline: "Extensible domain configuration engine reducing solution engineering approval cycles from 3 days to 1 day.",
+    metric: { value: "3 days → 1 day", label: "Config approval cycle" },
     stack: ["Java", "Design Patterns", "Spring Boot", "TypeScript", "React"],
     problem:
       "Every client configuration adjustment required manual engineer intervention and code deployment, creating a 3-day bottleneck for non-technical teams.",

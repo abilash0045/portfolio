@@ -1,34 +1,32 @@
+/* The storage decision, before and after. A panel of its own under the first
+   case study, because it is the one thing in that study you can press. */
 .sim-container {
-  margin: 32px 0 40px;
-  background: var(--bg-card);
-  border: 1px solid var(--bg-card-border);
-  border-radius: var(--radius-lg);
-  padding: clamp(16px, 3vw, 32px);
-  position: relative;
-  overflow: hidden;
   width: 100%;
+  padding: clamp(20px, 3.4vw, 40px);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-xl);
+  background: var(--color-paper-2);
 }
 
 .sim-container__header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 24px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px 32px;
+  margin-bottom: 28px;
 }
 
 .sim-container__title {
-  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  letter-spacing: -0.03em;
 }
 
 .sim-container__subtitle {
-  font-size: clamp(0.82rem, 1.5vw, 0.92rem);
+  max-width: 52ch;
+  font-size: 0.95rem;
   color: var(--text-secondary);
-  margin: 0;
 }
 
 .sim-controls {
@@ -37,183 +35,179 @@
   gap: 12px;
 }
 
+/* A segmented control: a trough, and the pressed segment filled in ink. */
 .sim-btn-group {
   display: flex;
-  background: var(--color-inset);
-  padding: 3px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-interactive);
   max-width: 100%;
+  padding: 4px;
+  border: 1px solid var(--color-border-interactive);
+  border-radius: var(--radius-pill);
+  background: var(--color-inset);
 }
 
 .sim-btn {
-  background: transparent;
+  min-height: 40px;
+  padding: 8px 16px;
   border: none;
-  color: var(--text-muted);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-secondary);
   font-family: var(--font-body);
-  font-size: clamp(0.72rem, 1.2vw, 0.82rem);
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: calc(var(--radius-md) - 3px);
+  font-size: 0.85rem;
+  font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-  min-height: 38px;
 }
 
-/* The pair had no hover state at all: the only way to find out a segment
-   was clickable was to click it. Scoped to the unpressed one so hovering
-   the current selection does not undo its fill. */
+/* Scoped to the unpressed one so hovering the selection does not undo it. */
 .sim-btn[aria-pressed="false"]:hover {
-  color: var(--text-primary);
   background: var(--color-paper-3);
+  color: var(--text-primary);
+}
+
+.sim-btn[aria-pressed="true"] {
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
 .sim-btn:active {
   transform: translateY(1px);
 }
 
-.sim-btn--active {
-  background: var(--accent-red);
-  color: var(--color-on-accent);
-  box-shadow: 0 2px 8px var(--accent-red-glow);
-}
-
-.sim-btn--active-green {
-  background: var(--color-accent);
-  color: var(--color-on-accent);
-  box-shadow: none;
-}
-
 .sim-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
-  align-items: center;
+  gap: 20px;
+  align-items: stretch;
 }
 
-@media (max-width: 900px) {
+@media (min-width: 900px) {
   .sim-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   }
 }
 
-/* Architecture Flow Nodes */
 .sim-flow {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: clamp(14px, 2vw, 20px);
+  gap: 18px;
+  padding: clamp(16px, 2vw, 22px);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-lg);
   background: var(--color-inset);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
-  width: 100%;
 }
 
 .sim-nodes {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  position: relative;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
 }
 
 @media (max-width: 768px) {
   .sim-nodes {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 420px) {
   .sim-nodes {
     grid-template-columns: 1fr;
   }
 }
 
 .sim-node {
-  background: var(--color-paper-2);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
   padding: 14px 12px;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-md);
+  background: var(--color-paper-2);
   text-align: center;
-  position: relative;
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-.sim-node__icon {
-  font-size: 1.25rem;
-  margin-bottom: 6px;
-}
-
 .sim-node__title {
-  font-size: 0.8rem;
-  font-weight: 700;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 2px;
 }
 
 .sim-node__detail {
-  font-size: 0.72rem;
   font-family: var(--font-mono);
-  color: var(--color-muted);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
 }
 
-/* Red is the whole signal. It also pulsed forever, which made a static
-   illustration of the old setup look like a live alarm. */
+/* Red is the whole signal: the legacy setup's render stage, failing. */
 .sim-node--error {
   border-color: var(--color-accent);
   background: var(--color-accent);
+}
+
+.sim-node--error .sim-node__title,
+.sim-node--error .sim-node__detail {
   color: var(--color-on-accent);
 }
 
-.sim-node--success {
-  border-color: var(--color-border-interactive);
-  background: var(--color-paper-3);
-}
-
+.sim-node--success,
 .sim-node--cached {
   border-color: var(--color-border-interactive);
   background: var(--color-paper-3);
 }
 
-/* Metrics Column */
+.sim-explain {
+  padding-top: 14px;
+  border-top: 1px dashed var(--color-rule);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.sim-explain__good {
+  color: var(--text-primary);
+}
+
+.sim-explain__bad {
+  color: var(--color-accent);
+}
+
 .sim-metrics {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  gap: 12px;
 }
 
 .sim-card {
+  padding: 18px;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-lg);
   background: var(--color-inset);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 16px;
 }
 
 .sim-card__label {
-  font-size: 0.78rem;
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
   color: var(--text-muted);
-  font-weight: 600;
-  margin-bottom: 8px;
 }
 
 .sim-card__value {
-  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
-  font-weight: 800;
-  font-family: var(--font-display);
-  color: var(--text-primary);
   display: flex;
-  align-items: baseline;
   flex-wrap: wrap;
+  align-items: baseline;
   gap: 8px;
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
 }
 
 .sim-bar-bg {
-  height: 8px;
-  background: var(--color-paper-3);
-  border-radius: var(--radius-pill);
+  height: 6px;
+  margin-top: 12px;
   overflow: hidden;
-  margin-top: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-paper-3);
 }
 
 .sim-bar-fill {
@@ -224,42 +218,21 @@
 
 .sim-badge {
   display: inline-block;
-  padding: 3px 8px;
+  padding: 3px 9px;
   border-radius: var(--radius-pill);
-  font-size: 0.72rem;
-  font-weight: 700;
   font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .sim-badge--danger {
-  background: var(--color-accent);
-  color: var(--color-on-accent);
+  background: var(--color-paper-3);
   color: var(--color-accent);
 }
 
-.sim-badge--success {
-  background: var(--color-paper-3);
-  color: var(--color-ink);
-}
-
+.sim-badge--success,
 .sim-badge--info {
   background: var(--color-paper-3);
-  color: var(--color-muted);
-}
-
-.sim-explain {
-  font-size: 0.82rem;
-  line-height: 1.5;
   color: var(--text-secondary);
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px dashed var(--border-subtle);
-}
-
-.sim-explain__good {
-  color: var(--color-ink);
-}
-
-.sim-explain__bad {
-  color: var(--color-accent);
 }

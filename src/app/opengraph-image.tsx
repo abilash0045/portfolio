@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -10,23 +11,54 @@ export const contentType = SITE_CARD.type;
 
 const asset = (name: string) => readFile(join(process.cwd(), "assets", name));
 
-const [interRegular, interBold, glass] = await Promise.all([
-  asset("Inter-Regular.ttf"),
-  asset("Inter-Bold.ttf"),
-  asset("og-glass.jpg"),
+// The site's own three families, so the card someone sees before they click
+// looks like the page they land on. Satori needs TTF or OTF, not the WOFF2
+// next/font serves, hence the copies in assets/.
+const [geistRegular, geistSemiBold, geistMono, instrumentItalic] = await Promise.all([
+  asset("Geist-Regular.ttf"),
+  asset("Geist-SemiBold.ttf"),
+  asset("GeistMono-Medium.ttf"),
+  asset("InstrumentSerif-Italic.ttf"),
 ]);
 
-const background = `data:image/jpeg;base64,${glass.toString("base64")}`;
-
-const { ink: INK, muted: MUTED, accent: ACCENT, paper: PAPER } = RESOLVED_COLOURS;
+const { ink: INK, muted: MUTED, neutral: NEUTRAL, rule: RULE, accent: ACCENT, paper: PAPER } =
+  RESOLVED_COLOURS;
 
 /** The three numbers the site leads with, in the wording it uses. */
 const FACTS = [
-  { value: "25,000+", label: "renders a day" },
-  { value: "60% → 98%", label: "render reliability" },
-  { value: "3d → 1d", label: "config approval" },
+  { value: "25,000+", label: "Renders a day" },
+  { value: "60% → 98%", label: "Render reliability" },
+  { value: "3d → 1d", label: "Config approval" },
 ];
 
+/** The two words the headline leans on, in the serif, as on the page. */
+function Serif({ children }: { children: string }) {
+  return (
+    <span style={{ fontFamily: "Instrument Serif", fontWeight: 400, letterSpacing: -1 }}>
+      {children}
+    </span>
+  );
+}
+
+/** A figure with its arrow in the accent, as on the page. */
+function Figure({ value }: { value: string }) {
+  return (
+    <div style={{ display: "flex" }}>
+      {value.split("→").map((part, index) => (
+        <Fragment key={index}>
+          {index > 0 && (
+            <span style={{ color: ACCENT, fontWeight: 400, margin: "0 12px" }}>→</span>
+          )}
+          <span>{part.trim()}</span>
+        </Fragment>
+      ))}
+    </div>
+  );
+}
+
+// Satori lays every block out as flex and has no inline flow, so the
+// headline's line breaks are set by hand: the three lines the page shows at
+// desktop width. The last line mixes two families, so its spaces are gaps.
 export default function Image() {
   return new ImageResponse(
     (
@@ -37,41 +69,21 @@ export default function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: 72,
+          padding: "60px 72px 56px",
           background: PAPER,
-          backgroundImage: `url(${background})`,
-          backgroundSize: "1200px 630px",
-          fontFamily: "Inter",
-          position: "relative",
+          color: INK,
+          fontFamily: "Geist",
         }}
       >
-        {/* The photograph is bright at the top left and dark at the bottom
-            right, so a flat scrim would either wash out or crush half of it.
-            This one leans on the light corner and lets the red breathe.
-            Satori has no z-index and paints in source order, so the scrim
-            comes first and everything after it lands on top. */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: size.width,
-            height: size.height,
-            display: "flex",
-            background:
-              "linear-gradient(100deg, rgba(20,14,13,0.96) 0%, rgba(20,14,13,0.92) 50%, rgba(20,14,13,0.62) 100%)",
-          }}
-        />
-
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: 14,
-              color: ACCENT,
-              fontSize: 22,
-              fontWeight: 700,
+              color: MUTED,
+              fontFamily: "Geist Mono",
+              fontSize: 19,
               letterSpacing: 2,
               textTransform: "uppercase",
             }}
@@ -85,57 +97,70 @@ export default function Image() {
                 display: "flex",
               }}
             />
-            {SITE_ROLE}
+            {`${SITE_NAME} / ${SITE_ROLE}`}
           </div>
 
           <div
             style={{
-              marginTop: 30,
-              color: INK,
-              fontSize: 76,
-              fontWeight: 700,
-              lineHeight: 1.08,
-              letterSpacing: -2,
-              maxWidth: 880,
               display: "flex",
+              flexDirection: "column",
+              marginTop: 40,
+              fontSize: 96,
+              fontWeight: 600,
+              lineHeight: 0.96,
+              letterSpacing: -5,
             }}
           >
-            I keep a 25,000-render-a-day pipeline cheap and standing up.
+            <div style={{ display: "flex" }}>I keep a 25,000-</div>
+            <div style={{ display: "flex" }}>render-a-day pipeline</div>
+            <div style={{ display: "flex", gap: 22 }}>
+              <Serif>cheap</Serif>
+              <span>and</span>
+              <div style={{ display: "flex" }}>
+                <Serif>standing up</Serif>
+                <span>.</span>
+              </div>
+            </div>
           </div>
         </div>
 
         <div
           style={{
             display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
+            gap: 72,
+            paddingTop: 26,
+            borderTop: `1px solid ${RULE}`,
           }}
         >
-          <div style={{ display: "flex", gap: 56 }}>
-            {FACTS.map((fact) => (
-              <div
-                key={fact.value}
-                style={{ display: "flex", flexDirection: "column", gap: 6 }}
-              >
-                <div style={{ color: INK, fontSize: 34, fontWeight: 700 }}>
-                  {fact.value}
-                </div>
-                <div style={{ color: MUTED, fontSize: 19 }}>{fact.label}</div>
+          {FACTS.map((fact) => (
+            <div key={fact.value} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <div style={{ display: "flex", fontSize: 40, fontWeight: 600, letterSpacing: -1.5 }}>
+                <Figure value={fact.value} />
               </div>
-            ))}
-          </div>
-
-          <div style={{ color: INK, fontSize: 26, fontWeight: 700, display: "flex" }}>
-            {SITE_NAME}
-          </div>
+              <div
+                style={{
+                  display: "flex",
+                  color: NEUTRAL,
+                  fontFamily: "Geist Mono",
+                  fontSize: 15,
+                  letterSpacing: 1.5,
+                  textTransform: "uppercase",
+                }}
+              >
+                {fact.label}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     ),
     {
       ...size,
       fonts: [
-        { name: "Inter", data: interRegular, style: "normal", weight: 400 },
-        { name: "Inter", data: interBold, style: "normal", weight: 700 },
+        { name: "Geist", data: geistRegular, style: "normal", weight: 400 },
+        { name: "Geist", data: geistSemiBold, style: "normal", weight: 600 },
+        { name: "Geist Mono", data: geistMono, style: "normal", weight: 500 },
+        { name: "Instrument Serif", data: instrumentItalic, style: "italic", weight: 400 },
       ],
     },
   );

@@ -79,6 +79,37 @@ describe("every case study", () => {
     }
   });
 
+  // Each card leads with one big figure. It may only repeat what the study's
+  // own text says, so a headline number cannot be invented for the layout.
+  it("leads with a figure its own text states", () => {
+    for (const study of caseStudies) {
+      const prose = [
+        study.headline,
+        study.problem,
+        study.architecture,
+        study.contribution,
+        study.challenges,
+        study.results,
+      ]
+        .join(" ")
+        .replace(/,/g, "");
+      const numbers = study.metric.value.replace(/,/g, "").match(/\d+(\.\d+)?/g) ?? [];
+      expect(numbers.length, `${study.slug} leads with no number`).toBeGreaterThan(0);
+      for (const n of numbers) {
+        expect(prose, `${study.slug} leads with ${n}, which its text never states`).toMatch(
+          new RegExp(`(^|[^\\d.])${n.replace(".", "\\.")}(?!\\d)`),
+        );
+      }
+    }
+  });
+
+  it("never leads the cost story with the combined figure", () => {
+    const cost = caseStudies.find((c) => c.slug === "cloud-cost")!;
+    expect(cost.metric.value).not.toContain("40");
+    expect(cost.metric.value).toContain("~30%");
+    expect(cost.metric.value).toContain("~10%");
+  });
+
   it("keeps the two cost wins apart", () => {
     const cost = caseStudies.find((c) => c.slug === "cloud-cost")!;
     // ~30% from segment caching and ~10% from scale-to-zero are independent.

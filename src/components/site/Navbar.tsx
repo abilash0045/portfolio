@@ -19,11 +19,10 @@ import {
 import "./navbar.css";
 
 const SECTIONS = [
-  { href: "#overview", label: "Overview" },
-  { href: "#case-studies", label: "Selected Work" },
-  { href: "#philosophy", label: "Philosophy" },
-  { href: "#tech-stack", label: "Technology" },
+  { href: "#work", label: "Work" },
   { href: "#experience", label: "Experience" },
+  { href: "#approach", label: "Approach" },
+  { href: "#dartboard-embedded-section", label: "Dartboard" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -70,7 +69,7 @@ export default function Navbar() {
   // would trap focus in links nobody can see.
   useEffect(() => {
     if (!menuOpen) return;
-    const wide = window.matchMedia("(min-width: 769px)");
+    const wide = window.matchMedia("(min-width: 821px)");
     const onChange = () => closeMenu();
     wide.addEventListener("change", onChange);
     return () => wide.removeEventListener("change", onChange);
@@ -80,9 +79,15 @@ export default function Navbar() {
 
   return (
     <header className="navbar-wrapper">
-      <nav className="navbar" aria-label="Main">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+      <nav className="navbar container" aria-label="Main">
+        {/* The same mark as the tab icon, so the two read as one site. */}
         <Link href="/" className="navbar__brand">
-          <span className="navbar__avatar">A</span>
+          <span className="navbar__mark" aria-hidden="true">
+            A
+          </span>
           <span>Abilash S L</span>
         </Link>
 
@@ -101,11 +106,6 @@ export default function Navbar() {
         </ul>
 
         <div className="navbar__actions">
-          <div className="navbar__status" title="Daily renders on the pipeline I work on">
-            <span className="navbar__status-dot" aria-hidden="true" />
-            <span>25k/day</span>
-          </div>
-
           <button
             type="button"
             className="navbar__theme-btn"

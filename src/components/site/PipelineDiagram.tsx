@@ -72,7 +72,7 @@ export default function PipelineDiagram() {
       </svg>
 
       <figcaption className="pipeline__caption" id="pipeline-caption">
-        The shape of it. The numbers are below.
+        The render path, drawn at the level the text above describes it.
       </figcaption>
     </figure>
   );

@@ -76,6 +76,24 @@ map's reduced-motion test failing about one run in five under load, with the map
 should be. Animations keep the near-zero duration so `animationend` still fires; nothing here waits
 on `transitionend`.
 
+**2026-09-24: The page was rebuilt as an editorial one-pager.**
+Abilash didn't like the old look, and it had earned that: a dark dashboard where every section was
+a grid of boxes with the same border, radius and weight, so nothing led. The rebuild takes its cues
+from the portfolio templates Abilash pointed at and the developer portfolios that roundups of them
+keep citing: one oversized statement at the top, the numbers straight under it, and every section on
+one two-column grid, index and heading on the left, intro and detail on the right. Rules and space replaced cards. The palette went from a red on reddish
+near-black to warm neutral paper and ink with one vermilion accent, used for the section numbers,
+the arrows in figures and the dart. Geist for text, Geist Mono for labels, and Instrument Serif
+italic for the two words the headline leans on. The widgets and the map keep their panels because
+they are things to use, not read. Every claim, number and feature carried over unchanged, and the
+link card and tab icon were redrawn to match, which also retired the red glass photo and Inter.
+
+**2026-09-24: The contact form went; the address is the contact.**
+There was never a backend to send it, so the form only ever opened a mail draft, and it still looked
+like it sent something. DESIGN.md already had "no contact form" out of scope. The contact section is
+now the address as a big mailto link, a Copy email button whose failure message points at it, and the
+two profile links.
+
 ## Progress
 
 - [x] 2026-08-05: API behaviour measured (Nominatim, Overpass, both tile sources)

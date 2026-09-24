@@ -51,15 +51,45 @@ async function activeFocusInfo(page: import("@playwright/test").Page) {
   });
 }
 
-test("every control reachable by Tab shows a focus ring", async ({ page }) => {
+/**
+ * Where an element's focus ring is cut off by an ancestor that clips, or null.
+ * Computed style reports a perfectly good outline either way, so this measures
+ * where the ring lands. Runs in the page, so it closes over nothing.
+ */
+function ringCut(el: Element): string | null {
+  const own = getComputedStyle(el);
+  const style = own.outlineStyle === "none" ? getComputedStyle(el, "::after") : own;
+  if (style.outlineStyle === "none") return `${el.className} has no ring at all`;
+  const reach = (parseFloat(style.outlineOffset) || 0) + (parseFloat(style.outlineWidth) || 0);
+  const box = el.getBoundingClientRect();
+  for (let p = el.parentElement; p; p = p.parentElement) {
+    const ps = getComputedStyle(p);
+    if (ps.overflowX === "visible" && ps.overflowY === "visible") continue;
+    const clip = p.getBoundingClientRect();
+    if (
+      box.left - reach < clip.left - 0.5 ||
+      box.top - reach < clip.top - 0.5 ||
+      box.right + reach > clip.right + 0.5 ||
+      box.bottom + reach > clip.bottom + 0.5
+    ) {
+      return `${el.textContent?.trim().slice(0, 20) || el.className} by ${p.className}`;
+    }
+  }
+  return null;
+}
+
+test("every control reachable by Tab shows a focus ring, and none is cut off", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/");
 
   const seen: string[] = [];
   const unringed: string[] = [];
+  const cut: string[] = [];
 
   // Enough presses to walk the header, the hero, both widgets, the map
-  // controls, the form and the footer.
+  // controls, the contact links and the footer.
   for (let i = 0; i < 70; i += 1) {
     await page.keyboard.press("Tab");
     const info = await activeFocusInfo(page);
@@ -77,6 +107,11 @@ test("every control reachable by Tab shows a focus ring", async ({ page }) => {
           `:focus-visible=${info.matchesFocusVisible}`,
       );
     }
+
+    // A code pane once sat in a box with overflow: hidden that cut its ring
+    // off on every side.
+    const where = await page.locator(":focus").evaluate(ringCut);
+    if (where) cut.push(where);
   }
 
   expect(seen.length, "tab order should reach the page at all").toBeGreaterThan(
@@ -87,24 +122,29 @@ test("every control reachable by Tab shows a focus ring", async ({ page }) => {
     "the walk stopped before the footer",
   ).toBe(true);
   expect(unringed, "controls with no visible keyboard focus").toEqual([]);
+  expect(cut, "focus rings cut off by an edge that clips").toEqual([]);
 });
 
-test("the form fields keep their focus ring", async ({ page }) => {
-  await page.goto("/");
+// The home page has no form any more. The search field on the dartboard is
+// the text field left, and it once had its ring taken away for a border.
+test("the text field keeps its focus ring", async ({ page }) => {
+  await page.addInitScript(() => {
+    navigator.geolocation.getCurrentPosition = (_ok, fail) => {
+      fail?.({ code: 1, message: "denied" } as GeolocationPositionError);
+    };
+  });
+  await page.goto("/dartboard");
 
-  for (const id of ["#contact-name", "#contact-email", "#contact-message"]) {
-    await page.locator(id).focus();
-    const info = await activeFocusInfo(page);
-    expect(info, `${id} did not take focus`).not.toBeNull();
-    expect(info!.outlineStyle, `${id} has outline: none`).not.toBe("none");
-    expect(info!.outlineWidth, `${id} ring too thin`).toBeGreaterThanOrEqual(2);
-  }
+  const field = page.getByLabel("Search for your location");
+  await field.focus();
+  const info = await activeFocusInfo(page);
+  expect(info, "the search field did not take focus").not.toBeNull();
+  expect(info!.outlineStyle, "the search field has outline: none").not.toBe("none");
+  expect(info!.outlineWidth, "the search field's ring is too thin").toBeGreaterThanOrEqual(2);
 });
 
 // The map and its credit links sit flush against an overflow: hidden edge, so
-// the standard ring 3px outside them was cut off completely. Computed style
-// reports a perfectly good outline either way, which is why this measures
-// where the ring lands against every ancestor that clips.
+// the standard ring 3px outside them was cut off completely.
 test("focus rings on the map are not cut off by its edges", async ({ page }) => {
   await page.goto("/dartboard");
   const credits = page.locator(".leaflet-control-attribution a");
@@ -113,28 +153,7 @@ test("focus rings on the map are not cut off by its edges", async ({ page }) => 
   const targets = [page.locator(".leaflet-container"), ...(await credits.all())];
   for (const target of targets) {
     await target.focus();
-    const cut = await target.evaluate((el) => {
-      const own = getComputedStyle(el);
-      const style = own.outlineStyle === "none" ? getComputedStyle(el, "::after") : own;
-      if (style.outlineStyle === "none") return `${el.className} has no ring at all`;
-      const reach = (parseFloat(style.outlineOffset) || 0) + (parseFloat(style.outlineWidth) || 0);
-      const box = el.getBoundingClientRect();
-      for (let p = el.parentElement; p; p = p.parentElement) {
-        const ps = getComputedStyle(p);
-        if (ps.overflowX === "visible" && ps.overflowY === "visible") continue;
-        const clip = p.getBoundingClientRect();
-        if (
-          box.left - reach < clip.left - 0.5 ||
-          box.top - reach < clip.top - 0.5 ||
-          box.right + reach > clip.right + 0.5 ||
-          box.bottom + reach > clip.bottom + 0.5
-        ) {
-          return `${el.textContent?.trim().slice(0, 20) || el.className} by ${p.className}`;
-        }
-      }
-      return null;
-    });
-    expect(cut, "focus ring cut off").toBeNull();
+    expect(await target.evaluate(ringCut), "focus ring cut off").toBeNull();
   }
 });
 
@@ -156,12 +175,13 @@ for (const scheme of ["dark", "light"] as const) {
 
 // Three lists of plain text carried hover styles: the hero stack tags, the
 // per-study tech list and the tech-stack pills. A cursor change or a colour
-// shift on something that cannot be clicked is a promise the page breaks.
+// shift on something that cannot be clicked is a promise the page breaks. The
+// hero tags and the pills are gone; the toolbox took the pills' place.
 test("text that is not a control does not behave like one", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/");
 
-  for (const selector of [".hero__tech-tag", ".study__tech", ".tech-pill"]) {
+  for (const selector of [".study__tech", ".toolbox__item"]) {
     const item = page.locator(selector).first();
     await item.scrollIntoViewIfNeeded();
 
@@ -214,7 +234,7 @@ test.describe("reduced motion is respected", () => {
     );
 
     const durations = await page
-      .locator(".hero__btn, .submit-btn, .sim-btn")
+      .locator(".button, .sim-btn, .pg-tab")
       .evaluateAll((els) =>
         els.map((el) => getComputedStyle(el).transitionDuration),
       );

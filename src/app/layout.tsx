@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { SHARED_OPEN_GRAPH, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 import { applyInitialTheme, THEME_KEY } from "@/lib/theme";
 import "./globals.css";
@@ -7,21 +7,25 @@ import "./globals.css";
 /** Runs during parsing, before first paint. See applyInitialTheme. */
 const THEME_SCRIPT = `(${applyInitialTheme.toString()})(${JSON.stringify(THEME_KEY)})`;
 
-const inter = Inter({
+// One sans for everything from body copy to the hero, one mono for labels and
+// data, and one serif used only in italic, for the odd word a headline leans on.
+const geist = Geist({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
 });
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-display",
+  variable: "--font-mono",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  variable: "--font-mono",
+  weight: "400",
+  style: "italic",
+  variable: "--font-serif",
   display: "swap",
 });
 
@@ -54,7 +58,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable}`}
+      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />

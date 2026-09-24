@@ -29,7 +29,7 @@ export default function PipelineSimulator() {
             <button
               type="button"
               aria-pressed={storageMode === "efs"}
-              className={`sim-btn ${storageMode === "efs" ? "sim-btn--active" : ""}`}
+              className="sim-btn"
               onClick={() => setStorageMode("efs")}
             >
               Shared EFS (Legacy)
@@ -37,7 +37,7 @@ export default function PipelineSimulator() {
             <button
               type="button"
               aria-pressed={storageMode === "ephemeral"}
-              className={`sim-btn ${storageMode === "ephemeral" ? "sim-btn--active-green" : ""}`}
+              className="sim-btn"
               onClick={() => setStorageMode("ephemeral")}
             >
               Ephemeral Disk (Current)
@@ -48,7 +48,7 @@ export default function PipelineSimulator() {
             <button
               type="button"
               aria-pressed={cacheMode === "none"}
-              className={`sim-btn ${cacheMode === "none" ? "sim-btn--active" : ""}`}
+              className="sim-btn"
               onClick={() => setCacheMode("none")}
             >
               No Cache
@@ -56,7 +56,7 @@ export default function PipelineSimulator() {
             <button
               type="button"
               aria-pressed={cacheMode === "redis"}
-              className={`sim-btn ${cacheMode === "redis" ? "sim-btn--active-green" : ""}`}
+              className="sim-btn"
               onClick={() => setCacheMode("redis")}
             >
               Redis Segment Cache
@@ -66,7 +66,6 @@ export default function PipelineSimulator() {
       </div>
 
       <div className="sim-grid">
-        {/* Animated Visual Pipeline Flow */}
         <div className="sim-flow">
           <div className="sim-nodes">
             <div className="sim-node">
@@ -107,7 +106,6 @@ export default function PipelineSimulator() {
           </div>
         </div>
 
-        
         <div className="sim-metrics">
           <div className="sim-card">
             <div className="sim-card__label">Render Reliability</div>

@@ -9,6 +9,13 @@ export const SITE_URL = "https://portfolio-madcap1.vercel.app";
 export const SITE_NAME = "Abilash S L";
 export const SITE_ROLE = "Backend Engineer, distributed systems";
 
+/** Where people reach him. Written out once, used by the hero, the contact
+    section and the footer. */
+export const EMAIL = "abilash0045@gmail.com";
+export const GITHUB_URL = "https://github.com/abilash0045";
+export const LINKEDIN_URL = "https://www.linkedin.com/in/abilash0045/";
+export const SOURCE_URL = "https://github.com/abilash0045/portfolio";
+
 export const SITE_DESCRIPTION =
   "Backend engineer on a video rendering pipeline handling 25,000+ renders a day " +
   "across GKE and Cloud Run. Java, Spring Boot, Kafka, Redis, Kubernetes, GCP and AWS.";
@@ -25,14 +32,17 @@ export const SHARED_OPEN_GRAPH = {
 } as const;
 
 /**
- * The dark theme's tokens resolved to hex, for the images Satori draws (the
- * link preview card and the tab icon). Satori does not read CSS variables.
+ * The dark theme's tokens from globals.css resolved to hex, for the images
+ * Satori draws (the link preview card and the tab icon). Satori does not read
+ * CSS variables, so a palette change has to be made here as well.
  */
 export const RESOLVED_COLOURS = {
-  ink: "#f2ebe9",
-  muted: "#b0a9a8",
-  accent: "#e0554b",
-  paper: "#17100f",
+  ink: "#f1f0ed", // --color-ink
+  muted: "#b9b7b3", // --color-muted
+  neutral: "#94928e", // --color-neutral
+  rule: "#2b2826", // --color-rule
+  accent: "#f77647", // --color-accent
+  paper: "#0c0b09", // --color-paper
 } as const;
 
 /**
