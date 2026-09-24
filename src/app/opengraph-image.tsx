@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { RESOLVED_COLOURS, SITE_CARD, SITE_NAME, SITE_ROLE } from "@/lib/site";
+import { CARD_FIGURES, RESOLVED_COLOURS, SITE_CARD, SITE_NAME, SITE_ROLE } from "@/lib/site";
 
 export const alt = SITE_CARD.alt;
 
@@ -23,13 +23,6 @@ const [geistRegular, geistSemiBold, geistMono, instrumentItalic] = await Promise
 
 const { ink: INK, muted: MUTED, neutral: NEUTRAL, rule: RULE, accent: ACCENT, paper: PAPER } =
   RESOLVED_COLOURS;
-
-/** The three numbers the site leads with, in the wording it uses. */
-const FACTS = [
-  { value: "25,000+", label: "Renders a day" },
-  { value: "60% → 98%", label: "Render reliability" },
-  { value: "3d → 1d", label: "Config approval" },
-];
 
 /** The two words the headline leans on, in the serif, as on the page. */
 function Serif({ children }: { children: string }) {
@@ -132,7 +125,7 @@ export default function Image() {
             borderTop: `1px solid ${RULE}`,
           }}
         >
-          {FACTS.map((fact) => (
+          {CARD_FIGURES.map((fact) => (
             <div key={fact.value} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <div style={{ display: "flex", fontSize: 40, fontWeight: 600, letterSpacing: -1.5 }}>
                 <Figure value={fact.value} />

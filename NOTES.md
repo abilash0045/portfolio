@@ -94,6 +94,16 @@ like it sent something. DESIGN.md already had "no contact form" out of scope. Th
 now the address as a big mailto link, a Copy email button whose failure message points at it, and the
 two profile links.
 
+**2026-09-24: The GitHub profile follows the site.**
+The profile README (abilash0045/abilash0045) was a template: a wave banner, a typing effect, a view
+counter, stats cards and a contribution snake, in a purple the site never used. It now carries the
+site's headline and figures as a header image, and the case studies in plain Markdown linked to their
+write-ups. `scripts/profile-header.mjs` draws the header from the site's own fonts, colours and
+figures, so when those change: run it and copy the four PNGs into the profile repo's `assets/`. Four,
+because there is a wide and a narrow layout in each theme, and the README's `<picture>` picks by width
+and colour scheme. The wide one shrunk onto a phone took its small type down to about 5px. The two
+nightly workflows that drew the stats cards and the snake were removed along with them.
+
 ## Progress
 
 - [x] 2026-08-05: API behaviour measured (Nominatim, Overpass, both tile sources)

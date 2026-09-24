@@ -33,8 +33,9 @@ export const SHARED_OPEN_GRAPH = {
 
 /**
  * The dark theme's tokens from globals.css resolved to hex, for the images
- * Satori draws (the link preview card and the tab icon). Satori does not read
- * CSS variables, so a palette change has to be made here as well.
+ * Satori draws (the link preview card, the tab icon, and the GitHub profile
+ * header from scripts/profile-header.mjs). Satori does not read CSS
+ * variables, so a palette change has to be made here as well.
  */
 export const RESOLVED_COLOURS = {
   ink: "#f1f0ed", // --color-ink
@@ -44,6 +45,27 @@ export const RESOLVED_COLOURS = {
   accent: "#f77647", // --color-accent
   paper: "#0c0b09", // --color-paper
 } as const;
+
+/** The light theme's, for the one image drawn in both: the profile header. */
+export const RESOLVED_COLOURS_LIGHT = {
+  ink: "#171310",
+  muted: "#46413e",
+  neutral: "#67625f",
+  rule: "#dedcd8",
+  accent: "#c03300",
+  paper: "#fcfaf7",
+} as const;
+
+/**
+ * The three numbers the link card and the GitHub profile header lead with,
+ * in the site's wording. The hero's fourth, the combined ~40%, stays on the
+ * page, where its label can say it was two cuts.
+ */
+export const CARD_FIGURES = [
+  { value: "25,000+", label: "Renders a day" },
+  { value: "60% → 98%", label: "Render reliability" },
+  { value: "3d → 1d", label: "Config approval" },
+] as const;
 
 /**
  * The link preview card drawn by app/opengraph-image.tsx. Only the segment
