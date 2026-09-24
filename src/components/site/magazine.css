@@ -34,6 +34,13 @@
   border-color: var(--color-ink);
 }
 
+/* The featured card takes the first row, so the cards after it pair up and a
+   last one without a partner sat in the left column beside nothing. With two
+   roles, that was the whole second row: half card, half hole. */
+.magazine-card:last-child:nth-child(even) {
+  grid-column: 1 / -1;
+}
+
 .magazine-meta {
   display: flex;
   justify-content: space-between;

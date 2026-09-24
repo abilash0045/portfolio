@@ -281,6 +281,32 @@ test("home page stays about the work", async ({ page }) => {
   expect(body).not.toContain("lpa");
 });
 
+// The second role sat in the left half of its row next to nothing, and every
+// case study wore the same "FEATURED PROJECT" label.
+test("no card sits alone in half a row, and no two case studies share a label", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  const holes = await page.locator(".magazine-grid").evaluate((grid) => {
+    const width = grid.getBoundingClientRect().width;
+    const rows = new Map<number, DOMRect[]>();
+    for (const card of Array.from(grid.children)) {
+      const box = card.getBoundingClientRect();
+      const top = Math.round(box.top);
+      rows.set(top, [...(rows.get(top) ?? []), box]);
+    }
+    return [...rows.values()]
+      .filter((row) => row.length === 1 && row[0].width < width - 1)
+      .map((row) => Math.round(row[0].width));
+  });
+  expect(holes, "a card sits alone in half a row").toEqual([]);
+
+  const labels = await page.locator(".study__number").allTextContents();
+  expect(new Set(labels).size, `labels repeat: ${labels.join(", ")}`).toBe(labels.length);
+});
+
 // At 390px "GitHub ↗" broke inside itself and stranded its arrow on a second
 // line, and a wrapped row could open with a "·" that separated nothing.
 test("link rows wrap between links, never inside one", async ({ page }) => {

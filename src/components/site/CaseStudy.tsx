@@ -2,7 +2,7 @@ import type { CaseStudy as Study } from "@/content/case-studies";
 import PipelineSimulator from "./PipelineSimulator";
 import ConfigVisitorPlayground from "./ConfigVisitorPlayground";
 
-export default function CaseStudy({ study }: { study: Study }) {
+export default function CaseStudy({ study, number }: { study: Study; number: number }) {
   // The three that have something to show further down the page get the full
   // width. It also keeps the two half-width cards paired rather than leaving
   // one alone in a row.
@@ -13,7 +13,10 @@ export default function CaseStudy({ study }: { study: Study }) {
   return (
     <article className={`study ${isFullWidth ? "study--full" : ""}`} id={study.slug} data-reveal>
       <div className="study__header">
-        <span className="study__number">FEATURED PROJECT</span>
+        {/* Every card used to say FEATURED PROJECT, which on five cards out
+            of five says nothing. Their order is deliberate (DESIGN.md), so
+            the number is the one thing worth putting here. */}
+        <span className="study__number">{String(number).padStart(2, "0")}</span>
         <h3 className="study__title">{study.title}</h3>
         <p className="study__headline">{study.headline}</p>
       </div>

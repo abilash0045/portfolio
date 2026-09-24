@@ -31,8 +31,8 @@ export default function Home() {
             Things I built or fixed, with what broke, what I changed, and what it moved.
           </p>
           <div className="studies-grid">
-            {caseStudies.map((study) => (
-              <CaseStudy key={study.slug} study={study} />
+            {caseStudies.map((study, index) => (
+              <CaseStudy key={study.slug} study={study} number={index + 1} />
             ))}
           </div>
         </section>
