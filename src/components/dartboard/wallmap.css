@@ -123,8 +123,26 @@
   outline-offset: -3px;
 }
 
+/* The credit strip in the site's colours. Leaflet's own is a white sticker on
+   the dark map, and `font: inherit` above had quietly taken it from Leaflet's
+   12px to 16px, tall enough to cover the bottom of the control panel and, on
+   a phone, to wrap onto a second line across it. Still plainly visible: the
+   credit is required, not fine print. */
 .wallmap .leaflet-control-attribution {
   padding: 3px 8px;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border-top-left-radius: var(--radius-sm);
+}
+
+/* Underlined, since colour alone is not enough to tell a link from the
+   text around it at this contrast. */
+.wallmap .leaflet-control-attribution a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .wallmap .leaflet-control-attribution a:focus-visible {

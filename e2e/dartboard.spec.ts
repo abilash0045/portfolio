@@ -41,6 +41,26 @@ test("the page keeps its content in a main landmark", async ({ page }) => {
   await expect(main.locator(".leaflet-container")).toHaveCount(1);
 });
 
+// The credit strip inherited the page's 16px type, sat across the bottom of
+// the control panel, and on a phone wrapped to two lines to cover even more
+// of it. The credit has to stay visible and stay out of the way.
+for (const width of [320, 390, 1280]) {
+  test(`at ${width}px the map's credits sit on one line, clear of the controls`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/dartboard");
+    const credits = page.locator(".leaflet-control-attribution");
+    await expect(credits).toContainText("OpenStreetMap");
+
+    const box = await credits.boundingBox();
+    const panel = await page.locator(".dartboard__panel").boundingBox();
+    const lineHeight = await credits.evaluate((el) => parseFloat(getComputedStyle(el).lineHeight));
+    expect(box!.height, "the credits wrapped").toBeLessThan(lineHeight * 2);
+    expect(panel!.y + panel!.height, "the credits cover the controls").toBeLessThanOrEqual(box!.y);
+  });
+}
+
 test("the map credits OpenStreetMap", async ({ page }) => {
   await page.goto("/dartboard");
   await expect(page.locator(".leaflet-control-attribution")).toContainText(
