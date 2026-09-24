@@ -66,6 +66,32 @@ test.describe("nothing on this page claims something untrue", () => {
     }
   });
 
+  // Four of the five case studies said "See it below" and meant something
+  // else. Two pointed at the widget in their own card, which sits above the
+  // link naming it; one pointed at that widget from the next card down; one
+  // pointed at the contact form, which has nothing to do with WhatsApp.
+  test("a link that says below points at something below it", async ({ page }) => {
+    await page.goto("/");
+    const links = await page.locator("a", { hasText: /below/i }).all();
+    expect(links.length).toBeGreaterThan(0);
+
+    for (const link of links) {
+      const where = await link.evaluate((a) => {
+        const target = document.querySelector(a.getAttribute("href") ?? "");
+        if (!target) return null;
+        return {
+          label: `${a.textContent?.trim()} -> ${a.getAttribute("href")}`,
+          linkBottom: a.getBoundingClientRect().bottom,
+          targetTop: target.getBoundingClientRect().top,
+        };
+      });
+      expect(where, "a 'below' link to nothing on this page").not.toBeNull();
+      expect(where!.targetTop, `${where!.label} points up`).toBeGreaterThan(
+        where!.linkBottom,
+      );
+    }
+  });
+
   test("the contact form does not fake a send", async ({ page }) => {
     await page.goto("/");
     await page.fill("#contact-name", "Alex Recruiter");
