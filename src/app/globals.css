@@ -225,11 +225,6 @@ a {
   background: var(--color-neutral);
 }
 
-@keyframes pulse-slow {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.95); }
-}
-
 /* The project rule is that every animation respects this. Three stylesheets
    each guarded two or three of their own rules and the other twenty-odd
    transitions were unguarded, so the guard lives here instead: one block

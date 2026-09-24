@@ -118,8 +118,13 @@ export function useDartboard(active = true) {
     });
 
     // The dart is in the air for a fixed beat, so a fast API response does not
-    // make the result pop in before the animation reads as a throw.
-    const flight = new Promise((resolve) => setTimeout(resolve, FLIGHT_MS));
+    // make the result pop in before the animation reads as a throw. With
+    // reduced motion there is no flight to watch, and DESIGN.md has the dart
+    // snap to where it lands rather than keep the visitor waiting on nothing.
+    const flightMs = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? 0
+      : FLIGHT_MS;
+    const flight = new Promise((resolve) => setTimeout(resolve, flightMs));
 
     Promise.all([reverse, flight])
       .then(([landed]) => {

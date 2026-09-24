@@ -226,4 +226,49 @@ test.describe("reduced motion is respected", () => {
       expect(seconds, `transition still runs for ${duration}`).toBeLessThan(0.01);
     }
   });
+
+  // Leaflet flies and pans in JavaScript, which no stylesheet can stop, so the
+  // map took 0.9s to fly to every landing whatever the setting said. Set to
+  // jump, the pin is dead centre by the time the card is up; mid-flight it is
+  // nowhere near.
+  test("the map jumps to where the dart landed instead of flying there", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/dartboard");
+    const throwButton = page.getByRole("button", { name: /throw the dart/i });
+    await expect(throwButton).toBeEnabled({ timeout: 15_000 });
+
+    await throwButton.click();
+    await expect(page.locator(".card")).toBeVisible({ timeout: 25_000 });
+    await expect(page.locator(".leaflet-marker-icon")).toHaveCount(1);
+
+    const offCentre = await page.evaluate(() => {
+      const pin = document.querySelector(".leaflet-marker-icon")!.getBoundingClientRect();
+      const map = document.querySelector(".leaflet-container")!.getBoundingClientRect();
+      return Math.hypot(
+        pin.left + pin.width / 2 - (map.left + map.width / 2),
+        pin.top + pin.height / 2 - (map.top + map.height / 2),
+      );
+    });
+    expect(offCentre, "the map was still flying when the card appeared").toBeLessThan(2);
+  });
+});
+
+// The hero's dot and the storage widget's failure node both pulsed forever:
+// motion nobody asked for, on a page whose one unprompted movement is meant to
+// be content settling in once.
+test("nothing on the page loops forever", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Shared EFS (Legacy)" }).click();
+
+  const looping = await page.evaluate(() =>
+    Array.from(document.querySelectorAll<HTMLElement>("body *"))
+      .filter((el) => {
+        const style = getComputedStyle(el);
+        return style.animationName !== "none" && style.animationIterationCount.includes("infinite");
+      })
+      .map((el) => `${el.tagName.toLowerCase()}.${el.className}`),
+  );
+  expect(looping).toEqual([]);
 });

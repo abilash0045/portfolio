@@ -22,6 +22,11 @@ const TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 const ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
+/* Leaflet pans and flies in JavaScript, which the reduced-motion rule in
+   globals.css cannot reach. Asked on every move, so changing the setting
+   applies from the next throw. */
+const animate = () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 export default function WallMap({ origin, radiusM, landing, shake }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -71,7 +76,7 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
     }).addTo(map);
     circleRef.current = circle;
 
-    if (!landing) map.fitBounds(circle.getBounds(), { padding: [40, 40] });
+    if (!landing) map.fitBounds(circle.getBounds(), { padding: [40, 40], animate: animate() });
   }, [origin.lat, origin.lon, radiusM, landing]);
 
   // Landing pin with neon glow and expanding ripple animation.
@@ -99,7 +104,7 @@ export default function WallMap({ origin, radiusM, landing, shake }: Props) {
     }).addTo(map);
     markerRef.current = marker;
 
-    map.flyTo([landing.lat, landing.lon], 11, { duration: 0.9 });
+    map.flyTo([landing.lat, landing.lon], 11, { duration: 0.9, animate: animate() });
   }, [landing]);
 
   return (

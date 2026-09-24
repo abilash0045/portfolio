@@ -50,7 +50,7 @@ export default function Hero() {
       <div className="hero__top-row">
         <div>
           <div className="hero__badge">
-            <span className="hero__badge-pulse" aria-hidden="true" />
+            <span className="hero__badge-dot" aria-hidden="true" />
             <span>Backend engineer, distributed systems</span>
           </div>
 

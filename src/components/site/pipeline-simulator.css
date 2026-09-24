@@ -156,11 +156,12 @@
   color: var(--color-muted);
 }
 
+/* Red is the whole signal. It also pulsed forever, which made a static
+   illustration of the old setup look like a live alarm. */
 .sim-node--error {
   border-color: var(--color-accent);
   background: var(--color-accent);
   color: var(--color-on-accent);
-  animation: pulse-slow 1.5s infinite;
 }
 
 .sim-node--success {
