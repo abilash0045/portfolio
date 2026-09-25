@@ -17,8 +17,9 @@ export const LINKEDIN_URL = "https://www.linkedin.com/in/abilash0045/";
 export const SOURCE_URL = "https://github.com/abilash0045/portfolio";
 
 export const SITE_DESCRIPTION =
-  "Backend engineer on a video rendering pipeline handling 25,000+ renders a day " +
-  "across GKE and Cloud Run. Java, Spring Boot, Kafka, Redis, Kubernetes, GCP and AWS.";
+  "Backend engineer. Lead and architect of CiteOS, an AI search-visibility platform " +
+  "built AI-first on TypeScript, NestJS, PostgreSQL and AWS EKS. Before that, one of " +
+  "the core engineers on a Java and Spring Boot video pipeline running 25,000+ renders a day.";
 
 /**
  * Open Graph fields every page shares. A page that sets its own openGraph
@@ -56,6 +57,6 @@ export const SITE_CARD = {
   width: 1200,
   height: 630,
   alt:
-    "Abilash S L, backend engineer. 25,000 renders a day, 60% to 98% render " +
-    "reliability, 3 days to 1 day config approval.",
+    "Abilash S L, backend engineer. CiteOS from an empty repo to production in three " +
+    "weeks. 25,000 renders a day and 60% to 98% render reliability on the video pipeline.",
 } as const;

@@ -128,7 +128,9 @@ what it did.`;
       <div className="pg-header">
         <h3 className="pg-title">Visitor Pattern Playground</h3>
         <p className="pg-subtitle">
-          Test operations over closed config types without modifying node classes (3-day to 1-day approval win)
+          An illustration of the pattern with generic visitors. The production
+          service has one, PlaygroundVisitor, over TtsRequest, VoiceCloneRequest
+          and LipSyncRequest.
         </p>
       </div>
 

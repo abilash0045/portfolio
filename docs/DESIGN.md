@@ -192,9 +192,20 @@ facts scroll past. The reasoning is in `NOTES.md`.
 
 ## Content
 
-Case studies, in this order. The first leads because "resisted a week of team-wide investigation" is the
-most interview-relevant sentence Abilash has.
+Case studies, in this order. CiteOS leads because it is what he works on now. The render story comes
+next because "resisted a week of team-wide investigation" is the most interview-relevant sentence
+Abilash has.
 
+0. **CiteOS, from an empty repo to production in three weeks.** Whilter's AI search-visibility
+   platform: it measures how a brand shows up in ChatGPT, Perplexity, Gemini, Copilot and Google AI
+   Overviews answers. Abilash is its lead and architect. He chose TypeScript over the mandated
+   Java/Spring stack in a written decision record and directed the design of tenancy, auth and the scan
+   pipeline. The build is AI-first, with one other engineer and Claude Code, and he writes no code by
+   hand, so the page says "built AI-first" and never "hand-built". Stack as the page names it:
+   TypeScript, NestJS, PostgreSQL, Keycloak, pg-boss, Playwright, AWS EKS, Claude Code. First commit
+   2026-07-22, production 2026-08-12, AWS EKS from 2026-08-21, 4,300+ automated tests. Per-domain LLM
+   vendor spend down ~68%, stated only as a percentage because the dollar figures stay internal.
+   Production runs on test brands, so the page claims no customers and no revenue.
 1. **The render failures that survived a week of debugging.** Render success stuck at 60%. Root cause
    was MOV atom corruption from concurrent EFS reads and writes during render. Fix was staging media on
    pod-local ephemeral disk before render. Result 60% → 98%. Written as an investigation, not a summary:
@@ -206,7 +217,12 @@ most interview-relevant sentence Abilash has.
    happen to sum — the page must not let them read as one.
 3. **A config playground built on the Visitor pattern.** Let solution engineers iterate on TTS,
    voice-clone, lip-sync and video-template configs in isolation against client previews. Approval cycle
-   3 days → 1 day. This is the LLD story.
+   3 days → 1 day. This is the LLD story. The production shape is one `PlaygroundVisitor` over
+   `TtsRequest`, `VoiceCloneRequest` and `LipSyncRequest`, subtypes of a `PlaygroundRequest` that Jackson
+   picks by its `type` field (charp `playground` module, added 2025-10-16). The widget on the page
+   illustrates the pattern with generic visitors and says so on screen; the case study text describes
+   the production shape. `ValidateVisitor`, `DiffVisitor`, `SerialiseVisitor` and `PreviewVisitor`
+   were once presented as the real classes. They never existed.
 4. **The dartboard.** Short, links to the source, honest about the Overpass problem and why the
    architecture works around it rather than pretending the API is reliable.
 

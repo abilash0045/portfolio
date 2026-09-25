@@ -17,11 +17,30 @@ type Role = {
 const ROLES: Role[] = [
   {
     title: "Software Development Engineer",
-    org: "Whilter · Video Platform",
-    start: "2023",
+    org: "Whilter · CiteOS, lead and architect",
+    start: "2026",
     lead: (
       <>
-        Operating core video rendering microservices processing{" "}
+        Lead and architect of CiteOS, an AI search-visibility platform taken
+        from an empty repo to <strong>production in three weeks</strong>, built
+        AI-first with Claude Code and one other engineer.
+      </>
+    ),
+    points: [
+      "Chose TypeScript and NestJS over the mandated Java/Spring stack in a written decision record, for a product that spends most of its time waiting on LLM vendor APIs.",
+      "Directed the design of the multi-tenant core: PostgreSQL row-level security behind a startup check that refuses to boot the API if any tenant table loses its policy.",
+      "Cut per-domain LLM vendor spend ~68% by retuning scan cadence, quotas and queue tiers, with the cost model kept in code and asserted by tests.",
+      "Moved it from a single VM to AWS EKS behind a push-to-deploy pipeline that pins image digests and snapshots the database before every apply.",
+    ],
+  },
+  {
+    title: "Software Development Engineer",
+    org: "Whilter · Video Platform",
+    start: "2023",
+    end: "2026",
+    lead: (
+      <>
+        One of the core engineers on video rendering microservices processing{" "}
         <strong>25,000+ daily renders</strong> across GKE and GCP Cloud Run.
       </>
     ),

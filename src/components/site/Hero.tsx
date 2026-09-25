@@ -2,13 +2,14 @@ import CopyEmail from "./CopyEmail";
 import Figure from "./Figure";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_NAME, SITE_ROLE } from "@/lib/site";
 
+// CiteOS first, because it is the current work (DESIGN.md content item 0).
+// The ~40% cost story left the hero rather than shrink to a bare number;
+// the case study below tells it as the two cuts it was.
 const METRICS = [
+  { value: "3 weeks", label: "CiteOS, empty repo to production" },
+  { value: "~68%", label: "CiteOS LLM spend per domain, cut" },
   { value: "25,000+", label: "Daily video renders" },
   { value: "60% → 98%", label: "Render reliability" },
-  // Two independent cuts that happen to sum, which is how DESIGN.md words it.
-  // A bare "~40%" read as one win.
-  { value: "~40%", label: "Cloud spend, cut twice" },
-  { value: "3d → 1d", label: "Config approval cycle" },
 ];
 
 export default function Hero() {
@@ -23,15 +24,16 @@ export default function Hero() {
         </p>
 
         <h1 className="hero__title" id="hero-title">
-          I keep a 25,000-render-a-day pipeline <em>cheap</em> and{" "}
-          <em>standing&nbsp;up</em>.
+          Empty repo in July. In production <em>three&nbsp;weeks</em> later.
         </h1>
 
         <div className="hero__row">
           <p className="hero__lede">
-            At Whilter I work on the video rendering pipeline: Java and Spring
-            Boot over Kafka, Redis and MongoDB, running on GKE and Cloud Run
-            across GCP and AWS.
+            That&apos;s CiteOS, the AI search-visibility platform I lead at
+            Whilter: TypeScript, NestJS and PostgreSQL on AWS EKS, built
+            AI-first with Claude Code and one other engineer. Before it, I was
+            one of the core engineers on a Java and Spring Boot video pipeline
+            running 25,000+ renders a day.
           </p>
 
           <div className="hero__actions">

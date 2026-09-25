@@ -18,6 +18,27 @@ export type CaseStudy = {
 
 export const caseStudies: CaseStudy[] = [
   {
+    // DESIGN.md content item 0. Built AI-first and said so: he writes no code
+    // by hand. Production runs on test brands, so no customer claims, and the
+    // spend cut is a percentage because the dollar figures stay internal.
+    slug: "citeos",
+    title: "CiteOS, AI Search Visibility",
+    headline:
+      "A multi-tenant platform that measures how brands show up in ChatGPT, Perplexity, Gemini, Copilot and Google AI Overviews answers, taken from an empty repo to production in three weeks.",
+    metric: { value: "~68%", label: "LLM spend per domain, cut" },
+    stack: ["TypeScript", "NestJS", "PostgreSQL", "Keycloak", "pg-boss", "Playwright", "AWS EKS", "Claude Code"],
+    problem:
+      "People now find brands through AI answers as much as through search results, and a brand has no way to see how often an answer engine mentions it, which pages it cites, or whether what it says is true. CiteOS asks the engines on a schedule and turns their answers into visibility scores, citations, accuracy checks and a list of fixes.",
+    architecture:
+      "Two deployables: a NestJS API on Fastify that also runs the scanner, crawler and integration workers as pg-boss jobs, and a React web app. PostgreSQL holds every tenant behind row-level security and Keycloak issues the tokens. Engine answers are archived verbatim, so extraction can be replayed without paying for another engine call. It runs on AWS EKS behind a pipeline that pins image digests and snapshots the database before every apply.",
+    contribution:
+      "Lead and architect. Chose TypeScript over the mandated Java/Spring stack in a written decision record, directed the design of tenancy, auth and the scan pipeline, and built it AI-first with one other engineer and Claude Code.",
+    challenges:
+      "Tenant isolation that cannot fail quietly: a startup check refuses to boot the API if any tenant table has lost its row-level security policy. And an auth trap where the token names Keycloak by the browser's hostname while the API has to fetch signing keys by an internal one, so the issuer and the key URL became two settings.",
+    results:
+      "In production three weeks after the first commit and on AWS EKS nine days later, with 4,300+ automated tests. Per-domain LLM vendor spend down ~68% after retuning scan cadence, quotas and queue tiers, with the cost model kept in code and asserted by tests.",
+  },
+  {
     slug: "render-reliability",
     title: "AI Video Generation Platform",
     headline: "Scalable event-driven video rendering microservices processing 25,000+ daily renders across GKE and Cloud Run.",
@@ -79,19 +100,19 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "config-playground",
-    title: "Visitor Pattern Config Engine",
-    headline: "Extensible domain configuration engine reducing solution engineering approval cycles from 3 days to 1 day.",
+    title: "Visitor Pattern Config Playground",
+    headline: "A playground microservice that lets solution engineers try client configurations on their own, cutting approval cycles from 3 days to 1 day.",
     metric: { value: "3 days → 1 day", label: "Config approval cycle" },
-    stack: ["Java", "Design Patterns", "Spring Boot", "TypeScript", "React"],
+    stack: ["Java", "Spring Boot", "Jackson", "Design Patterns"],
     problem:
-      "Every client configuration adjustment required manual engineer intervention and code deployment, creating a 3-day bottleneck for non-technical teams.",
+      "Every client configuration change for TTS, voice cloning or lip sync needed an engineer to run it, so solution engineers waited on us and an approval took 3 days.",
     architecture:
-      "Closed AST node hierarchy evaluated by external Visitor operations (ValidateVisitor, DiffVisitor, SerialiseVisitor, PreviewVisitor) wrapped in an interactive playground UI.",
+      "One PlaygroundRequest type with a subtype per engine: TtsRequest, VoiceCloneRequest and LipSyncRequest. Jackson reads the type field and builds the right subtype, and a PlaygroundVisitor sends each one to its engine, so supporting a new engine means a new subtype and a new visit method rather than another branch in a switch.",
     contribution:
-      "Designed Visitor pattern AST structures, implemented validation/diff algorithms, and created the interactive web playground.",
+      "Built the playground microservice: the request hierarchy, the visitor and the service that runs each request.",
     challenges:
-      "Safely exposing complex model parameters (voice cloning, TTS, lip sync) to non-engineers without risking invalid production configurations.",
+      "Letting non-engineers try TTS, voice-clone and lip-sync settings in isolation against client previews, without touching production configuration.",
     results:
-      "Shortened client configuration approval cycles from 3 days to 1 day and enabled self-service tuning for solution engineering teams.",
+      "Solution engineers test configurations themselves, and the approval cycle went from 3 days to 1 day.",
   },
 ];

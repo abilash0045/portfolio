@@ -26,9 +26,9 @@ const { ink: INK, muted: MUTED, neutral: NEUTRAL, rule: RULE, accent: ACCENT, pa
 
 /** The three numbers the site leads with, in the wording it uses. */
 const FACTS = [
+  { value: "3 weeks", label: "Repo to production" },
   { value: "25,000+", label: "Renders a day" },
   { value: "60% → 98%", label: "Render reliability" },
-  { value: "3d → 1d", label: "Config approval" },
 ];
 
 /** The two words the headline leans on, in the serif, as on the page. */
@@ -111,15 +111,11 @@ export default function Image() {
               letterSpacing: -5,
             }}
           >
-            <div style={{ display: "flex" }}>I keep a 25,000-</div>
-            <div style={{ display: "flex" }}>render-a-day pipeline</div>
+            <div style={{ display: "flex" }}>Empty repo in July.</div>
+            <div style={{ display: "flex" }}>In production</div>
             <div style={{ display: "flex", gap: 22 }}>
-              <Serif>cheap</Serif>
-              <span>and</span>
-              <div style={{ display: "flex" }}>
-                <Serif>standing up</Serif>
-                <span>.</span>
-              </div>
+              <Serif>three weeks</Serif>
+              <span>later.</span>
             </div>
           </div>
         </div>
