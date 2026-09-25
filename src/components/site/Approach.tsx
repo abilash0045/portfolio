@@ -20,13 +20,16 @@ const PRINCIPLES = [
   },
 ];
 
+// "Run in production" is the bar. RabbitMQ sat under Messaging without ever
+// having been run; it only appears in CiteOS's docs as an alternative.
 const TOOLBOX = [
-  { category: "Languages", items: ["Java", "Python", "SQL", "TypeScript"] },
-  { category: "Backend", items: ["Spring Boot", "Spring Security", "REST APIs", "Microservices"] },
-  { category: "Messaging", items: ["Kafka", "GCP Pub/Sub", "RabbitMQ"] },
-  { category: "Databases", items: ["MongoDB", "PostgreSQL", "MySQL", "Redis"] },
+  { category: "Languages", items: ["Java", "TypeScript", "Python", "SQL"] },
+  { category: "Backend", items: ["Spring Boot", "Spring Security", "NestJS", "REST APIs", "Microservices"] },
+  { category: "Messaging", items: ["Kafka", "GCP Pub/Sub", "pg-boss"] },
+  { category: "Databases", items: ["PostgreSQL", "MongoDB", "MySQL", "Redis"] },
   { category: "Cloud", items: ["AWS", "EKS", "S3", "ECR", "GCP Cloud Run"] },
-  { category: "DevOps", items: ["Docker", "Kubernetes", "Git", "Maven", "Linux"] },
+  { category: "DevOps", items: ["Docker", "Kubernetes", "Jenkins", "Git", "Maven", "Linux"] },
+  { category: "AI", items: ["OpenAI API", "Anthropic API", "Gemini API", "Claude Code"] },
 ];
 
 export default function Approach() {
