@@ -28,28 +28,11 @@ export const caseStudies: CaseStudy[] = [
     architecture:
       "Distributed event-driven architecture using Kafka for task ingestion, GKE worker clusters for rendering, Redis for media segment caching, and Pub/Sub queue-depth autoscaling.",
     contribution:
-      "Architected core rendering microservices, root-caused EFS concurrent write atom corruption, and implemented pod-local ephemeral storage staging for render workloads.",
+      "Engineered core rendering microservices as one of the pipeline's core engineers, root-caused EFS concurrent write atom corruption, and implemented pod-local ephemeral storage staging for render workloads.",
     challenges:
       "Diagnosing non-reproducible MOV atom file header corruption caused by simultaneous read/write locks across shared network file systems.",
     results:
-      "Raised pipeline render reliability from 60% to 98%, eliminated un-reproducible MOV atom errors, and scaled daily throughput to 25,000+ videos.",
-  },
-  {
-    slug: "whatsapp-automation",
-    title: "WhatsApp Automation Platform",
-    headline: "High-throughput messaging and notification workflows integrating Spring Boot, bot engines, and REST APIs.",
-    metric: { value: "85%", label: "Customer response workflows automated" },
-    stack: ["Java", "Spring Boot", "Spring Security", "REST APIs", "Botpress", "MySQL", "Redis"],
-    problem:
-      "Manual customer response flows and fragmented messaging systems caused high latency and low engagement during high-volume notification bursts.",
-    architecture:
-      "Spring Boot RESTful microservices layer connected to automated bot webhooks, MySQL transactional stores, and Redis rate limiters.",
-    contribution:
-      "Designed REST API contracts, implemented secure webhook handlers, integrated bot message engines, and built automated notification retry queues.",
-    challenges:
-      "Handling upstream WhatsApp API rate limits and preventing message duplication under sudden burst traffic.",
-    results:
-      "Automated 85% of customer response workflows, reduced notification delivery latency to under 1.2 seconds, and achieved zero message loss.",
+      "Raised pipeline render reliability from 60% to 98% and eliminated the un-reproducible MOV atom errors.",
   },
   {
     // Told the way docs/DESIGN.md tells it: two independent wins, and the

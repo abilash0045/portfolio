@@ -32,18 +32,6 @@ const ROLES: Role[] = [
       "Created an extensible Visitor pattern config engine, cutting client solution approval cycles from 3 days to 1 day.",
     ],
   },
-  {
-    title: "Software Development Engineer",
-    org: "Distributed Systems",
-    start: "2021",
-    end: "2023",
-    lead: "Designing high-performance Java REST APIs, notification queues, and automated bot integrations.",
-    points: [
-      "Built resilient Spring Boot microservices with MySQL transactional integrity and Redis rate limiters.",
-      "Integrated WhatsApp automation workflows handling burst traffic with under 1.2s delivery latency.",
-      "Configured Docker container builds and Kubernetes EKS deployment manifests for zero-downtime rolling updates.",
-    ],
-  },
 ];
 
 export default function Experience() {
