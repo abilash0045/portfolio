@@ -19,9 +19,11 @@ export default function Hero() {
       <div className="container">
         <p className="hero__eyebrow">
           <span className="hero__dot" aria-hidden="true" />
-          {SITE_NAME}
-          <span aria-hidden="true">/</span>
-          {SITE_ROLE}
+          <span className="hero__whose">
+            {SITE_NAME}
+            <span aria-hidden="true">/</span>
+          </span>
+          <span className="hero__role">{SITE_ROLE}</span>
         </p>
 
         <h1 className="hero__title" id="hero-title">

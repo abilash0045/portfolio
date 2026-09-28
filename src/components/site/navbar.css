@@ -37,7 +37,11 @@
   transform: none;
 }
 
+/* The name never breaks. At 320px the bar ran 9px short and it went
+   "Abilash S" over "L". */
 .navbar__brand {
+  flex: none;
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -148,6 +152,16 @@
 .navbar__menu-btn:active,
 .navbar__theme-btn:active {
   transform: translateY(1px);
+}
+
+@media (max-width: 359px) {
+  .navbar {
+    gap: 14px;
+  }
+
+  .navbar__menu-btn {
+    padding-inline: 12px;
+  }
 }
 
 @media (max-width: 820px) {

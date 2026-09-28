@@ -118,11 +118,11 @@
   padding-block: clamp(56px, 10vw, 136px) clamp(56px, 8vw, 104px);
 }
 
+/* Baseline, so the dot sits level with the capitals of the first line. */
 .hero__eyebrow {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 12px;
+  align-items: baseline;
+  gap: 12px;
   margin-bottom: clamp(28px, 4vw, 52px);
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -130,6 +130,27 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-secondary);
+}
+
+/* On a phone the bar right above already names him, and with the name in
+   too this line ran to three, with the slash left hanging at the end of the
+   first. From 720px it all fits on one line. */
+.hero__whose {
+  display: none;
+  gap: 12px;
+}
+
+@media (min-width: 720px) {
+  .hero__whose {
+    display: inline-flex;
+  }
+}
+
+/* Shrinks instead of wrapping as a whole, so on a phone the role stays
+   beside the dot and breaks within itself. */
+.hero__role {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .hero__dot {
