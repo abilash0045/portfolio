@@ -7,7 +7,7 @@
 export const SITE_URL = "https://portfolio-madcap1.vercel.app";
 
 export const SITE_NAME = "Abilash S L";
-export const SITE_ROLE = "Backend Engineer, distributed systems";
+export const SITE_ROLE = "Backend engineer at Whilter.ai";
 
 /** Where people reach him. Written out once, used by the hero, the contact
     section and the footer. */

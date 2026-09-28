@@ -1,22 +1,24 @@
 import SectionHead from "./SectionHead";
 import "./approach.css";
 
+// Each one is something he did, not a slogan: the render bug, the move off
+// always-on Kafka, CiteOS's tenancy check, and how CiteOS gets built.
 const PRINCIPLES = [
   {
-    title: "Fault Isolation over Silent Retries",
-    desc: "Swallowed exceptions and papered-over retries increase cloud spend and mask bugs. Systems must isolate failure layers directly to reveal root causes.",
+    title: "Reproduce It Before Theorising",
+    desc: "The render failure survived a week of theories about the renderer. Run one record at a time, it never failed; run in parallel, it failed every time. That split said concurrency, and the pod logs said which file.",
   },
   {
-    title: "Pod-Local Ephemeral Work Execution",
-    desc: "Concurrent media rendering should never mutate shared network storage mid-flight. Stage work on pod-local disk, complete execution, then publish output.",
+    title: "Pay for Traffic, Not for Idle",
+    desc: "Brokers running around the clock and render pods waiting between bursts were a fixed bill against bursty load. A queue that costs nothing when empty, and instances that scale to zero, made the spend follow the work.",
   },
   {
-    title: "Sub-Entity Caching Boundaries",
-    desc: "Cache granular sub-segments (audio synthesis, lip sync vectors) rather than full monolithic outputs to reach cache hit rates around 80% across dynamic requests.",
+    title: "Make the Unsafe State Refuse to Start",
+    desc: "CiteOS keeps tenants apart with row-level security, so the API checks every tenant table's policy at startup and will not boot if one is missing. A guarantee that can fail quietly is not a guarantee.",
   },
   {
-    title: "Extensible Without Breaking Contracts",
-    desc: "Architect closed data structures with visitor operations so new functionality can be introduced without mutating existing node types or breaking contracts.",
+    title: "Agents Write the Code, Tests Decide",
+    desc: "I run AI agents like a small team: a clear spec, tests as the gate, and a review before anything ships. CiteOS reached production in three weeks with 4,300+ automated tests behind it.",
   },
 ];
 
@@ -40,7 +42,7 @@ export default function Approach() {
           index="03"
           id="approach-title"
           title="How I work"
-          intro="Most of what I do lands on either the cloud bill or the on-call dashboard. How media gets cached, how render jobs get queued and scaled, and what breaks when shared storage, concurrency and bursty traffic all arrive at once."
+          intro="I like problems that end up on the cloud bill or the on-call dashboard. On CiteOS I set the direction and own the decisions, and the agents write the code."
         />
 
         <ol className="principles">

@@ -17,9 +17,8 @@ export default function Contact() {
 
         <div className="contact__grid">
           <p className="contact__lede" data-reveal>
-            If your team works on high-throughput backends, caching, or the
-            kind of infrastructure problems that show up on the bill, I&apos;m
-            happy to talk shop.
+            If your team works on backends where cost and reliability show up
+            on the bill, or is building AI-first, I&apos;m happy to talk shop.
           </p>
 
           <div className="contact__reach" data-reveal>
