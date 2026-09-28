@@ -258,6 +258,15 @@ links back to the work.
 
 Attribution: OpenStreetMap contributors credited on the map, per ODbL. Non-negotiable and not fine print.
 
+## Performance
+
+Below the hero, each case study and the sections after them are laid out as they are needed, not all
+before the first paint (`content-visibility: auto` with measured height estimates in `site.css`).
+`LayoutAhead.tsx` lays them out for real straight after load, one per idle moment, and all at once
+before any jump to a `#section`, because a jump past estimated heights lands in the wrong place and
+Safari has no scroll anchoring to correct it. `e2e/jumps.spec.ts` checks that jumps land. The
+measurements behind this are in `NOTES.md`.
+
 ## Testing
 
 The dart sampler is a pure function and gets real tests:

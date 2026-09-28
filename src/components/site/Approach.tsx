@@ -25,7 +25,12 @@ const PRINCIPLES = [
 
 export default function Approach() {
   return (
-    <section className="section" id="approach" aria-labelledby="approach-title">
+    <section
+      className="section"
+      id="approach"
+      aria-labelledby="approach-title"
+      data-lazy-layout
+    >
       <div className="container">
         <SectionHead
           index="03"

@@ -7,7 +7,12 @@ import "./contact.css";
 // job without pretending otherwise.
 export default function Contact() {
   return (
-    <section className="section contact" id="contact" aria-labelledby="contact-title">
+    <section
+      className="section contact"
+      id="contact"
+      aria-labelledby="contact-title"
+      data-lazy-layout
+    >
       <div className="container">
         <span className="section-head__index" aria-hidden="true">
           05

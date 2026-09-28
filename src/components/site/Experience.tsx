@@ -13,7 +13,12 @@ import "./experience.css";
 
 export default function Experience() {
   return (
-    <section className="section" id="experience" aria-labelledby="experience-title">
+    <section
+      className="section"
+      id="experience"
+      aria-labelledby="experience-title"
+      data-lazy-layout
+    >
       <div className="container">
         <SectionHead
           index="02"

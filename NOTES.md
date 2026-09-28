@@ -118,6 +118,24 @@ describes: two deployables, the jobs, the database's tenancy rule, the cluster. 
 and its test fails if it names a component the study's prose doesn't, or a customer, a hostname or a
 dollar amount. DESIGN.md now says this outright instead of leaving it to a test comment.
 
+**2026-09-28: Below the hero, the page is laid out as it is needed.**
+Measured on a 4x-throttled phone profile: the first layout shaped every line on the page, 190 to 270ms
+before anything painted, and Lighthouse mobile scored 85 with 380ms of total blocking time. Nothing in
+the CSS was to blame on its own; switching off text-wrap, container queries, sticky, the SVGs or
+kerning changed nothing, and only system fonts helped much. `content-visibility: auto` on the case
+studies and the sections after them cut that layout to about 55ms. It also broke anchor jumps: with
+estimated heights, smooth jumps landed over 1,200px off, jumps Next scrolled after a page change over
+600px off, and Safari has no scroll anchoring to correct even the browser's own. So `LayoutAhead.tsx`
+lays every block out for real straight after load, one per idle callback (each step 11 to 26ms under
+the same throttling, so none is a long task), and all at once before a hash-link click or when a visit
+arrives with a `#section`. Results against the local production build: Lighthouse mobile 97, 95, 95,
+95 and 95 on five runs, plus 86 on the first run after a server restart; desktop 100; the résumé 96 and
+the dartboard 97. 112 of 112 jumps landed at seven widths from 320 to 1920px, including clicks made
+before anything had been drawn. The height estimates are content boxes, padding excluded, averaged
+over each width tier; if a section's content changes a lot, measure it again with the lazy layout off.
+The case study ids moved to their list items on the way, because the article slides 14px as it
+appears, and a link straight to one landed 14px high.
+
 **2026-09-28: Search engines get a map and a fence.**
 `robots.txt` keeps crawlers off `/api/`, which proxies Nominatim and Overpass: their rate limits are
 shared by every visitor, and a crawler walking those routes would spend them for nothing. The sitemap

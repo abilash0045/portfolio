@@ -33,7 +33,7 @@ export default function CaseStudy({ study, number, total }: Props) {
   const titleId = `${study.slug}-title`;
 
   return (
-    <article className="study" id={study.slug} aria-labelledby={titleId} data-reveal>
+    <article className="study" aria-labelledby={titleId} data-reveal data-lazy-layout>
       <div className="study__aside">
         <p className="study__number">
           {pad(number)} <span className="study__of">/ {pad(total)}</span>
