@@ -103,6 +103,13 @@ employer with two products instead of two jobs, and gains the side projects, edu
 the resume. The principles are four things he actually did rather than four slogans. Where his accounts
 hold numbers the resume doesn't, batch volumes and a render time budget, the page leaves them out.
 
+**2026-09-28: The resume is a page, not a download.**
+A 473-byte stub once sat behind a resume download link. `/resume` is built from `src/content/resume.ts`,
+which Experience, the toolbox and the structured data read too, so it cannot fall behind the site, and
+the browser's print dialog makes the PDF when someone needs one. The phone number stays off it: it is
+on the resume Abilash sends, and this page is public and indexed. The bar, the hero, the contact
+section and the footer all link to it.
+
 **2026-09-28: A diagram may draw what the prose says, and no more.**
 DESIGN.md ruled out real architecture diagrams of Whilter's system. The render path diagram already
 existed on the reading that a drawing of the case study's own words exposes nothing new, and a test

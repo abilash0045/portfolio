@@ -1,3 +1,4 @@
+import Link from "next/link";
 import CopyEmail from "./CopyEmail";
 import Figure from "./Figure";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_NAME, SITE_ROLE } from "@/lib/site";
@@ -32,8 +33,8 @@ export default function Hero() {
             That&apos;s CiteOS, the AI search-visibility platform I lead at
             Whilter: TypeScript, NestJS and PostgreSQL on AWS EKS, built
             AI-first with Claude Code and one other engineer. Before it, I was
-            one of the core engineers on a Java and Spring Boot video pipeline
-            running 25,000+ renders a day.
+            one of the core engineers on a Java, Spring Boot and Kafka video
+            pipeline running 25,000+ renders a day.
           </p>
 
           <div className="hero__actions">
@@ -45,6 +46,9 @@ export default function Hero() {
             </div>
 
             <div className="hero__socials">
+              <Link className="hero__social-link" href="/resume">
+                Résumé
+              </Link>
               <a
                 className="hero__social-link"
                 href={GITHUB_URL}

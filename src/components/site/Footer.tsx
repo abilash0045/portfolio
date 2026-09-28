@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_NAME, SOURCE_URL } from "@/lib/site";
 
 export default function Footer() {
@@ -24,6 +25,11 @@ export default function Footer() {
             <a className="footer__link" href={`mailto:${EMAIL}`}>
               Email
             </a>
+          </li>
+          <li>
+            <Link className="footer__link" href="/resume">
+              Résumé
+            </Link>
           </li>
           <li>
             <a className="footer__link" href={SOURCE_URL} target="_blank" rel="noopener noreferrer">

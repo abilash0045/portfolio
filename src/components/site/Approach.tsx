@@ -1,4 +1,5 @@
 import SectionHead from "./SectionHead";
+import { TOOLBOX } from "@/content/resume";
 import "./approach.css";
 
 // Each one is something he did, not a slogan: the render bug, the move off
@@ -20,18 +21,6 @@ const PRINCIPLES = [
     title: "Agents Write the Code, Tests Decide",
     desc: "I run AI agents like a small team: a clear spec, tests as the gate, and a review before anything ships. CiteOS reached production in three weeks with 4,300+ automated tests behind it.",
   },
-];
-
-// "Run in production" is the bar. RabbitMQ sat under Messaging without ever
-// having been run; it only appears in CiteOS's docs as an alternative.
-const TOOLBOX = [
-  { category: "Languages", items: ["Java", "TypeScript", "Python", "SQL"] },
-  { category: "Backend", items: ["Spring Boot", "Spring Security", "NestJS", "REST APIs", "Microservices"] },
-  { category: "Messaging", items: ["Kafka", "GCP Pub/Sub", "pg-boss"] },
-  { category: "Databases", items: ["PostgreSQL", "MongoDB", "MySQL", "Redis"] },
-  { category: "Cloud", items: ["AWS", "EKS", "S3", "ECR", "GCP Cloud Run"] },
-  { category: "DevOps", items: ["Docker", "Kubernetes", "Jenkins", "Git", "Maven", "Linux"] },
-  { category: "AI", items: ["OpenAI API", "Anthropic API", "Gemini API", "Claude Code"] },
 ];
 
 export default function Approach() {

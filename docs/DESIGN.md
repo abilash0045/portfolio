@@ -245,6 +245,11 @@ Experience follows the resume: one employer, Whilter Technologies, from May 2023
 architect, from July 2026) and the personalized video platform (May 2023 to July 2026) as two parts of
 the same role, then the side projects, education and award the resume lists. No other job goes here.
 
+The resume is a page, `/resume`, not a file. It reads `src/content/resume.ts`, the same data as
+Experience, the toolbox and the structured data, so none of them can drift from the others, and it
+prints to a clean sheet for anyone who wants a PDF. It gives his email and profiles and no phone
+number: that is on the resume he sends, not on a public page.
+
 Attribution: OpenStreetMap contributors credited on the map, per ODbL. Non-negotiable and not fine print.
 
 ## Testing

@@ -62,14 +62,24 @@ test.describe("nothing on this page claims something untrue", () => {
 
     // An in-page anchor pointing at a section that no longer exists is a dead
     // link that still looks alive. Removing the testimonials section left one.
-    const fragments = hrefs.filter(
-      (h): h is string => !!h && h.startsWith("#") && h.length > 1,
-    );
-    for (const fragment of fragments) {
+    // The bar's links are rooted at "/" so they work from every page, which
+    // makes "/#work" an in-page anchor here too.
+    const fragments = hrefs.filter((h): h is string => !!h && /^\/?#./.test(h));
+    expect(fragments.length).toBeGreaterThan(5);
+    for (const href of fragments) {
       await expect(
-        page.locator(fragment),
-        `${fragment} has no matching element on the page`,
+        page.locator(href.slice(href.indexOf("#"))),
+        `${href} has no matching element on the page`,
       ).toHaveCount(1);
+    }
+
+    // And a link to another page of this site has to reach one.
+    const pages = [
+      ...new Set(hrefs.filter((h): h is string => !!h && h.startsWith("/") && !h.startsWith("/#"))),
+    ];
+    expect(pages).toContain("/resume");
+    for (const path of pages) {
+      expect((await page.request.get(path)).status(), `${path} does not answer`).toBe(200);
     }
   });
 

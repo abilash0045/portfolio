@@ -1,3 +1,4 @@
+import Link from "next/link";
 import CopyEmail from "./CopyEmail";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL } from "@/lib/site";
 import "./contact.css";
@@ -48,6 +49,11 @@ export default function Contact() {
                   >
                     LinkedIn ↗
                   </a>
+                </li>
+                <li>
+                  <Link className="contact-channel-link" href="/resume">
+                    Résumé
+                  </Link>
                 </li>
               </ul>
             </div>
