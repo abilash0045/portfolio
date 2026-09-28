@@ -118,6 +118,12 @@ describes: two deployables, the jobs, the database's tenancy rule, the cluster. 
 and its test fails if it names a component the study's prose doesn't, or a customer, a hostname or a
 dollar amount. DESIGN.md now says this outright instead of leaving it to a test comment.
 
+**2026-09-28: Search engines get a map and a fence.**
+`robots.txt` keeps crawlers off `/api/`, which proxies Nominatim and Overpass: their rate limits are
+shared by every visitor, and a crawler walking those routes would spend them for nothing. The sitemap
+lists the three pages. The 404 page had inherited the home page's title and canonical, which told
+search engines every dead address was a copy of `/`; it now has its own title and no canonical.
+
 ## Progress
 
 - [x] 2026-08-05: API behaviour measured (Nominatim, Overpass, both tile sources)

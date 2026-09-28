@@ -250,6 +250,12 @@ Experience, the toolbox and the structured data, so none of them can drift from 
 prints to a clean sheet for anyone who wants a PDF. It gives his email and profiles and no phone
 number: that is on the resume he sends, not on a public page.
 
+For search engines: `robots.txt` keeps crawlers off `/api/`, whose upstream rate limits every visitor
+shares; the sitemap lists `/`, `/resume` and `/dartboard`; the home page carries schema.org Person and
+WebSite data built from the page's own data and claiming nothing it doesn't, with no telephone and the
+employer named but not linked. An unknown address answers 404 with its own title, no canonical, and
+links back to the work.
+
 Attribution: OpenStreetMap contributors credited on the map, per ODbL. Non-negotiable and not fine print.
 
 ## Testing
