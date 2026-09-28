@@ -1,0 +1,233 @@
+/* The résumé, on the site's two-column grid: what a section is on the left,
+   its content on the right. It prints on the same structure, in black on
+   white, without the site's chrome. */
+.resume {
+  padding-block: clamp(48px, 8vw, 112px) clamp(64px, 8vw, 120px);
+}
+
+.resume__head {
+  display: grid;
+  gap: 18px;
+  padding-bottom: clamp(32px, 5vw, 56px);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.resume__name {
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.resume__role {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.resume__contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.resume__contact a {
+  white-space: nowrap;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.resume__contact a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.resume__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+  margin-top: 10px;
+}
+
+.resume__section {
+  display: grid;
+  row-gap: 14px;
+  padding-block: clamp(28px, 4vw, 44px);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+@media (min-width: 900px) {
+  .resume__section {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+    column-gap: clamp(32px, 5vw, 80px);
+  }
+}
+
+.resume__label {
+  padding-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.resume__body {
+  max-width: 72ch;
+  margin: 0;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.resume__body strong,
+.resume__lead strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.resume__role-title {
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.resume__dates {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.resume__part {
+  margin-top: 26px;
+}
+
+.resume__part-title {
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.resume__lead {
+  margin-top: 10px;
+  color: var(--text-primary);
+}
+
+.resume__points {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding-left: 1.4em;
+  list-style-type: "–  ";
+}
+
+.resume__points li::marker {
+  color: var(--color-accent);
+}
+
+.resume__skills {
+  display: grid;
+  gap: 10px;
+}
+
+.resume__skill {
+  display: grid;
+  gap: 2px 20px;
+}
+
+@media (min-width: 640px) {
+  .resume__skill {
+    grid-template-columns: 8rem minmax(0, 1fr);
+  }
+}
+
+.resume__skill dt {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.resume__skill dd {
+  margin: 0;
+}
+
+.resume__plain-list {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+/* Paper: no chrome, no dark theme, no accent fills, and a role never split
+   across two pages if it fits on one. */
+@media print {
+  @page {
+    margin: 14mm 16mm;
+  }
+
+  .navbar-wrapper,
+  .footer,
+  .resume__actions {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .resume {
+    width: auto;
+    padding: 0;
+    font-size: 10.5pt;
+  }
+
+  .resume * {
+    color: #111 !important;
+  }
+
+  .resume__role,
+  .resume__label,
+  .resume__dates,
+  .resume__contact a {
+    color: #555 !important;
+  }
+
+  .resume__points li::marker {
+    color: #555 !important;
+  }
+
+  .resume__name {
+    font-size: 26pt;
+  }
+
+  .resume__head,
+  .resume__section {
+    border-color: #ccc;
+  }
+
+  .resume__section {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    column-gap: 18px;
+    padding-block: 10pt;
+  }
+
+  .resume__part,
+  .resume__skill,
+  .resume__plain-list li {
+    break-inside: avoid;
+  }
+}

@@ -15,8 +15,11 @@ export default function Work() {
         />
 
         <ol className="work-list">
+          {/* The id sits on the item rather than the article, because the
+              article slides 14px as it appears and a link straight to it was
+              scrolled into place mid-slide, then left 14px high. */}
           {caseStudies.map((study, index) => (
-            <li key={study.slug}>
+            <li key={study.slug} id={study.slug}>
               <CaseStudy study={study} number={index + 1} total={caseStudies.length} />
             </li>
           ))}

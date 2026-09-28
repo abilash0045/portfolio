@@ -8,13 +8,21 @@ import Contact from "@/components/site/Contact";
 import Footer from "@/components/site/Footer";
 import Dartboard from "@/components/dartboard/Dartboard";
 import ScrollReveal from "@/components/site/ScrollReveal";
+import LayoutAhead from "@/components/site/LayoutAhead";
+import { structuredDataScript } from "@/lib/structured-data";
 import "@/components/site/site.css";
 
 export default function Home() {
   return (
     <>
+      {/* Structured data is not executable, so a plain script tag, per the Next docs. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: structuredDataScript() }}
+      />
       <Navbar />
       <ScrollReveal />
+      <LayoutAhead />
 
       <main id="main">
         <Hero />
@@ -26,6 +34,7 @@ export default function Home() {
           className="section"
           id="dartboard-embedded-section"
           aria-labelledby="dartboard-title"
+          data-lazy-layout
         >
           <div className="container">
             <SectionHead

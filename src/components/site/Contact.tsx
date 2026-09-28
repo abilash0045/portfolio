@@ -1,3 +1,4 @@
+import Link from "next/link";
 import CopyEmail from "./CopyEmail";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL } from "@/lib/site";
 import "./contact.css";
@@ -6,7 +7,12 @@ import "./contact.css";
 // job without pretending otherwise.
 export default function Contact() {
   return (
-    <section className="section contact" id="contact" aria-labelledby="contact-title">
+    <section
+      className="section contact"
+      id="contact"
+      aria-labelledby="contact-title"
+      data-lazy-layout
+    >
       <div className="container">
         <span className="section-head__index" aria-hidden="true">
           05
@@ -17,9 +23,8 @@ export default function Contact() {
 
         <div className="contact__grid">
           <p className="contact__lede" data-reveal>
-            If your team works on high-throughput backends, caching, or the
-            kind of infrastructure problems that show up on the bill, I&apos;m
-            happy to talk shop.
+            If your team works on backends where cost and reliability show up
+            on the bill, or is building AI-first, I&apos;m happy to talk shop.
           </p>
 
           <div className="contact__reach" data-reveal>
@@ -49,6 +54,11 @@ export default function Contact() {
                   >
                     LinkedIn ↗
                   </a>
+                </li>
+                <li>
+                  <Link className="contact-channel-link" href="/resume">
+                    Résumé
+                  </Link>
                 </li>
               </ul>
             </div>

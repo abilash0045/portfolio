@@ -126,6 +126,42 @@ describe("every case study", () => {
   });
 });
 
+describe("the render case study", () => {
+  const study = caseStudies.find((c) => c.slug === "render-reliability")!;
+  const prose = [
+    study.headline,
+    study.problem,
+    study.architecture,
+    study.contribution,
+    study.challenges,
+    study.results,
+  ].join(" ");
+
+  // Three engineers were on it. His part is the reproduction, the trace and
+  // the fix, and the card must not grow into owning the whole pipeline.
+  it("credits the team and claims only his part", () => {
+    expect(study.contribution).toContain("Three of us");
+    expect(prose.toLowerCase()).not.toMatch(/single-handed|on my own|\bsole\b|\balone\b/);
+  });
+
+  // The move to EFS came first, for throughput; the failure came later, at a
+  // client's batch volume. Told the other way round, it reads as if the
+  // migration caused the outage.
+  it("tells the EFS move before the failure it exposed", () => {
+    const moved = study.problem.indexOf("S3 to a shared EFS mount");
+    const failed = study.problem.indexOf("segmentation faults");
+    expect(moved, "the move to EFS is not told").toBeGreaterThanOrEqual(0);
+    expect(failed, "the failure is not told").toBeGreaterThanOrEqual(0);
+    expect(moved, "the failure is told before the move").toBeLessThan(failed);
+  });
+
+  // Employer detail stays at resume level: batch volumes and the render time
+  // budget are real, but they are not on the resume, so they are not here.
+  it("quotes nothing the resume does not", () => {
+    expect(prose).not.toMatch(/million|\bSLA\b|minute/i);
+  });
+});
+
 describe("the CiteOS case study", () => {
   const study = caseStudies.find((c) => c.slug === "citeos")!;
   // DESIGN.md's account of this story: content item 0, up to item 1.

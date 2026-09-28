@@ -27,7 +27,10 @@ It is the only thing on the site whose source a reader can actually inspect.
   to open, not on the front page of a portfolio.
 - Employer detail is capped at what his resume and LinkedIn already say publicly. Numbers, tech, and
   narrative are in. Internal service names, client names, config specifics, and real architecture
-  diagrams of Whilter's system are out.
+  diagrams of Whilter's system are out. A diagram that draws only what its case study's prose already
+  says, at that level of detail and no further, is allowed: `e2e/pipeline-diagram.spec.ts` holds the
+  render path and CiteOS diagrams to naming nothing the prose doesn't, and to no internal names,
+  customers or dollar figures.
 - Nothing mocked. Every feature calls real APIs and handles real failures. No fixture data standing in
   for a live call, anywhere.
 - Two tracking files total: this document, and `NOTES.md` for running progress and decisions.
@@ -209,12 +212,20 @@ Abilash has.
 1. **The render failures that survived a week of debugging.** Render success stuck at 60%. Root cause
    was MOV atom corruption from concurrent EFS reads and writes during render. Fix was staging media on
    pod-local ephemeral disk before render. Result 60% → 98%. Written as an investigation, not a summary:
-   what was tried, what ruled things out, what the actual mechanism was.
+   what was tried, what ruled things out, what the actual mechanism was. Told in the order it happened:
+   media moved from S3 to a shared EFS mount first, for throughput, and the failure came later, when a
+   client's batch pushed volume up. Told the other way round it reads as if the migration caused the
+   outage. Serial renders never failed and parallel ones did, which pointed at concurrency; the pod logs
+   showed a moov atom error on every failure. Credit as it was: three engineers narrowed it down over
+   about a week, and Abilash built the reproduction, traced it and proposed the fix. Batch volumes and the
+   render time budget are real but not on the resume, so they stay off the page.
 2. **Cutting cloud spend ~40%, twice, for different reasons.** Segment-level Redis cache deduplicating
    TTS, voice-clone and lip-sync segments across users with overlapping params, ~80% hit rate, ~30% of
    the saving. Then migrating render autoscaling from KEDA-on-GKE (Kafka lag) to a Pub/Sub queue-depth
    Cloud Run autoscaler, scale-to-zero killing idle-pod cost, the other ~10%. Two independent wins that
-   happen to sum — the page must not let them read as one.
+   happen to sum; the page must not let them read as one. Abilash built the cache and owned the move
+   off self-managed Kafka onto Pub/Sub and Cloud Run; folding the render path into one service around
+   it was a team decision, and the page says so.
 3. **A config playground built on the Visitor pattern.** Let solution engineers iterate on TTS,
    voice-clone, lip-sync and video-template configs in isolation against client previews. Approval cycle
    3 days → 1 day. This is the LLD story. The production shape is one `PlaygroundVisitor` over
@@ -226,7 +237,35 @@ Abilash has.
 4. **The dartboard.** Short, links to the source, honest about the Overpass problem and why the
    architecture works around it rather than pretending the API is reliable.
 
+Each study says whose work it was, "Professional work, Whilter" or "Personal project", before it
+claims anything, and gives the trade-off the work turned on next to the problem, the architecture,
+his part, the hard part and the result.
+
+Experience follows the resume: one employer, Whilter Technologies, from May 2023, with CiteOS (lead and
+architect, from July 2026) and the personalized video platform (May 2023 to July 2026) as two parts of
+the same role, then the side projects, education and award the resume lists. No other job goes here.
+
+The resume is a page, `/resume`, not a file. It reads `src/content/resume.ts`, the same data as
+Experience, the toolbox and the structured data, so none of them can drift from the others, and it
+prints to a clean sheet for anyone who wants a PDF. It gives his email and profiles and no phone
+number: that is on the resume he sends, not on a public page.
+
+For search engines: `robots.txt` keeps crawlers off `/api/`, whose upstream rate limits every visitor
+shares; the sitemap lists `/`, `/resume` and `/dartboard`; the home page carries schema.org Person and
+WebSite data built from the page's own data and claiming nothing it doesn't, with no telephone and the
+employer named but not linked. An unknown address answers 404 with its own title, no canonical, and
+links back to the work.
+
 Attribution: OpenStreetMap contributors credited on the map, per ODbL. Non-negotiable and not fine print.
+
+## Performance
+
+Below the hero, each case study and the sections after them are laid out as they are needed, not all
+before the first paint (`content-visibility: auto` with measured height estimates in `site.css`).
+`LayoutAhead.tsx` lays them out for real straight after load, one per idle moment, and all at once
+before any jump to a `#section`, because a jump past estimated heights lands in the wrong place and
+Safari has no scroll anchoring to correct it. `e2e/jumps.spec.ts` checks that jumps land. The
+measurements behind this are in `NOTES.md`.
 
 ## Testing
 

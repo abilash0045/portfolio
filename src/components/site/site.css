@@ -118,11 +118,11 @@
   padding-block: clamp(56px, 10vw, 136px) clamp(56px, 8vw, 104px);
 }
 
+/* Baseline, so the dot sits level with the capitals of the first line. */
 .hero__eyebrow {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 12px;
+  align-items: baseline;
+  gap: 12px;
   margin-bottom: clamp(28px, 4vw, 52px);
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -130,6 +130,27 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-secondary);
+}
+
+/* On a phone the bar right above already names him, and with the name in
+   too this line ran to three, with the slash left hanging at the end of the
+   first. From 720px it all fits on one line. */
+.hero__whose {
+  display: none;
+  gap: 12px;
+}
+
+@media (min-width: 720px) {
+  .hero__whose {
+    display: inline-flex;
+  }
+}
+
+/* Shrinks instead of wrapping as a whole, so on a phone the role stays
+   beside the dot and breaks within itself. */
+.hero__role {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .hero__dot {
@@ -301,4 +322,80 @@
 
 .footer__link:hover {
   color: var(--color-accent);
+}
+
+/* Below the hero, a block marked data-lazy-layout is laid out when it nears
+   the screen or when LayoutAhead.tsx gets to it, whichever comes first,
+   instead of all at once. The first layout used to shape every line on the
+   page before anything painted, 190 to 270ms on a phone-class CPU, for text
+   nobody could see yet. Each height stands in for a block's content until it
+   is drawn, so it is the content box, padding excluded, averaged over the
+   widths in its tier. `auto` swaps in the real height once a block has been
+   drawn. */
+[data-lazy-layout] {
+  content-visibility: auto;
+}
+
+.study {
+  contain-intrinsic-block-size: auto 2700px;
+}
+
+#experience {
+  contain-intrinsic-block-size: auto 3000px;
+}
+
+#approach {
+  contain-intrinsic-block-size: auto 2600px;
+}
+
+#dartboard-embedded-section {
+  contain-intrinsic-block-size: auto 890px;
+}
+
+#contact {
+  contain-intrinsic-block-size: auto 430px;
+}
+
+@media (min-width: 720px) {
+  .study {
+    contain-intrinsic-block-size: auto 1950px;
+  }
+
+  #experience {
+    contain-intrinsic-block-size: auto 2120px;
+  }
+
+  #approach {
+    contain-intrinsic-block-size: auto 1800px;
+  }
+
+  #dartboard-embedded-section {
+    contain-intrinsic-block-size: auto 810px;
+  }
+
+  #contact {
+    contain-intrinsic-block-size: auto 410px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .study {
+    contain-intrinsic-block-size: auto 1500px;
+  }
+
+  #experience {
+    contain-intrinsic-block-size: auto 2060px;
+  }
+
+  #approach {
+    contain-intrinsic-block-size: auto 1550px;
+  }
+
+  #dartboard-embedded-section {
+    contain-intrinsic-block-size: auto 850px;
+  }
+
+  #contact {
+    contain-intrinsic-block-size: auto 440px;
+  }
 }

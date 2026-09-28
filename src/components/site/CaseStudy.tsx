@@ -1,5 +1,6 @@
 import type { CaseStudy as Study } from "@/content/case-studies";
 import Figure from "./Figure";
+import CiteosDiagram from "./CiteosDiagram";
 import PipelineDiagram from "./PipelineDiagram";
 import PipelineSimulator from "./PipelineSimulator";
 import ConfigVisitorPlayground from "./ConfigVisitorPlayground";
@@ -10,8 +11,14 @@ const FACTS = [
   { key: "architecture", label: "Architecture" },
   { key: "contribution", label: "What I did" },
   { key: "challenges", label: "The hard part" },
+  { key: "tradeoff", label: "The trade-off" },
   { key: "results", label: "Result" },
 ] as const;
+
+const KIND: Record<Study["kind"], string> = {
+  professional: "Professional work, Whilter",
+  personal: "Personal project",
+};
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -20,17 +27,18 @@ type Props = { study: Study; number: number; total: number };
 /**
  * One case study. The left column holds what a skim needs, the title, the
  * figure and the stack, and stays put on a wide screen while the right column
- * carries the reading. The two studies with something to try get it below.
+ * carries the reading. The studies with something to try get it below.
  */
 export default function CaseStudy({ study, number, total }: Props) {
   const titleId = `${study.slug}-title`;
 
   return (
-    <article className="study" id={study.slug} aria-labelledby={titleId} data-reveal>
+    <article className="study" aria-labelledby={titleId} data-reveal data-lazy-layout>
       <div className="study__aside">
         <p className="study__number">
           {pad(number)} <span className="study__of">/ {pad(total)}</span>
         </p>
+        <p className="study__kind">{KIND[study.kind]}</p>
         <h3 className="study__title" id={titleId}>
           {study.title}
         </h3>
@@ -65,12 +73,27 @@ export default function CaseStudy({ study, number, total }: Props) {
           ))}
         </dl>
 
+        {study.slug === "citeos" && <CiteosDiagram />}
         {study.slug === "render-reliability" && <PipelineDiagram />}
 
-        {study.inPageAnchor && (
-          <a className="text-link study__jump" href={study.inPageAnchor}>
-            See it below ↓
-          </a>
+        {(study.inPageAnchor || study.githubUrl) && (
+          <p className="study__links">
+            {study.inPageAnchor && (
+              <a className="text-link" href={study.inPageAnchor}>
+                See it below ↓
+              </a>
+            )}
+            {study.githubUrl && (
+              <a
+                className="text-link"
+                href={study.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Read the source ↗
+              </a>
+            )}
+          </p>
         )}
       </div>
 

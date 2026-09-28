@@ -18,12 +18,15 @@ import {
 } from "@/lib/theme";
 import "./navbar.css";
 
+// Rooted at "/", so the same bar works on the résumé page. On the home page
+// they are still same-document jumps and scroll without a reload.
 const SECTIONS = [
-  { href: "#work", label: "Work" },
-  { href: "#experience", label: "Experience" },
-  { href: "#approach", label: "Approach" },
-  { href: "#dartboard-embedded-section", label: "Dartboard" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#work", label: "Work" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#approach", label: "Approach" },
+  { href: "/#dartboard-embedded-section", label: "Dartboard" },
+  { href: "/#contact", label: "Contact" },
+  { href: "/resume", label: "Résumé" },
 ];
 
 /** The theme lives on <html>. This lets the toggle hear it change. */
@@ -94,13 +97,13 @@ export default function Navbar() {
         <ul className="navbar__nav" id="primary-nav" data-open={menuOpen}>
           {SECTIONS.map((section) => (
             <li key={section.href}>
-              <a
+              <Link
                 href={section.href}
                 className="navbar__link"
                 onClick={() => closeMenu()}
               >
                 {section.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

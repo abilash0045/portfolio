@@ -62,14 +62,24 @@ test.describe("nothing on this page claims something untrue", () => {
 
     // An in-page anchor pointing at a section that no longer exists is a dead
     // link that still looks alive. Removing the testimonials section left one.
-    const fragments = hrefs.filter(
-      (h): h is string => !!h && h.startsWith("#") && h.length > 1,
-    );
-    for (const fragment of fragments) {
+    // The bar's links are rooted at "/" so they work from every page, which
+    // makes "/#work" an in-page anchor here too.
+    const fragments = hrefs.filter((h): h is string => !!h && /^\/?#./.test(h));
+    expect(fragments.length).toBeGreaterThan(5);
+    for (const href of fragments) {
       await expect(
-        page.locator(fragment),
-        `${fragment} has no matching element on the page`,
+        page.locator(href.slice(href.indexOf("#"))),
+        `${href} has no matching element on the page`,
       ).toHaveCount(1);
+    }
+
+    // And a link to another page of this site has to reach one.
+    const pages = [
+      ...new Set(hrefs.filter((h): h is string => !!h && h.startsWith("/") && !h.startsWith("/#"))),
+    ];
+    expect(pages).toContain("/resume");
+    for (const path of pages) {
+      expect((await page.request.get(path)).status(), `${path} does not answer`).toBe(200);
     }
   });
 
@@ -189,6 +199,24 @@ test.describe("nothing on this page claims something untrue", () => {
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
       "abilash0045@gmail.com",
     );
+  });
+
+  // A second, earlier job sat here that never existed: "2021 to 2023" at a
+  // company called "Distributed Systems", with numbers nobody measured. The
+  // resume has one employer, from May 2023, with two products under it.
+  test("experience lists one employer, from May 2023", async ({ page }) => {
+    await page.goto("/");
+    const roles = page.locator("#experience .timeline__item");
+    await expect(roles).toHaveCount(1);
+    await expect(roles.locator(".timeline__org")).toHaveText("Whilter Technologies (Whilter.ai)");
+
+    const dates = await roles
+      .locator("time")
+      .evaluateAll((els) => els.map((el) => el.getAttribute("datetime") ?? ""));
+    expect(dates.length, "the role carries no dates").toBeGreaterThan(0);
+    for (const date of dates) {
+      expect(date >= "2023-05", `${date} is before the first job`).toBe(true);
+    }
   });
 
   // The segment cache hits about 80%, as every other mention on the page says.

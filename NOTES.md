@@ -94,6 +94,54 @@ like it sent something. DESIGN.md already had "no contact form" out of scope. Th
 now the address as a big mailto link, a Copy email button whose failure message points at it, and the
 two profile links.
 
+**2026-09-28: The page's facts come from the resume and Abilash's own accounts of each story.**
+The render case study was still a summary with lines nobody could source, "retries consuming excessive
+cloud compute" and "read/write locks" among them. It is now the investigation as he tells it, in the
+order it happened, with the credit split as it was: three engineers, and his part the reproduction, the
+trace and the fix. The cost story says what he owned and what the team decided. Experience shows one
+employer with two products instead of two jobs, and gains the side projects, education and award from
+the resume. The principles are four things he actually did rather than four slogans. Where his accounts
+hold numbers the resume doesn't, batch volumes and a render time budget, the page leaves them out.
+
+**2026-09-28: The resume is a page, not a download.**
+A 473-byte stub once sat behind a resume download link. `/resume` is built from `src/content/resume.ts`,
+which Experience, the toolbox and the structured data read too, so it cannot fall behind the site, and
+the browser's print dialog makes the PDF when someone needs one. The phone number stays off it: it is
+on the resume Abilash sends, and this page is public and indexed. The bar, the hero, the contact
+section and the footer all link to it.
+
+**2026-09-28: A diagram may draw what the prose says, and no more.**
+DESIGN.md ruled out real architecture diagrams of Whilter's system. The render path diagram already
+existed on the reading that a drawing of the case study's own words exposes nothing new, and a test
+held it there. CiteOS now has one on the same terms, drawn at the level its architecture paragraph
+describes: two deployables, the jobs, the database's tenancy rule, the cluster. It states no figures,
+and its test fails if it names a component the study's prose doesn't, or a customer, a hostname or a
+dollar amount. DESIGN.md now says this outright instead of leaving it to a test comment.
+
+**2026-09-28: Below the hero, the page is laid out as it is needed.**
+Measured on a 4x-throttled phone profile: the first layout shaped every line on the page, 190 to 270ms
+before anything painted, and Lighthouse mobile scored 85 with 380ms of total blocking time. Nothing in
+the CSS was to blame on its own; switching off text-wrap, container queries, sticky, the SVGs or
+kerning changed nothing, and only system fonts helped much. `content-visibility: auto` on the case
+studies and the sections after them cut that layout to about 55ms. It also broke anchor jumps: with
+estimated heights, smooth jumps landed over 1,200px off, jumps Next scrolled after a page change over
+600px off, and Safari has no scroll anchoring to correct even the browser's own. So `LayoutAhead.tsx`
+lays every block out for real straight after load, one per idle callback (each step 11 to 26ms under
+the same throttling, so none is a long task), and all at once before a hash-link click or when a visit
+arrives with a `#section`. Results against the local production build: Lighthouse mobile 97, 95, 95,
+95 and 95 on five runs, plus 86 on the first run after a server restart; desktop 100; the résumé 96 and
+the dartboard 97. 112 of 112 jumps landed at seven widths from 320 to 1920px, including clicks made
+before anything had been drawn. The height estimates are content boxes, padding excluded, averaged
+over each width tier; if a section's content changes a lot, measure it again with the lazy layout off.
+The case study ids moved to their list items on the way, because the article slides 14px as it
+appears, and a link straight to one landed 14px high.
+
+**2026-09-28: Search engines get a map and a fence.**
+`robots.txt` keeps crawlers off `/api/`, which proxies Nominatim and Overpass: their rate limits are
+shared by every visitor, and a crawler walking those routes would spend them for nothing. The sitemap
+lists the three pages. The 404 page had inherited the home page's title and canonical, which told
+search engines every dead address was a copy of `/`; it now has its own title and no canonical.
+
 ## Progress
 
 - [x] 2026-08-05: API behaviour measured (Nominatim, Overpass, both tile sources)

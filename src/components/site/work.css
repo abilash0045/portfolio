@@ -47,6 +47,16 @@
   color: var(--text-muted);
 }
 
+/* Whose work it is, stated before anything else is claimed about it. */
+.study__kind {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
 .study__title {
   margin: 14px 0 16px;
   font-size: clamp(1.9rem, 3.4vw, 2.9rem);
@@ -156,10 +166,16 @@
   font-weight: 500;
 }
 
-.study__jump {
-  display: inline-block;
+.study__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
   margin-top: 28px;
   font-weight: 500;
+}
+
+.study__links a {
+  white-space: nowrap;
 }
 
 .study__extra {

@@ -7,7 +7,8 @@
 export const SITE_URL = "https://portfolio-madcap1.vercel.app";
 
 export const SITE_NAME = "Abilash S L";
-export const SITE_ROLE = "Backend Engineer, distributed systems";
+/** The eyebrow over the hero and the link card: what he does, read first. */
+export const SITE_ROLE = "Backend engineer, distributed systems and AI products";
 
 /** Where people reach him. Written out once, used by the hero, the contact
     section and the footer. */
@@ -17,9 +18,9 @@ export const LINKEDIN_URL = "https://www.linkedin.com/in/abilash0045/";
 export const SOURCE_URL = "https://github.com/abilash0045/portfolio";
 
 export const SITE_DESCRIPTION =
-  "Backend engineer. Lead and architect of CiteOS, an AI search-visibility platform " +
-  "built AI-first on TypeScript, NestJS, PostgreSQL and AWS EKS. Before that, one of " +
-  "the core engineers on a Java and Spring Boot video pipeline running 25,000+ renders a day.";
+  "Backend engineer at Whilter.ai. Lead and architect of CiteOS, an AI search-visibility " +
+  "platform built AI-first on TypeScript, NestJS, PostgreSQL and AWS EKS. Before that, one of " +
+  "the core engineers on a Java, Spring Boot and Kafka video pipeline running 25,000+ renders a day.";
 
 /**
  * Open Graph fields every page shares. A page that sets its own openGraph
