@@ -94,6 +94,15 @@ like it sent something. DESIGN.md already had "no contact form" out of scope. Th
 now the address as a big mailto link, a Copy email button whose failure message points at it, and the
 two profile links.
 
+**2026-09-28: The page's facts come from the resume and Abilash's own accounts of each story.**
+The render case study was still a summary with lines nobody could source, "retries consuming excessive
+cloud compute" and "read/write locks" among them. It is now the investigation as he tells it, in the
+order it happened, with the credit split as it was: three engineers, and his part the reproduction, the
+trace and the fix. The cost story says what he owned and what the team decided. Experience shows one
+employer with two products instead of two jobs, and gains the side projects, education and award from
+the resume. The principles are four things he actually did rather than four slogans. Where his accounts
+hold numbers the resume doesn't, batch volumes and a render time budget, the page leaves them out.
+
 ## Progress
 
 - [x] 2026-08-05: API behaviour measured (Nominatim, Overpass, both tile sources)

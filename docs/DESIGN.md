@@ -209,12 +209,20 @@ Abilash has.
 1. **The render failures that survived a week of debugging.** Render success stuck at 60%. Root cause
    was MOV atom corruption from concurrent EFS reads and writes during render. Fix was staging media on
    pod-local ephemeral disk before render. Result 60% → 98%. Written as an investigation, not a summary:
-   what was tried, what ruled things out, what the actual mechanism was.
+   what was tried, what ruled things out, what the actual mechanism was. Told in the order it happened:
+   media moved from S3 to a shared EFS mount first, for throughput, and the failure came later, when a
+   client's batch pushed volume up. Told the other way round it reads as if the migration caused the
+   outage. Serial renders never failed and parallel ones did, which pointed at concurrency; the pod logs
+   showed a moov atom error on every failure. Credit as it was: three engineers narrowed it down over
+   about a week, and Abilash built the reproduction, traced it and proposed the fix. Batch volumes and the
+   render time budget are real but not on the resume, so they stay off the page.
 2. **Cutting cloud spend ~40%, twice, for different reasons.** Segment-level Redis cache deduplicating
    TTS, voice-clone and lip-sync segments across users with overlapping params, ~80% hit rate, ~30% of
    the saving. Then migrating render autoscaling from KEDA-on-GKE (Kafka lag) to a Pub/Sub queue-depth
    Cloud Run autoscaler, scale-to-zero killing idle-pod cost, the other ~10%. Two independent wins that
-   happen to sum — the page must not let them read as one.
+   happen to sum; the page must not let them read as one. Abilash built the cache and owned the move
+   off self-managed Kafka onto Pub/Sub and Cloud Run; folding the render path into one service around
+   it was a team decision, and the page says so.
 3. **A config playground built on the Visitor pattern.** Let solution engineers iterate on TTS,
    voice-clone, lip-sync and video-template configs in isolation against client previews. Approval cycle
    3 days → 1 day. This is the LLD story. The production shape is one `PlaygroundVisitor` over
@@ -225,6 +233,10 @@ Abilash has.
    were once presented as the real classes. They never existed.
 4. **The dartboard.** Short, links to the source, honest about the Overpass problem and why the
    architecture works around it rather than pretending the API is reliable.
+
+Experience follows the resume: one employer, Whilter Technologies, from May 2023, with CiteOS (lead and
+architect, from July 2026) and the personalized video platform (May 2023 to July 2026) as two parts of
+the same role, then the side projects, education and award the resume lists. No other job goes here.
 
 Attribution: OpenStreetMap contributors credited on the map, per ODbL. Non-negotiable and not fine print.
 
