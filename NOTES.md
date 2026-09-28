@@ -103,6 +103,14 @@ employer with two products instead of two jobs, and gains the side projects, edu
 the resume. The principles are four things he actually did rather than four slogans. Where his accounts
 hold numbers the resume doesn't, batch volumes and a render time budget, the page leaves them out.
 
+**2026-09-28: A diagram may draw what the prose says, and no more.**
+DESIGN.md ruled out real architecture diagrams of Whilter's system. The render path diagram already
+existed on the reading that a drawing of the case study's own words exposes nothing new, and a test
+held it there. CiteOS now has one on the same terms, drawn at the level its architecture paragraph
+describes: two deployables, the jobs, the database's tenancy rule, the cluster. It states no figures,
+and its test fails if it names a component the study's prose doesn't, or a customer, a hostname or a
+dollar amount. DESIGN.md now says this outright instead of leaving it to a test comment.
+
 ## Progress
 
 - [x] 2026-08-05: API behaviour measured (Nominatim, Overpass, both tile sources)
