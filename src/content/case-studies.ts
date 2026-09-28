@@ -39,25 +39,33 @@ export const caseStudies: CaseStudy[] = [
       "In production three weeks after the first commit and on AWS EKS nine days later, with 4,300+ automated tests. Per-domain LLM vendor spend down ~68% after retuning scan cadence, quotas and queue tiers, with the cost model kept in code and asserted by tests.",
   },
   {
+    // Told in the order it happened, from his own account of it: the move to
+    // EFS came first, for throughput, and the failure it exposed came later.
+    // Told the other way round, it reads as if the migration caused the
+    // outage. Three engineers were on it; his part is the reproduction, the
+    // trace and the fix. Numbers stay at resume level.
     slug: "render-reliability",
     title: "AI Video Generation Platform",
-    headline: "Scalable event-driven video rendering microservices processing 25,000+ daily renders across GKE and Cloud Run.",
+    headline:
+      "A pipeline producing 25,000+ personalized videos a day, and the render failure that survived a week of team-wide debugging.",
     metric: { value: "60% → 98%", label: "Render reliability" },
-    stack: ["Java", "Spring Boot", "Kafka", "Kubernetes", "AWS EFS", "GCP Cloud Run", "MongoDB"],
+    stack: ["Java", "Spring Boot", "Kafka", "Kubernetes", "AWS S3", "AWS EFS"],
     problem:
-      "Render success sat at 60%. Four out of ten renders failed un-reproducibly under concurrent load, with retries consuming excessive cloud compute and delaying output delivery.",
+      "The pipeline renders personalized videos on Java, Spring Boot and Kafka across GKE and Cloud Run. Its media had moved from S3 to a shared EFS mount, to take the per-render S3 round trip off the critical path. Then a large client's batch pushed volume hard, renders started dying with segmentation faults, and batch success sat around 60%. The only stopgap was re-fetching the failed records, remapping them and uploading again, and each pass recovered only about 60% of what it retried.",
     architecture:
-      "Distributed event-driven architecture using Kafka for task ingestion, GKE worker clusters for rendering, Redis for media segment caching, and Pub/Sub queue-depth autoscaling.",
+      "Render pods pulled media from S3 once, then read and wrote it on the EFS mount they all shared, so several pods could have the same file open at once. The fix moved that work onto each pod's own disk: media is staged there before render, the copy skips files the pod already has, and the dynamic working files are cleaned up while the static ones stay.",
     contribution:
-      "Engineered core rendering microservices as one of the pipeline's core engineers, root-caused EFS concurrent write atom corruption, and implemented pod-local ephemeral storage staging for render workloads.",
+      "Three of us were on it, and we narrowed it down over about a week. I built the reproduction, traced the failures to the MOV file's moov atom, and proposed staging media on pod-local disk.",
     challenges:
-      "Diagnosing non-reproducible MOV atom file header corruption caused by simultaneous read/write locks across shared network file systems.",
+      "It never failed on its own. One record at a time with no parallelism, every render passed; in parallel, the segfaults came back. That ruled out the input data and the renderer's configuration, and pointed at concurrency. The pod logs showed a moov atom error on every failed record. The moov atom is the index inside an MP4 or MOV file, and pods reading and writing the same file on shared EFS were corrupting it, so the renderer crashed on a half-written file.",
     results:
-      "Raised pipeline render reliability from 60% to 98% and eliminated the un-reproducible MOV atom errors.",
+      "Batch render success went from 60% to 98%. The manual re-fetch and re-upload loop stopped, and the client's deadline was met.",
   },
   {
     // Told the way docs/DESIGN.md tells it: two independent wins, and the
-    // autoscaling change is a move off KEDA on GKE, not a KEDA setup.
+    // autoscaling change is a move off KEDA on GKE, not a KEDA setup. He built
+    // the cache and owned the move off Kafka; the consolidation around it was
+    // a team decision, and the card says so.
     slug: "cloud-cost",
     title: "Cutting Cloud Spend, Twice",
     headline:
@@ -65,13 +73,13 @@ export const caseStudies: CaseStudy[] = [
     metric: { value: "~30% + ~10%", label: "Cloud spend, cut twice" },
     stack: ["Redis", "GKE", "KEDA", "Kafka", "Pub/Sub", "Cloud Run"],
     problem:
-      "Spend was leaking two ways. TTS, voice-clone and lip-sync segments were generated again for every user, even when their parameters overlapped with someone else's. And the render pods on GKE, autoscaled by KEDA on Kafka lag, still cost money while they sat idle.",
+      "Spend was leaking two ways. TTS, voice-clone and lip-sync segments were generated again for every user, even when their parameters overlapped with someone else's. And the render path paid for capacity it wasn't using: render pods on GKE, autoscaled by KEDA on Kafka lag, sat idle between bursts, and the Kafka brokers ran around the clock whatever the traffic.",
     architecture:
-      "A Redis cache at segment level, shared across users, so a TTS, voice-clone or lip-sync segment with the same parameters is generated once. Render autoscaling moved from KEDA on GKE, which scaled on Kafka consumer lag, to a Cloud Run autoscaler driven by Pub/Sub queue depth that scales to zero between bursts.",
+      "A Redis cache at segment level, shared across users, so a TTS, voice-clone or lip-sync segment with the same parameters is generated once. Render autoscaling moved from KEDA on GKE, which scaled on Kafka consumer lag, to a Cloud Run autoscaler driven by Pub/Sub queue depth: each instance renders one video, the fleet scales out across videos, and it scales to zero between bursts.",
     contribution:
-      "Built the segment cache, which holds about an 80% hit rate, and migrated render autoscaling off KEDA onto the Cloud Run autoscaler.",
+      "Built the segment cache, which holds about an 80% hit rate, and owned the messaging migration off self-managed Kafka onto Pub/Sub and Cloud Run, which is how render autoscaling moved off KEDA. Folding the render path into one service around it was a team decision.",
     challenges:
-      "Decoupling monolithic render steps into granular segment tasks, small enough to cache and quick enough to start from zero.",
+      "Giving up speed nobody needed. The old path split each video into chunks rendered in parallel across machines. Every render the pipeline had produced was short enough for one instance to finish on its own, so the move traded that parallelism for a simpler system whose cost follows the traffic.",
     results:
       "Reduced monthly cloud spend by ~40% across two independent wins: ~30% from segment caching (80% hit rate) and ~10% from scale-to-zero autoscaling.",
   },

@@ -76,7 +76,7 @@ export default function PipelineSimulator() {
             <div className={`sim-node ${storageMode === "efs" ? "sim-node--error" : "sim-node--success"}`}>
               <div className="sim-node__title">Render Worker</div>
               <div className="sim-node__detail">
-                {storageMode === "efs" ? "EFS Concurrent Lock" : "Pod Ephemeral Disk"}
+                {storageMode === "efs" ? "Shared EFS Mount" : "Pod-Local Disk"}
               </div>
             </div>
 
@@ -96,11 +96,11 @@ export default function PipelineSimulator() {
           <div className="sim-explain">
             {storageMode === "efs" ? (
               <span className="sim-explain__bad">
-                <strong>Shared EFS:</strong> Concurrent reads/writes cause MOV atom corruption mid-render. 40% of renders fail un-reproducibly.
+                <strong>Shared EFS:</strong> Pods reading and writing the same file corrupt its MOV atom mid-render, and 40% of renders fail.
               </span>
             ) : (
               <span className="sim-explain__good">
-                <strong>Pod-local disk:</strong> Renders complete on pod-local disk before publishing. MOV atom corruption eliminated (98% reliability).
+                <strong>Pod-local disk:</strong> Each pod stages its media on its own disk, so no two processes touch the same file. 98% of renders succeed.
               </span>
             )}
           </div>
