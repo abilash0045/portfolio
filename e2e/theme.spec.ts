@@ -75,7 +75,7 @@ test("blocked site data costs the saved theme, not the page", async ({ page }) =
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/", { waitUntil: "networkidle" });
 
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("25,000");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("three weeks");
   expect(errors, "an uncaught storage error").toEqual([]);
 
   // The toggle still switches; it just can't be remembered.

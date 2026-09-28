@@ -67,13 +67,18 @@ test("every revealed element ends up visible after a full pass", async ({
   // All the way to the bottom. A negative bottom rootMargin used to strand the
   // last section's heading here: it sat inside the shrunk band and the page had
   // nowhere further to scroll to lift it clear.
+  //
+  // "instant", because the page scrolls smoothly. A plain scrollTo animated,
+  // the last jump was still travelling when the check ran, and the contact
+  // section was caught mid-fade on screen: a failure about this test's
+  // timing, not about the reveal.
   await page.evaluate(async () => {
     const step = window.innerHeight * 0.7;
     for (let y = 0; y < document.body.scrollHeight; y += step) {
-      window.scrollTo(0, y);
+      window.scrollTo({ top: y, behavior: "instant" });
       await new Promise((r) => setTimeout(r, 90));
     }
-    window.scrollTo(0, document.body.scrollHeight);
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" });
     await new Promise((r) => setTimeout(r, 200));
   });
   await page.waitForTimeout(800);

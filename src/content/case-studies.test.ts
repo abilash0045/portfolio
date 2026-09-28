@@ -125,3 +125,52 @@ describe("every case study", () => {
     expect(text, "60 to 98% is the EFS atom fix, never KEDA").not.toContain("keda");
   });
 });
+
+describe("the CiteOS case study", () => {
+  const study = caseStudies.find((c) => c.slug === "citeos")!;
+  // DESIGN.md's account of this story: content item 0, up to item 1.
+  const account = design.slice(
+    design.indexOf("0. **CiteOS"),
+    design.indexOf("1. **The render failures"),
+  );
+  const prose = [
+    study.headline,
+    study.problem,
+    study.architecture,
+    study.contribution,
+    study.challenges,
+    study.results,
+  ].join(" ");
+
+  it("leads the page, because it is the current work", () => {
+    expect(caseStudies[0].slug).toBe("citeos");
+  });
+
+  it("names only technology that DESIGN.md's account of it names", () => {
+    expect(account.length, "DESIGN.md's account of CiteOS moved").toBeGreaterThan(100);
+    for (const tech of study.stack) {
+      expect(account, `${tech} is not in DESIGN.md's account of CiteOS`).toContain(tech);
+    }
+  });
+
+  // Production runs on test brands. Nothing on the card may suggest otherwise.
+  it("claims no customers and no revenue", () => {
+    const text = prose.toLowerCase();
+    for (const word of ["customer", "revenue", "clients"]) {
+      expect(text, `the CiteOS card claims ${word}`).not.toContain(word);
+    }
+    expect(text, "the CiteOS card claims paying users").not.toMatch(/paying (users?|brands?|accounts?)/);
+  });
+
+  // The dollar figures stay internal; the percentage is the public number.
+  it("states the spend cut as a percentage, never in dollars", () => {
+    expect(prose).not.toMatch(/\$\s?\d/);
+    expect(prose).toContain("~68%");
+  });
+
+  // He writes no code by hand, so the card must not say he did.
+  it("says the build was AI-first and never claims it was hand-written", () => {
+    expect(prose).toContain("AI-first");
+    expect(prose.toLowerCase()).not.toMatch(/hand-(written|coded|built)|wrote (all|every)/);
+  });
+});
