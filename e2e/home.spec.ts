@@ -191,6 +191,24 @@ test.describe("nothing on this page claims something untrue", () => {
     );
   });
 
+  // A second, earlier job sat here that never existed: "2021 to 2023" at a
+  // company called "Distributed Systems", with numbers nobody measured. The
+  // resume has one employer, from May 2023, with two products under it.
+  test("experience lists one employer, from May 2023", async ({ page }) => {
+    await page.goto("/");
+    const roles = page.locator("#experience .timeline__item");
+    await expect(roles).toHaveCount(1);
+    await expect(roles.locator(".timeline__org")).toHaveText("Whilter Technologies (Whilter.ai)");
+
+    const dates = await roles
+      .locator("time")
+      .evaluateAll((els) => els.map((el) => el.getAttribute("datetime") ?? ""));
+    expect(dates.length, "the role carries no dates").toBeGreaterThan(0);
+    for (const date of dates) {
+      expect(date >= "2023-05", `${date} is before the first job`).toBe(true);
+    }
+  });
+
   // The segment cache hits about 80%, as every other mention on the page says.
   // One card rounded that into a floor, "80%+".
   test("no measured percentage is turned into a floor", async ({ page }) => {
